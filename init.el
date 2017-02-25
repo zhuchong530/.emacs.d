@@ -9,19 +9,14 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (defconst demo-packages
-  '(anzu
+  '(anzu                                ; Show number of matches in mode-line while searching
+    clean-aindent-mode                  ; Simple indent and unindent, trims indent white-space
+    comment-dwim-2                      ; An all-in-one comment command to rule them all
+    seq
+    let-alist
     company
+    company-c-headers                   ; Company mode backend for C/C++ header files
     duplicate-thing
-    ggtags
-    helm
-    helm-gtags
-    helm-projectile
-    helm-swoop
-    function-args
-    clean-aindent-mode
-    comment-dwim-2
-    dtrt-indent
-    ws-butler
     iedit
     yasnippet
     smartparens
@@ -32,12 +27,20 @@
     python-mode
     rainbow-mode
     js2-mode
-    ace-jump-mode
+    ace-jump-mode                       ;a quick cursor location minor mode for emacs
     golden-ratio
     switch-window
     zencoding-mode
-    color-theme
+    color-theme                         ;install color themes
     tabbar
+    irony
+    irony-eldoc
+    company-irony                       ; company-mode completion back-end for irony-mode
+    company-irony-c-headers             ; Company mode backend for C/C++ header files with Irony
+    flycheck
+    flycheck-irony
+    smart-mode-line
+    dtrt-indent                         ; Adapt to foreign indentation offsets
     zygospore))
 
 (defun install-packages ()
@@ -170,11 +173,28 @@
 ;; Package zygospore
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
 
-;;(set-frame-font "Monaco-14")
-(set-frame-font "Mononoki-14")
+(set-frame-font "Monaco-14")
+;;(set-frame-font "Mononoki-14")
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward uniquify-separator ":")
 (setq make-backup-files nil)
 (tool-bar-mode 0)
 (setq column-number-mode t)
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" default)))
+ '(package-selected-packages
+   (quote
+    (disaster jedi highlight-symbol nasm-mode zygospore zencoding-mode yasnippet ws-butler volatile-highlights undo-tree tabbar switch-window smartparens smart-mode-line rainbow-mode python-mode powerline multi-web-mode js2-mode irony-eldoc iedit helm-swoop helm-projectile helm-gtags golden-ratio ggtags function-args flycheck-irony duplicate-thing dtrt-indent company-irony-c-headers company-irony company-c-headers comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

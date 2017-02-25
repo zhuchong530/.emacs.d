@@ -12,9 +12,18 @@
 ;; (when (memq window-system '(mac ns))
 ;;   (exec-path-from-shell-initialize))
 
+(desktop-save-mode 1)
+
 ;;linum-mode
 (require 'linum)
 (global-linum-mode 1)
+
+;; highlight-symbol
+(require 'highlight-symbol)
+(global-set-key [(control f3)] 'highlight-symbol)
+(global-set-key [f3] 'highlight-symbol-next)
+(global-set-key [(shift f3)] 'highlight-symbol-prev)
+(global-set-key [(meta f3)] 'highlight-symbol-query-replace)
 
 ;;package tabbar
 (require 'tabbar)
@@ -86,9 +95,17 @@
                                    "eshell-mode" "dired-mode"))
 (golden-ratio-mode)
 
-;; Package - powerline
-(require 'powerline)
-(powerline-vim-theme)
+;;color-theme
+(require 'color-theme)
+(color-theme-initialize)
+(setq color-theme-is-global t)
+(color-theme-dark-laptop)
+
+;;smart-mode-line
+(require 'smart-mode-line)
+(setq sml/no-confirm-load-theme t)
+(sml/setup)
+(set sml/theme 'light)
 
 ;; Package - Dash-at-point
 ;; search documents in Dash API docsets
@@ -98,10 +115,7 @@
 ;; (global-set-key "\C-cd" 'dash-at-point)
 ;; (global-set-key "\C-ce" 'dash-at-point-with-docset)
 
-(require 'color-theme)
-(color-theme-initialize)
-(setq color-theme-is-global t)
-(color-theme-dark-laptop)
+
 
 (toggle-frame-maximized)
 

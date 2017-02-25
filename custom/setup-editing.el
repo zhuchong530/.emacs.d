@@ -67,6 +67,7 @@
 ;; Package: yasnippet
 ;; GROUP: Editing -> Yasnippet
 (require 'yasnippet)
+(setq yas/snippet-dirs '("~/.emacs.d/snippets/"))
 (yas-global-mode 1)
 
 ;; PACKAGE: smartparens

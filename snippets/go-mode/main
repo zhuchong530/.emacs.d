@@ -1,7 +1,5 @@
-# -*- mode: snippet -*-
-# name: func main()
-# key: main
+#name: func main
 # --
 func main() {
-  $0
+	$0
 }

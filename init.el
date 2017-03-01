@@ -68,6 +68,20 @@
 (require 'setup-python)
 (require 'setup-programming)
 
+
+;; exec-path-from-shell packages
+(defun set-exec-path-from-shell-PATH ()
+  (let ((path-from-shell (replace-regexp-in-string
+                          "[ \t\n]*$"
+                          ""
+                          (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+    (setenv "PATH" path-from-shell)
+    (setq eshell-path-env path-from-shell) ; for eshell users
+    (setq exec-path (split-string path-from-shell path-separator))))
+
+(when window-system (set-exec-path-from-shell-PATH))
+(setenv "GOPATH" "/home/wangchang/data/Programme/googleGo/")
+
 ;; Shift + up/down/left/right  to move among window
 (windmove-default-keybindings)
 
@@ -189,9 +203,10 @@
  '(custom-safe-themes
    (quote
     ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" default)))
+ '(delete-selection-mode nil)
  '(package-selected-packages
    (quote
-    (disaster jedi highlight-symbol nasm-mode zygospore zencoding-mode yasnippet ws-butler volatile-highlights undo-tree tabbar switch-window smartparens smart-mode-line rainbow-mode python-mode powerline multi-web-mode js2-mode irony-eldoc iedit helm-swoop helm-projectile helm-gtags golden-ratio ggtags function-args flycheck-irony duplicate-thing dtrt-indent company-irony-c-headers company-irony company-c-headers comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode))))
+    (company-go go-eldoc go-guru exec-path-from-shell go-mode disaster jedi highlight-symbol nasm-mode zygospore zencoding-mode yasnippet ws-butler volatile-highlights undo-tree tabbar switch-window smartparens smart-mode-line rainbow-mode python-mode powerline multi-web-mode js2-mode irony-eldoc iedit helm-swoop helm-projectile helm-gtags golden-ratio ggtags function-args flycheck-irony duplicate-thing dtrt-indent company-irony-c-headers company-irony company-c-headers comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

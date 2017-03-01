@@ -11,8 +11,38 @@
 (add-hook 'irony-mode-hook 'my-irony-mode-hook)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
-;;nast-mode
+;;nasm-mode
 (require 'nasm-mode)
 (add-to-list 'auto-mode-alist '("\\.\\(asm\\|s\\)$" . nasm-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;; golang settings
+(add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
+;;go-mode packages
+(require 'go-mode)
+;removes all unused imports
+(add-hook 'go-mode-hook '(lambda() (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))
+;; format the current buffer
+(add-hook 'go-mode-hook '(lambda() (local-set-key (kbd "C-c C-f") 'gofmt)))
+;; format the buffer when save
+(add-hook 'before-save-hook 'gofmt-before-save)
+;; show the go documentation for a given package
+(add-hook 'go-mode-hook '(lambda() (local-set-key (kbd "C-c C-k") 'godoc)))
+
+;; gocode autocomplete
+(add-hook 'go-mode-hook '(lambda()
+                           (set (make-local-variable 'company-backends) '(company-go))
+                           (company-mode)))
+;; go-eldoc packages
+(require 'go-eldoc)
+(add-hook 'go-mode-hook 'go-eldoc-setup)
+(set-face-attribute 'eldoc-highlight-function-argument nil
+                    :underline t :foreground "green"
+                    :weight 'bold)
+;; go-guru packages
+(require 'go-guru)
+(go-guru-hl-identifier-mode)
+(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+
+
 
 (provide 'setup-programming)

@@ -14,6 +14,9 @@
 ;;nasm-mode
 (require 'nasm-mode)
 (add-to-list 'auto-mode-alist '("\\.\\(asm\\|s\\)$" . nasm-mode))
+;; disaster
+;;(require 'disaster)
+;;(define-key c-mode-base-map (kbd "C-c d") 'disaster)
 
 ;;;;;;;;;;;;;;;;;;;;;;;; golang settings
 (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))

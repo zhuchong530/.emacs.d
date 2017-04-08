@@ -41,6 +41,11 @@
     flycheck-irony
     smart-mode-line
     dtrt-indent                         ; Adapt to foreign indentation offsets
+    go-mode
+    go-guru
+    go-eldoc
+    nasm-mode                           ;disassembly mode
+    disaster                            ;disassemble a c/c++ file
     zygospore))
 
 (defun install-packages ()
@@ -206,7 +211,7 @@
  '(delete-selection-mode nil)
  '(package-selected-packages
    (quote
-    (company-go go-eldoc go-guru exec-path-from-shell go-mode disaster jedi highlight-symbol nasm-mode zygospore zencoding-mode yasnippet ws-butler volatile-highlights undo-tree tabbar switch-window smartparens smart-mode-line rainbow-mode python-mode powerline multi-web-mode js2-mode irony-eldoc iedit helm-swoop helm-projectile helm-gtags golden-ratio ggtags function-args flycheck-irony duplicate-thing dtrt-indent company-irony-c-headers company-irony company-c-headers comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode))))
+    (irony company-go go-eldoc go-guru exec-path-from-shell go-mode disaster jedi highlight-symbol nasm-mode zygospore zencoding-mode yasnippet ws-butler volatile-highlights undo-tree tabbar switch-window smartparens smart-mode-line rainbow-mode python-mode powerline multi-web-mode js2-mode irony-eldoc iedit helm-swoop helm-projectile helm-gtags golden-ratio ggtags function-args flycheck-irony duplicate-thing dtrt-indent company-irony-c-headers company-irony company-c-headers comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

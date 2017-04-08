@@ -105,7 +105,9 @@
 (require 'smart-mode-line)
 (setq sml/no-confirm-load-theme t)
 (sml/setup)
-(set sml/theme 'light)
+;(set sml/theme 'light)
+(set sml/theme 'dark)
+;;(set sml/theme 'respectful)
 
 ;; Package - Dash-at-point
 ;; search documents in Dash API docsets

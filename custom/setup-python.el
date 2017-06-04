@@ -19,11 +19,13 @@
 (add-hook 'sgml-mode-hook 'zencoding-mode)    ;; Auto-start on any markup modes
 ;; ;;;;;;;;python programming settings;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;(add-to-list 'load-path py-install-directory)
-(add-to-list 'auto-mode-alist '("\.py\'" . python-mode))
+;; (add-to-list 'auto-mode-alist '("\.py\'" . python-mode))
 ;;jedi
-(autoload 'jedi:setup "jedi" nil t)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:setup-keys t)                      ; optional
-(setq jedi:complete-on-dot t)                 ; optional
+;; (autoload 'jedi:setup "jedi" nil t)
+;; (add-hook 'python-mode-hook 'jedi:setup)
+;; (setq jedi:setup-keys t)                      ; optional
+;; (setq jedi:complete-on-dot t)                 ; optional
+;; using elpy instead jedi
+(elpy-enable)
 
 (provide 'setup-python)

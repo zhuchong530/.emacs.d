@@ -46,6 +46,9 @@
 (go-guru-hl-identifier-mode)
 (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
 
+;;magit package
+(require 'magit)
+
 
 
 (provide 'setup-programming)

@@ -25,7 +25,11 @@
 ;; (add-hook 'python-mode-hook 'jedi:setup)
 ;; (setq jedi:setup-keys t)                      ; optional
 ;; (setq jedi:complete-on-dot t)                 ; optional
+;; python3.3 build-in virtualenv environments
+(require 'pyvenv)
 ;; using elpy instead jedi
 (elpy-enable)
-
+(setq elpy-use-cpython "/usr/bin/python3")
+(setq elpy-rpc-python-command "python3")
+(setq elpy-rpc-backend "jedi")
 (provide 'setup-python)

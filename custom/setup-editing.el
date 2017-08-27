@@ -4,25 +4,14 @@
       mark-ring-max 5000                ; increase kill ring to contains 5000 entries
       mode-require-final-newline t      ; add a newline to end of file
       tab-width 4                       ; default to 4 visible spaces to display a tab
+      kill-whole-line t                 ;if NIL, kill whole line and move the next line up
       )
 
 (add-hook 'sh-mode-hook (lambda ()
                           (setq tab-width 4)))
-
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-language-environment "UTF-8")
-(prefer-coding-system 'utf-8)
-
 (setq-default indent-tabs-mode nil)
 (delete-selection-mode)
 (global-set-key (kbd "RET") 'newline-and-indent)
-
-;; GROUP: Editing -> Killing
-(setq kill-ring-max 5000 ; increase kill-ring capacity
-      kill-whole-line t  ; if NIL, kill whole line and move the next line up
-      )
-
 ;; show whitespace in diff-mode
 (add-hook 'diff-mode-hook (lambda ()
                             (setq-local whitespace-style
@@ -39,44 +28,53 @@
                             (whitespace-mode 1)))
 
 ;; Package: volatile-highlights
-;; GROUP: Editing -> Volatile Highlights
-(require 'volatile-highlights)
-(volatile-highlights-mode t)
+(use-package volatile-highlights
+  :ensure t
+  :config (volatile-highlights-mode t)
+  )
 
 ;; Package: clean-aindent-mode
-;; GROUP: Editing -> Indent -> Clean Aindent
-(require 'clean-aindent-mode)
+(use-package clean-aindent-mode
+  :ensure t
+  )
 (add-hook 'prog-mode-hook 'clean-aindent-mode)
 
 ;; PACKAGE: dtrt-indent
-(require 'dtrt-indent)
-(dtrt-indent-mode 1)
+(use-package dtrt-indent
+  :ensure t
+  )
+(setq dtrt-indent-mode 1)
 (setq dtrt-indent-verbosity 0)
 
 ;; PACKAGE: ws-butler
-(require 'ws-butler)
+(use-package ws-butler
+  :ensure t
+  )
 (add-hook 'c-mode-common-hook 'ws-butler-mode)
 (add-hook 'text-mode 'ws-butler-mode)
 (add-hook 'fundamental-mode 'ws-butler-mode)
 
 ;; Package: undo-tree
-;; GROUP: Editing -> Undo -> Undo Tree
-(require 'undo-tree)
-(global-undo-tree-mode)
+(use-package undo-tree
+  :ensure t
+  :config (global-undo-tree-mode)
+  )
 
 ;; Package: yasnippet
-;; GROUP: Editing -> Yasnippet
+
+
 (require 'yasnippet)
 (setq yas/snippet-dirs '("~/.emacs.d/snippets/"))
 (yas-global-mode 1)
 
 ;; PACKAGE: smartparens
-(require 'smartparens-config)
+(use-package smartparens
+  :ensure t
+  )
 (setq sp-base-key-bindings 'paredit)
 (setq sp-autoskip-closing-pair 'always)
 (setq sp-hybrid-kill-entire-symbol nil)
 (sp-use-paredit-bindings)
-
 (show-smartparens-global-mode +1)
 (smartparens-global-mode 1)
 (sp-with-modes '(c-mode c++-mode)
@@ -85,7 +83,10 @@
                                             ("* ||\n[i]" "RET"))))
 
 ;; PACKAGE: comment-dwim-2
-(global-set-key (kbd "M-;") 'comment-dwim-2)
+(use-package comment-dwim-2
+  :ensure t
+  :bind ("M-;" . comment-dwim-2)
+)
 
 ;; Jump to end of snippet definition
 (define-key yas-keymap (kbd "<return>") 'yas/exit-all-snippets)
@@ -124,20 +125,25 @@
 (add-hook 'term-mode-hook (lambda() (setq yas-dont-activate t)))
 
 ;; PACKAGE: anzu
-;; GROUP: Editing -> Matching -> Isearch -> Anzu
-(require 'anzu)
-(global-anzu-mode)
-(global-set-key (kbd "M-%") 'anzu-query-replace)
-(global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp)
+(use-package anzu
+  :ensure t
+  :config (global-anzu-mode)
+  :bind (("M-%" . anzu-query-replace)
+	 ("C-M-%" . anzu-query-replace))
+  )
 
 ;; PACKAGE: iedit
-(setq iedit-toggle-key-default nil)
-(require 'iedit)
-(global-set-key (kbd "C-;") 'iedit-mode)
+(use-package iedit
+  :ensure t
+  :init (setq iedit-toggle-key-default nil)
+  :bind ("C-;" . iedit-mode)
+  )
 
 ;; PACKAGE: duplicate-thing
-(require 'duplicate-thing)
-(global-set-key (kbd "M-c") 'duplicate-thing)
+(use-package duplicate-thing
+  :ensure t
+  :bind ("M-c" . duplicate-thing)
+  )
 
 ;; Customized functions
 (defun prelude-move-beginning-of-line (arg)

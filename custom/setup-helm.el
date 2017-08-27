@@ -52,8 +52,6 @@
   (setq helm-apropos-fuzzy-match t)
   (setq helm-lisp-fuzzy-completion t)
   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-  (require 'helm-descbinds)
-  (helm-descbinds-mode)
   (projectile-global-mode)
   (setq projectile-completion-system 'helm)
   (helm-projectile-on)
@@ -65,6 +63,11 @@
       helm-ff-file-name-history-use-recentf t
       helm-echo-input-in-header-line t)
   (helm-mode 1)
+  )
+(use-package helm-descbinds
+  :defer t
+  :bind (("C-h b" . helm-descbinds)
+         ("C-h w" . helm-descbinds))
   )
 ;; use helm to list eshell history
 (add-hook 'eshell-mode-hook

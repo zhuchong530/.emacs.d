@@ -1,10 +1,29 @@
 ;; sys
+(require 'package)                      ;package manager
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
+
+;; bootstrap 'use-package'
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(use-package try                        ;let's you try packages without install them
+  :ensure t)
+(use-package which-key                  ;bring up help on key combinations
+  :ensure t
+  :config
+  (which-key-mode))
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-language-environment "UTF-8")
 (prefer-coding-system 'utf-8)
 (setq gc-cons-threshold 100000000)     ;garbage collect threshold
 (defalias 'yes-or-no-p 'y-or-n-p)       ;using y-or-n instead yes-or-no
+(setq inhibit-startup-message t)        ;disable startup message
+
 (setq make-backup-files nil)
 (setq column-number-mode t)
 ;; exec-path-from-shell packages
@@ -33,6 +52,8 @@
   (display-time-mode 1)
 (menu-bar-mode -1))
 
+(show-paren-mode t)
+(setq-default show-paren-style 'expression)
 
 (toggle-frame-maximized)
 ;; Shift + up/down/left/right  to move among window

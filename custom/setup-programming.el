@@ -8,17 +8,32 @@
 ;; company
 (use-package company
   :ensure t
-  :init (add-hook 'after-init-hook 'global-company-mode)
+  :commands (my-indent-or-complete)
+  :bind ("TAB" . my-indent-or-complete)  
+  :init (progn
+          (setq company-global-modes '(not python-mode cpython-mode sage-mode))
+          )
+  :config(progn
+           (setq company-tooltip-limit 20) ;bigger popup window
+           (setq company-idledelay .3)     ;decrease delay before autocompletion popup shows
+           (setq compan-begin-commands'(self-insert-command)) ;start autocompletion only after typing
+           (setq company-backends
+                 '(company-irony company-irony-c-headers company-bbdb company-nxml company-css company-eclim
+                                company-semantic company-cmake company-capf
+                                (company-dabbrev-code company-gtags company-keywords)
+                                company-files company-dabbrev))
+           (global-company-mode)
+           (defun my-indent-or-complete()
+             (interactive)
+             (if (looking-at "\\_>")
+                 (company-complete-common)
+               (indent-according-to-mode))))
   )
-;;(delete 'company-semantic company-backends)
-;; (define-key c-mode-map  [(tab)] 'company-complete)
-;; (define-key c++-mode-map  [(tab)] 'company-complete)
-;; (define-key c-mode-map  [(control tab)] 'company-complete)
-;; (define-key c++-mode-map  [(control tab)] 'company-complete)
 
 ;; Package - company-irony
 (eval-after-load 'company
   '(add-to-list 'company-backends 'company-irony))
+
 ;; Package - flycheck-irony
 (eval-after-load 'flycheck
   '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
@@ -27,25 +42,17 @@
 (add-hook 'c++-mode-hook
           (lambda () (setq flycheck-clang-include-path
                            (list (expand-file-name "/usr/include")))))
-;; (add-hook 'c-mode-hook
-;;           (lambda () (setq flycheck-clang-include-path
-;;                            (list (expand-file-name "~/Programme/tlpi/execise/lib")))))
+
 ;; Package - irony-eldoc
 (use-package irony-eldoc
   :ensure t
   :config (add-hook 'irony-mode-hook 'irony-eldoc)
   )
+
 ;; Package - company-irony-c-headers
 (use-package company-irony-c-headers
   :ensure t
   )
-;; Load with `irony-mode` as a grouped backend
-(eval-after-load 'company
-  '(add-to-list
-    'company-backends '(company-irony-c-headers company-irony)))
-
-;; company-c-headers
-(add-to-list 'company-backends 'company-c-headers)
 
 ;; hs-minor-mode for folding source code
 (add-hook 'c-mode-common-hook 'hs-minor-mode)
@@ -61,11 +68,8 @@
 ;; “python”: What Python developers use for extension modules
 ;; “java”: The default style for java-mode (see below)
 ;; “user”: When you want to define your own style
-(setq
- c-default-style "k&r" ;; set style to "linux"
- )
+(setq c-default-style "k&r)" ;; set style to "linux"
 (setq c-basic-offset 4)
-
 (global-set-key (kbd "RET") 'newline-and-indent)  ; automatically indent when press RET
 
 ;; activate whitespace-mode to view all whitespace characters
@@ -103,11 +107,17 @@
 ;; helm-projectile
 (use-package helm-projectile
   :ensure t
+  :if (display-graphic-p)
+  :diminish projectile-mode
+  :init
+  (setq projectile-enable-caching t
+        projectile-indexing-method 'alien
+        projectile-completion-system 'helm
+        projectile-mode-line '(:eval (format " {%s}" (projectile-project-name))))
+  :config
+  (projectile-global-mode)
+  (helm-projectile-on)
   )
-(helm-projectile-on)
-(setq projectile-completion-system 'helm)
-(setq projectile-indexing-method 'alien)
-
 ;; Package zygospore
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
 
@@ -166,8 +176,13 @@
 
 ;;magit package
 (use-package magit
-  :ensure t)
-
+  :ensure t
+  :commands magit-get-top-dir
+  :bind (("C-c g" . magit-status)
+         ("C-c C-g l" . magit-log-buffer-file)
+         ("C-c f" . magit-grep))
+  :config (magit-auto-revert-mode)
+  )
 
 
 (provide 'setup-programming)

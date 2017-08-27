@@ -48,15 +48,20 @@
 ;; PACKAGE: ws-butler
 (use-package ws-butler
   :ensure t
+  :init (progn
+          (add-hook 'c-mode-common-hook 'ws-butler-mode)
+          (add-hook 'text-mode 'ws-butler-mode)
+          (add-hook 'fundamental-mode 'ws-butler-mode)
+          (add-hook 'python-mode 'ws-butler-mode))
   )
-(add-hook 'c-mode-common-hook 'ws-butler-mode)
-(add-hook 'text-mode 'ws-butler-mode)
-(add-hook 'fundamental-mode 'ws-butler-mode)
 
 ;; Package: undo-tree
 (use-package undo-tree
   :ensure t
-  :config (global-undo-tree-mode)
+  :init (progn
+          (global-undo-tree-mode)
+          (setq undo-tree-visualizer-timestamps t)
+          (setq undo-tree-visualizer-diff t))
   )
 
 ;; Package: yasnippet

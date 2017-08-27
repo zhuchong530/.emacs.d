@@ -10,9 +10,10 @@
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 ;; rainbow mode for display the color
-(use-package rainbow-mode)
-(dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
-  (add-hook hook 'rainbow-turn-on))
+(use-package rainbow-mode
+  :ensure t
+  :mode "\\.css\\'"
+  )
 
 ;; zencoding-mode settings
 (use-package zencoding-mode)

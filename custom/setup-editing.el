@@ -1,5 +1,4 @@
 ;; GROUP: Editing -> Editing Basics
-
 (setq global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries
       mark-ring-max 5000                ; increase kill ring to contains 5000 entries
       mode-require-final-newline t      ; add a newline to end of file
@@ -61,11 +60,11 @@
   )
 
 ;; Package: yasnippet
-
-
-(require 'yasnippet)
-(setq yas/snippet-dirs '("~/.emacs.d/snippets/"))
-(yas-global-mode 1)
+(use-package yasnippet
+  :ensure t
+  :init (yas-global-mode 1)
+  :config (setq yas/snippet-dirs '("/home/wangchang/.emacs.d/snippets"))
+  )
 
 ;; PACKAGE: smartparens
 (use-package smartparens

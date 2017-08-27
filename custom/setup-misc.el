@@ -65,6 +65,7 @@
 	   (color-theme-dark-laptop)
 	   )
   )
+;; load-theme
 (add-to-list 'custom-theme-load-path "/home/wangchang/.emacs.d/themes")
 ;; (load-theme 'badger t)
 (load-theme 'grandshell t)

@@ -24,11 +24,28 @@
 ;; using elpy instead jedi
 (use-package elpy
   :ensure t
-  :config (elpy-enable)
+  :init
+  (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
+  :bind (:map elpy-mode-map
+              ("<M-left>" . nil)
+              ("<M-right>" . nil)
+              ("<M-S-left>" . elpy-nav-indent-shift-left)
+              ("<M-S-right>" . elpy-nav-indent-shift-right)
+              ("M-." . elpy-goto-definition)
+              ("M-," . pop-tag-mark)
+              )
+  :config
+  (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+  flycheck-python-flake8-executable "/usr/bin/flake8-3.4"
+  (setq elpy-rpc-backend "jedi")
+  (setq elpy-use-cpython "/usr/bin/python3")
+  (setq elpy-rpc-python-command "python3")
   )
-(setq elpy-use-cpython "/usr/bin/python3")
-(setq elpy-rpc-python-command "python3")
-(setq elpy-rpc-backend "jedi")
-
+(use-package python
+  :mode ("\\.py" . python-mode)
+  :config
+  (setq python-indent-offset 4)
+  (elpy-enable)
+  )
 
 (provide 'setup-python)

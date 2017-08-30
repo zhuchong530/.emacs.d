@@ -95,6 +95,10 @@
 	 )
   :config (setq helm-multi-swoop-edit-save t)
   )
+(use-package helm-ag
+  :ensure t
+  :after helm
+  :bind ("C-c a g" . helm-do-ag-project-root))
 ;; When doing isearch, hand the word over to helm-swoop
 (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
 

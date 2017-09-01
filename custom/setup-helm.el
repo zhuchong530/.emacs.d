@@ -52,9 +52,6 @@
   (setq helm-apropos-fuzzy-match t)
   (setq helm-lisp-fuzzy-completion t)
   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-  (projectile-global-mode)
-  (setq projectile-completion-system 'helm)
-  (helm-projectile-on)
   (require 'helm-config)
   (setq helm-split-window-in-side-p         t ; open helm buffer inside current window, not occupy whole other window
       helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.

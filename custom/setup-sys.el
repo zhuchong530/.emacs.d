@@ -44,16 +44,11 @@
  minibuffer-prompt-properties
  '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)
  ;; persistent bookmarks
- bookmark-save-flag                 t
- bookmark-default-file              (concat temp-dir "/bookmarks")
  ;; Disable backups (that's what git/dropbox are for)
  history-length                     1000
  auto-save-default                  nil
- auto-save-list-file-name           (concat temp-dir "/autosave")
  make-backup-files                  nil
  create-lockfiles                   nil
- backup-directory-alist            `((".*" . ,(concat temp-dir "/backup/")))
- auto-save-file-name-transforms    `((".*" ,(concat temp-dir "/auto-save-list/") t))
  ;; Disable non selected window highlight
  cursor-in-non-selected-windows     nil
  highlight-nonselected-windows      nil

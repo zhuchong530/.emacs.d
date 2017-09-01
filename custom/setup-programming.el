@@ -108,10 +108,9 @@
 
 
 ;; Package: projejctile
-(use-package projejctile
+(use-package projectile
   :ensure t
-  :config ((projectile-global-mode)
-	   (setq projetile-enable-cachint t))
+  :config (projectile-global-mode t)
   )
 ;; helm-projectile
 (use-package helm-projectile
@@ -124,7 +123,6 @@
         projectile-completion-system 'helm
         projectile-mode-line '(:eval (format " {%s}" (projectile-project-name))))
   :config
-  (projectile-global-mode)
   (helm-projectile-on)
   )
 ;; Package zygospore
@@ -187,7 +185,8 @@
               ;Godef jump key binding
               ("M-." . godef-jump)))
 
-(use-package flycheck-go)
+(use-package flycheck-go
+  :disabled)
 
 ;; go-eldoc packages
 (use-package go-eldoc

@@ -29,7 +29,7 @@
 (use-package company
   :ensure t
   :commands (my-indent-or-complete)
-  :bind ("TAB" . my-indent-or-complete)  
+  :bind ("TAB" . my-indent-or-complete)
   :init (progn
           (setq company-global-modes '(not python-mode cpython-mode sage-mode))
           )

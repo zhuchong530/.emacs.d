@@ -67,8 +67,13 @@
   )
 ;; load-theme
 (add-to-list 'custom-theme-load-path "/home/wangchang/.emacs.d/themes")
-;; (load-theme 'badger t)
-(load-theme 'grandshell t)
+;; (load-theme 'badger t)                  ;dark theme, grey background
+;; (load-theme 'grandshell t)              ;dark theme, balck background
+(load-theme 'dracula t)                ;dark theme, purple background
+;; (load-theme 'tomorrow-night-paradise t)    ;dark theme, black background
+;; (load-theme 'ujelly t)
+;; (load-theme 'autumn-light t)            ;light theme
+;; (load-theme 'infodoc t)                 ;light theme
 
 ;;smart-mode-line
 (use-package smart-mode-line

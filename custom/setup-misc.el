@@ -57,14 +57,14 @@
   )
 
 ;;color-theme
-(use-package color-theme
-  :disabled
-  :ensure t
-  :config ((color-theme-initialize)
-	   (setq color-theme-is-global t)
-	   (color-theme-dark-laptop)
-	   )
-  )
+;; (use-package color-theme
+;;   :disabled
+;;   :ensure t
+;;   :config ((color-theme-initialize)
+;; 	   (setq color-theme-is-global t)
+;; 	   (color-theme-dark-laptop)
+;; 	   )
+;;   )
 ;; load-theme
 (add-to-list 'custom-theme-load-path "/home/wangchang/.emacs.d/themes")
 ;; (load-theme 'badger t)                  ;dark theme, grey background

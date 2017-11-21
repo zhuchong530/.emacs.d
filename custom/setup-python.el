@@ -1,8 +1,9 @@
 (use-package web-mode
   :ensure t
-  :init
+  :config
   (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
@@ -11,7 +12,6 @@
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.api\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("/some/react/path/.*\\.js[x]?\\'" . web-mode))
-  :config
   (setq web-mode-engines-alist
         '(("php"    . "\\.phtml\\'")
           ("blade"  . "\\.blade\\."))
@@ -25,24 +25,44 @@
   (setq web-mode-enable-current-column-highlight t)
   (defun my-web-mode-hook ()
     "Hooks for Web mode."
-    (setq web-mode-markup-indent-offset 4)
+    (setq web-mode-markup-indent-offset 2)
     )
   (add-hook 'web-mode-hook  'my-web-mode-hook)
   
   )
 
 ;;js2-mode --- improved mode on editting .js
-(autoload 'js2-mode "js2" nil t)
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(use-package js2-mode
+  :ensure t
+  :commands js2-mode
+  :bind (("C-c ! n" . js2-next-error))
+  :init
+  (progn
+    (setq-default js2-basic-offset 4)
+    (setq-default js2-strict-trailing-comma-warning t)
+    (setq-default js2-global-externs
+                  '("module"
+                    "exports"
+                    "require"
+                    "process"
+                    "setTimeout"
+                    "clearTimeout"
+                    "setInterval"
+                    "clearInterval"
+                    "window"
+                    "location"
+                    "__dirname"
+                    "console"
+                    "JSON"))
+    (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode)))
+  )
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 ;; rainbow mode for display the color
 (use-package rainbow-mode
   :ensure t
   :mode "\\.css\\'"
   )
 
-;; zencoding-mode settings
-(use-package zencoding-mode)
-(add-hook 'sgml-mode-hook 'zencoding-mode)    ;; Auto-start on any markup modes
 
 ;; python3.3 build-in virtualenv environments
 (use-package pyvenv)

@@ -1,13 +1,17 @@
-;; package -- setup-sysfs
-;; Commentary:
-;; code:
+;;; package -- setup-sysfs
+;;; Commentary:
+;;; code:
 
 (use-package try                        ;let's you try packages without install them
   :ensure t)
 (use-package which-key                  ;bring up help on key combinations
   :ensure t
-  :config
-  (which-key-mode))
+  :diminish which-key-mode
+  :commands (which-key-mode)
+  :init
+  (add-hook 'after-init-hook
+            '(lambda() (which-key-mode)))
+  )
 
 ;; UTF-8
 (set-charset-priority 'unicode)
@@ -94,3 +98,4 @@
 
 
 (provide 'setup-sys)
+;;; setup-sys.el ends here

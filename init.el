@@ -1,9 +1,6 @@
-;; main init file
-;; Commentary:
-;; Cathy.chang's GNU Emacs configuration
-;;
-
-;; code:
+;;; Package -- main init file
+;;; Commentary:Cathy.chang's GNU Emacs configuration
+;;; code:
 
 
 ;; Added by Package.el.  This must come before configurations of
@@ -41,7 +38,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("2eb22fdddfd785dff3d1a6a851314cbaea36b128ff336e60ba73cf0d3aaa6b1f" default)))
+    ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "2eb22fdddfd785dff3d1a6a851314cbaea36b128ff336e60ba73cf0d3aaa6b1f" default)))
  '(delete-selection-mode nil)
  '(package-selected-packages
    (quote
@@ -52,3 +49,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+;;; init.el ends here

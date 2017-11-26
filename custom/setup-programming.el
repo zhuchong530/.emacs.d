@@ -1,3 +1,7 @@
+;;; Package -- Programming stuff
+;;; Commentary:
+;;; Code:
+
 (use-package cc-mode
   :config
 ;; Available C style:
@@ -53,8 +57,16 @@
 ;; Package - company-irony
 (use-package company-irony
   :after company-mode
-  :config
-  (add-to-list 'company-backends 'company-irony))
+  :defer t
+  :ensure t
+  :init
+  (add-hook 'c-mode-common-hook
+            (lambda()
+              (when (derived-mode-p 'c-mode 'c++-mode)
+                (progn
+                  (add-to-list 'company-backends 'company-irony)
+                  (irony-mode)))))
+  )
 
 ;; Package - company-irony-c-headers
 (use-package company-irony-c-headers
@@ -63,7 +75,15 @@
   :config
   (add-to-list 'company-backends '(company-irony-c-headers company-irony))
   )
-
+;; Package -flycheck
+(use-package flycheck
+  :ensure t
+  :bind
+  (("C-c e n" . flycheck-next-error)
+   ("C-c e p" . flycheck-previour-error))
+  :config
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  )
 ;; Package - flycheck-irony
 (use-package flycheck-irony
   :after flycheck-mode
@@ -143,9 +163,9 @@
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
 ;;nasm-mode
-(require 'nasm-mode)
-(add-to-list 'auto-mode-alist '("\\.\\(asm\\|s\\)$" . nasm-mode))
-
+(use-package nasm-mode
+  :mode "\\.\\(nasm\\|s\\)$"
+  )
 
 ;;go-mode packages
 ;; REQUIREMENTS:
@@ -248,3 +268,4 @@
 
 
 (provide 'setup-programming)
+;;; setup-programming.el ends here

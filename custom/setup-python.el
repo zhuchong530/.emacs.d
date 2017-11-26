@@ -1,3 +1,6 @@
+;;; Package -- Summary
+;;; Commentary:
+;;; Code:
 (use-package web-mode
   :ensure t
   :config
@@ -63,13 +66,21 @@
   :mode "\\.css\\'"
   )
 
+(use-package python
+  :defer t
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter ("python3" . python-mode)
+  :init
+  (add-hook 'python-mode-hook 'hs-minor-mode)
+  )
 
-;; python3.3 build-in virtualenv environments
-(use-package pyvenv)
 ;; using elpy instead jedi
 (use-package elpy
   :ensure t
+  :after python
+  :commands (elpy-enable)
   :init
+  (elpy-enable)
   (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
   :bind (:map elpy-mode-map
               ("<M-left>" . nil)
@@ -80,17 +91,27 @@
               ("M-," . pop-tag-mark)
               )
   :config
-  (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
-  flycheck-python-flake8-executable "/usr/bin/flake8-3.4"
+  (setq elpy-default-minor-mode '(elpy-module-company
+                                  elpy-module-eldoc
+                                  elpy-module-flycheck
+                                  elpy-module-pyvenv
+                                  elpy-module-yasnippet
+                                  elpy-module-django
+                                  elpy-module-sane-defaults))
+  ;; (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+  ;; (flycheck-python-flake8-executable "/usr/bin/flake8-3.4")
+  (setq python-check-command "flake8")
   (setq elpy-rpc-backend "jedi")
   (setq elpy-use-cpython "/usr/bin/python3")
   (setq elpy-rpc-python-command "python3")
+  (setq python-shell-interpreter "python3")
   )
-(use-package python
-  :mode ("\\.py" . python-mode)
+;; python3.3 build-in virtualenv environments
+(use-package pyvenv
+  :demand
   :config
-  (setq python-indent-offset 4)
-  (elpy-enable)
+  (pyvenv-mode 1)
   )
 
 (provide 'setup-python)
+;;; setup-python.el ends here

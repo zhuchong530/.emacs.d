@@ -1,4 +1,6 @@
-;; GROUP: misc
+;;; Package -- misc stuff
+;;; Commentary:
+;;; Code:
 
 ;; Save backup files in a dedicated directory
 (setq backup-directory-alist '(("." . "~/.emacs.d/saves")))
@@ -79,8 +81,8 @@
 (use-package smart-mode-line
   :ensure t
   :config
-  (setq sml/theme 'dark)
   (setq sml/no-confirm-load-theme t)
+  (setq sml/theme 'respectful)
   (sml/setup)
   )
 
@@ -110,3 +112,4 @@
 
 
 (provide 'setup-misc)
+;;; setup-misc.el ends here

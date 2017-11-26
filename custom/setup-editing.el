@@ -1,4 +1,7 @@
-;; GROUP: Editing -> Editing Basics
+;;; Package -- editor stuff
+;;; Commentary:
+;;; code:
+
 (setq global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries
       mark-ring-max 5000                ; increase kill ring to contains 5000 entries
       mode-require-final-newline t      ; add a newline to end of file
@@ -29,25 +32,35 @@
 ;; Package: volatile-highlights
 (use-package volatile-highlights
   :ensure t
-  :config (volatile-highlights-mode t)
+  :diminish volatile-highlights-mode
+  :commands (volatile-highlights-mode)
+  :init
+  (add-hook 'after-init-hook '(lambda() (volatile-highlights-mode t)))
+  :config
+  (set-face-attribute 'vhl/default-face nil
+                      :underline "light slate gray")
   )
 
 ;; Package: clean-aindent-mode
 (use-package clean-aindent-mode
   :ensure t
+  :commands (clean-aindent-mode)
+  :init
+  (add-hook 'prog-mode-hook 'clean-aindent-mode)
   )
-(add-hook 'prog-mode-hook 'clean-aindent-mode)
 
 ;; PACKAGE: dtrt-indent
 (use-package dtrt-indent
   :ensure t
+  :config
+  (setq global-mode-string (remove 'dtrt-indent-mode-line-info global-mode-string))
+  (dtrt-indent-mode 1)
   )
-(setq dtrt-indent-mode 1)
-(setq dtrt-indent-verbosity 0)
 
 ;; PACKAGE: ws-butler
 (use-package ws-butler
   :ensure t
+  :diminish ws-butler-mode
   :init (progn
           (add-hook 'c-mode-common-hook 'ws-butler-mode)
           (add-hook 'text-mode 'ws-butler-mode)
@@ -74,17 +87,20 @@
 ;; PACKAGE: smartparens
 (use-package smartparens
   :ensure t
+  :diminish smartparens-mode
+  :config
+  (setq
+   sp-base-key-bindings 'paredit
+   sp-autoskip-closing-pair 'always
+   sp-hybrid-kill-entire-symbol nil)
+  (sp-use-paredit-bindings)
+  (show-smartparens-global-mode +1)
+  (smartparens-mode 1)
+  (sp-with-modes '(c-mode c++-mode)
+    (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
+    (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
+                                              ("* ||\n[i]" "RET"))))
   )
-(setq sp-base-key-bindings 'paredit)
-(setq sp-autoskip-closing-pair 'always)
-(setq sp-hybrid-kill-entire-symbol nil)
-(sp-use-paredit-bindings)
-(show-smartparens-global-mode +1)
-(smartparens-global-mode 1)
-(sp-with-modes '(c-mode c++-mode)
-  (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
-  (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
-                                            ("* ||\n[i]" "RET"))))
 
 ;; PACKAGE: comment-dwim-2
 (use-package comment-dwim-2
@@ -131,7 +147,10 @@
 ;; PACKAGE: anzu
 (use-package anzu
   :ensure t
-  :config (global-anzu-mode)
+  :diminish anzu-mode
+  :commands (global-anzu-mode)
+  :init
+  (add-hook 'after-init-hook '(lambda() (global-anzu-mode +1)))
   :bind (("M-%" . anzu-query-replace)
 	 ("C-M-%" . anzu-query-replace))
   )
@@ -310,3 +329,4 @@ Position the cursor at it's beginning, according to the current mode."
 (global-set-key (kbd "M-o") 'open-line)
 
 (provide 'setup-editing)
+;;; setup-editing.el ends here

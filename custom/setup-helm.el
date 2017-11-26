@@ -1,3 +1,7 @@
+;;; Package -- helm stuff
+;;; Commentary:
+;;; code:
+
 (use-package helm-core
   :ensure t)
 
@@ -8,7 +12,7 @@
   :demand t
   :bind (("M-x" . helm-M-x)
      ("C-c h c" . helm-occur)
-     ("<f1> SPC" . helm-all-mark-rings) ; I modified the keybinding 
+     ("<f1> SPC" . helm-all-mark-rings) ; I modified the keybinding
      ("M-y" . helm-show-kill-ring)
      ("C-c h x" . helm-register)    ; C-x r SPC and C-x r j
      ("C-c h g" . helm-google-suggest)
@@ -19,7 +23,7 @@
      ("<tab>" . helm-execute-persistent-action) ; rebind tab to run persistent action
      ("C-i" . helm-execute-persistent-action) ; make TAB works in terminal
      ("C-z" . helm-select-action) ; list actions using C-z
-;;     :map shell-mode-map       
+;;     :map shell-mode-map
 ;;     ("C-c C-l" . helm-comint-input-ring) ; in shell mode
      :map minibuffer-local-map
      ("C-c C-l" . helm-minibuffer-history))
@@ -109,3 +113,4 @@
 (setq helm-swoop-speed-or-color t)
 
 (provide 'setup-helm)
+;;; setup-helm.el ends here

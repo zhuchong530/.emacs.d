@@ -1,6 +1,8 @@
 ;;; Package -- main init file
-;;; Commentary:Cathy.chang's GNU Emacs configuration
+;;; Commentary:
+;;; Cathy.chang's GNU Emacs configuration
 ;;; code:
+
 
 
 ;; Added by Package.el.  This must come before configurations of
@@ -21,15 +23,18 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+;; On MacOS?
+(setq ismac (equal system-type 'darwin))
+
 (add-to-list 'load-path "~/.emacs.d/custom")
 (add-to-list 'load-path (concat user-emacs-directory "custom"))
-(require 'setup-sys)
-(require 'setup-helm)
-(require 'setup-helm-gtags)
-(require 'setup-editing)
-(require 'setup-misc)
-(require 'setup-python)
-(require 'setup-programming)
+(load "setup-sys")
+(load "setup-helm")
+(load "setup-helm-gtags")
+(load "setup-editing")
+(load "setup-misc")
+(load "setup-python")
+(load "setup-programming")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

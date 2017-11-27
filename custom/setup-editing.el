@@ -81,7 +81,7 @@
 (use-package yasnippet
   :ensure t
   :init (yas-global-mode 1)
-  :config (setq yas/snippet-dirs '("/home/wangchang/.emacs.d/snippets"))
+  :config (setq yas/snippet-dirs '("~/.emacs.d/snippets"))
   )
 
 ;; PACKAGE: smartparens

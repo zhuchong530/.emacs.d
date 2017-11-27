@@ -72,7 +72,7 @@
     (setq exec-path (split-string path-from-shell path-separator))))
 
 (when window-system (set-exec-path-from-shell-PATH))
-(setenv "GOPATH" "/home/wangchang/data/Programme/googleGo/")
+(setenv "GOPATH" "~/Programme/googleGo/")
 
 ;;set the font
 (if (member "Monaco" (font-family-list))

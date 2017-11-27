@@ -1,3 +1,7 @@
+;;; Package -- ggtags stuff
+;;; Commentary:
+;;; code:
+
 (require 'ggtags)
 (add-hook 'c-mode-common-hook
           (lambda ()
@@ -48,3 +52,4 @@
 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
 
 (provide 'setup-helm-gtags)
+;;; setup-helm-gtags.el ends here

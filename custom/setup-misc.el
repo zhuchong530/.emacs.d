@@ -68,7 +68,7 @@
 ;; 	   )
 ;;   )
 ;; load-theme
-(add-to-list 'custom-theme-load-path "/home/wangchang/.emacs.d/themes")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 ;; (load-theme 'badger t)                  ;dark theme, grey background
 ;; (load-theme 'grandshell t)              ;dark theme, balck background
 (load-theme 'dracula t)                ;dark theme, purple background

@@ -89,18 +89,17 @@
   :ensure t
   :diminish smartparens-mode
   :config
-  (setq
-   sp-base-key-bindings 'paredit
-   sp-autoskip-closing-pair 'always
-   sp-hybrid-kill-entire-symbol nil)
+  (setq sp-base-key-bindings 'paredit)
+  (setq sp-autoskip-closing-pair 'always)
+  (setq sp-hybrid-kill-entire-symbol nil)
   (sp-use-paredit-bindings)
-  (show-smartparens-global-mode +1)
-  (smartparens-mode 1)
-  (sp-with-modes '(c-mode c++-mode)
-    (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
-    (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
-                                              ("* ||\n[i]" "RET"))))
+  (show-smartparens-global-mode 1)
+  (smartparens-global-mode 1)
   )
+(sp-with-modes '(c-mode c++-mode javascript-mode)
+  (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
+  (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
+                                            ("* ||\n[i]" "RET"))))
 
 ;; PACKAGE: comment-dwim-2
 (use-package comment-dwim-2

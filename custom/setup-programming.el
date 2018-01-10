@@ -40,7 +40,7 @@
   :config(progn
            (setq company-tooltip-limit 20) ;bigger popup window
            (setq company-idledelay .3)     ;decrease delay before autocompletion popup shows
-           (setq compan-begin-commands'(self-insert-command)) ;start autocompletion only after typing
+           (setq compan-begin-commands '(self-insert-command)) ;start autocompletion only after typing
            (setq company-backends
                  '(company-irony company-irony-c-headers company-bbdb company-nxml company-css company-eclim
                                 company-semantic company-cmake company-capf
@@ -179,7 +179,6 @@
   :config
   ;; Use goimports instead of go-fmt
   (setq gofmt-command "goimports")
-  (add-hook 'go-mode-hook 'company-mode)
   ;; Call gofmt before saving
   (add-hook 'before-save-hook 'gofmt-before-save)
   (add-hook 'go-mode-hook 'setup-go-mode-compile)
@@ -192,7 +191,7 @@
 
                             (set (make-local-variable 'company-backends) '(company-go))
                             (company-go)))
-  :mode ("\\.go\\'" . go-mode)
+  :mode ("\\.go$" . go-mode)
   )
 
 (use-package go-errcheck)
@@ -200,22 +199,17 @@
 (use-package go-add-tags)
 
 (use-package company-go
+  :init (with-eval-after-load 'company
+          (add-to-list 'company-backends 'company-go))
   :after go-mode
   :bind (:map go-mode-map
               ;Godef jump key binding
               ("M-." . godef-jump)))
 
-(use-package flycheck-go
-  :disabled)
 
 ;; go-eldoc packages
 (use-package go-eldoc
-  :ensure t
-  :config
-  (add-hook 'go-mode-hook 'go-eldoc-setup)
-  (set-face-attribute 'eldoc-highlight-function-argument nil
-                      :underline t :foreground "green"
-                      :weight 'bold)
+  :init (add-hook 'go-mode-hook 'go-eldoc-setup)
   )
 
 (use-package flycheck-gometalinter
@@ -231,8 +225,12 @@
   (setq flycheck-gometalinter-fast t)
   ;; use in tests files
   (setq flycheck-gometalinter-test t)
+  ;; disable linters
+  (setq flycheck-gometalinter-disable-linters '("gotype" "gocyclo"))
   ;; Only enable selected linters
-  (setq flycheck-gometalinter-enable-linters '("golint" "gotype" "gocyclo"))
+  (setq flycheck-gometalinter-disable-all t)
+  ;; Only enable selected linters
+  (setq flycheck-gometalinter-enable-linters '("golint"))
   ;; Set different deadline (default: 5s)
   (setq flycheck-gometalinter-deadline "10s"))
 

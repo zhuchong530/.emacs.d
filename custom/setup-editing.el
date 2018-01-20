@@ -77,11 +77,9 @@
   :after prog-mode
   :defer 10
   :diminish yas-minor-mode
-  :bind (:map yas-keymap
-              ("C-i" . yas-next-field-or-maybe-expand))
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-  (yas-global-mode 1))
+  :init (yas-global-mode 1))
 
 ;; PACKAGE: smartparens
 (use-package smartparens

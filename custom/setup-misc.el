@@ -58,15 +58,6 @@
                                    "eshell-mode" "dired-mode"))
   )
 
-;;color-theme
-;; (use-package color-theme
-;;   :disabled
-;;   :ensure t
-;;   :config ((color-theme-initialize)
-;; 	   (setq color-theme-is-global t)
-;; 	   (color-theme-dark-laptop)
-;; 	   )
-;;   )
 ;; load-theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 ;; (load-theme 'badger t)                  ;dark theme, grey background
@@ -80,10 +71,10 @@
 ;;smart-mode-line
 (use-package smart-mode-line
   :ensure t
+  :defer 10
   :config
-  (setq sml/no-confirm-load-theme t)
-  (setq sml/theme 'respectful)
   (sml/setup)
+  (sml/apply-theme 'respectful)
   )
 
 ;;tramp

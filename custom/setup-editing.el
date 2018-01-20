@@ -60,13 +60,8 @@
 ;; PACKAGE: ws-butler
 (use-package ws-butler
   :ensure t
-  :diminish ws-butler-mode
-  :init (progn
-          (add-hook 'c-mode-common-hook 'ws-butler-mode)
-          (add-hook 'text-mode 'ws-butler-mode)
-          (add-hook 'fundamental-mode 'ws-butler-mode)
-          (add-hook 'python-mode 'ws-butler-mode))
-  )
+  :diminish
+  :hook (prog-mode . ws-butler-mode))
 
 ;; Package: undo-tree
 (use-package undo-tree
@@ -79,10 +74,14 @@
 
 ;; Package: yasnippet
 (use-package yasnippet
-  :ensure t
-  :init (yas-global-mode 1)
-  :config (setq yas/snippet-dirs '("~/.emacs.d/snippets"))
-  )
+  :after prog-mode
+  :defer 10
+  :diminish yas-minor-mode
+  :bind (:map yas-keymap
+              ("C-i" . yas-next-field-or-maybe-expand))
+  :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-global-mode 1))
 
 ;; PACKAGE: smartparens
 (use-package smartparens

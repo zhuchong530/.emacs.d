@@ -6,12 +6,11 @@
   :ensure t)
 (use-package which-key                  ;bring up help on key combinations
   :ensure t
-  :diminish which-key-mode
-  :commands (which-key-mode)
-  :init
-  (add-hook 'after-init-hook
-            '(lambda() (which-key-mode)))
-  )
+  :defer 10
+  :diminish
+  :commands which-key-mode
+  :config
+  (which-key-mode))
 
 ;; UTF-8
 (set-charset-priority 'unicode)
@@ -61,17 +60,6 @@
  frame-resize-pixelwise t)
 
 (setq column-number-mode t)
-;; exec-path-from-shell packages
-(defun set-exec-path-from-shell-PATH ()
-  (let ((path-from-shell (replace-regexp-in-string
-                          "[ \t\n]*$"
-                          ""
-                          (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
-    (setenv "PATH" path-from-shell)
-    (setq eshell-path-env path-from-shell) ; for eshell users
-    (setq exec-path (split-string path-from-shell path-separator))))
-
-(when window-system (set-exec-path-from-shell-PATH))
 (setenv "GOPATH" "~/Programme/googleGo/")
 
 ;;set the font
@@ -96,6 +84,11 @@
 ;; Shift + up/down/left/right  to move among window
 (windmove-default-keybindings)
 
+;; symon settings
+(use-package symon
+  :ensure t
+  :init (symon-mode)
+  )
 
 (provide 'setup-sys)
 ;;; setup-sys.el ends here

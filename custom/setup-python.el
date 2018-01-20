@@ -37,7 +37,7 @@
 ;;js2-mode --- improved mode on editting .js
 (use-package js2-mode
   :ensure t
-  :commands js2-mode
+  :mode "\\.js\\'"
   :bind (("C-c ! n" . js2-next-error))
   :init
   (progn
@@ -59,7 +59,6 @@
                     "JSON"))
     (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode)))
   )
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 ;; rainbow mode for display the color
 (use-package rainbow-mode
   :ensure t

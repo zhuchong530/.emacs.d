@@ -19,7 +19,12 @@
   (setq c-basic-offset 4)
   (global-set-key (kbd "RET") 'newline-and-indent)  ; automatically indent when press RET
   (setq gdb-many-windows t ;; use gdb-many-windows by default
-        gdb-show-main t))  ;; Non-nil means display source file containing the main routine at startup
+        gdb-show-main t)
+  :mode (("\\.h\\(h?\\|x\\|pp\\)\\'" . c++-mode)
+         ("\\.m\\'" . c-mode)
+         ("\\.mm\=\\'" . c++-mode))
+ 
+  )  
 
 
 ;; function-args
@@ -32,11 +37,19 @@
 ;; company
 (use-package company
   :ensure t
-  :commands (my-indent-or-complete)
-  :bind ("TAB" . my-indent-or-complete)
-  :init (progn
-          (setq company-global-modes '(not python-mode cpython-mode sage-mode))
-          )
+  :defer 5
+  :diminish
+  :commands (company-mode company-indent-or-complete-common)
+  :init
+  (dolist (hook '(emacs-lisp-mode-hook
+                  c-mode-common-hook
+                  python-mode-hook
+                  go-mode-hook
+                  prog-mode-hook))
+    (add-hook hook
+              #'(lambda ()
+                  (local-set-key (kbd "<tab>")
+                                 #'company-indent-or-complete-common))))
   :config(progn
            (setq company-tooltip-limit 20) ;bigger popup window
            (setq company-idledelay .3)     ;decrease delay before autocompletion popup shows

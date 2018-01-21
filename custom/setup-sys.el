@@ -2,6 +2,17 @@
 ;;; Commentary:
 ;;; code:
 
+(eval-and-compile
+  (require 'use-package))
+(require 'diminish)
+(require 'bind-key)
+
+;; bug-hunter settings
+(use-package bug-hunter
+  :ensure t
+  :defer t
+  )
+
 (use-package try                        ;let's you try packages without install them
   :ensure t)
 (use-package which-key                  ;bring up help on key combinations

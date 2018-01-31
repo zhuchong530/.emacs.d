@@ -24,8 +24,7 @@
          ("\\.m\\'" . c-mode)
          ("\\.mm\=\\'" . c++-mode))
  
-  )  
-
+  )
 
 ;; function-args
 (use-package function-args

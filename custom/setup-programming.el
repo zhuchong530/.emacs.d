@@ -4,17 +4,17 @@
 
 (use-package cc-mode
   :config
-;; Available C style:
-;; “gnu”: The default style for GNU projects
-;; “k&r”: What Kernighan and Ritchie, the authors of C used in their book
-;; “bsd”: What BSD developers use, aka “Allman style” after Eric Allman.
-;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
-;; “stroustrup”: What Stroustrup, the author of C++ used in his book
-;; “ellemtel”: Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,” Erik Nyquist and Mats Henricson, Ellemtel
-;; “linux”: What the Linux developers use for kernel development
-;; “python”: What Python developers use for extension modules
-;; “java”: The default style for java-mode (see below)
-;; “user”: When you want to define your own style
+  ;; Available C style:
+  ;; “gnu”: The default style for GNU projects
+  ;; “k&r”: What Kernighan and Ritchie, the authors of C used in their book
+  ;; “bsd”: What BSD developers use, aka “Allman style” after Eric Allman.
+  ;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
+  ;; “stroustrup”: What Stroustrup, the author of C++ used in his book
+  ;; “ellemtel”: Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,” Erik Nyquist and Mats Henricson, Ellemtel
+  ;; “linux”: What the Linux developers use for kernel development
+  ;; “python”: What Python developers use for extension modules
+  ;; “java”: The default style for java-mode (see below)
+  ;; “user”: When you want to define your own style
   (setq c-default-style "k&r") ;; set style to "k&r"
   (setq c-basic-offset 4)
   (global-set-key (kbd "RET") 'newline-and-indent)  ; automatically indent when press RET
@@ -23,7 +23,7 @@
   :mode (("\\.h\\(h?\\|x\\|pp\\)\\'" . c++-mode)
          ("\\.m\\'" . c-mode)
          ("\\.mm\=\\'" . c++-mode))
- 
+
   )
 
 ;; function-args
@@ -37,33 +37,29 @@
 (use-package company
   :ensure t
   :defer 5
-  :diminish
-  :commands (company-mode company-indent-or-complete-common)
-  :init
-  (dolist (hook '(emacs-lisp-mode-hook
-                  c-mode-common-hook
-                  python-mode-hook
-                  go-mode-hook
-                  prog-mode-hook))
-    (add-hook hook
-              #'(lambda ()
-                  (local-set-key (kbd "<tab>")
-                                 #'company-indent-or-complete-common))))
-  :config(progn
-           (setq company-tooltip-limit 20) ;bigger popup window
-           (setq company-idledelay .3)     ;decrease delay before autocompletion popup shows
-           (setq compan-begin-commands '(self-insert-command)) ;start autocompletion only after typing
-           (setq company-backends
-                 '(company-irony company-irony-c-headers company-bbdb company-nxml company-css company-eclim
-                                company-semantic company-cmake company-capf
-                                (company-dabbrev-code company-gtags company-keywords)
-                                company-files company-dabbrev))
-           (global-company-mode)
-           (defun my-indent-or-complete()
-             (interactive)
-             (if (looking-at "\\_>")
-                 (company-complete-common)
-               (indent-according-to-mode))))
+  :diminish ""
+  :bind ("C-." . company-complte)
+  :init (add-hook 'prog-mode-hook 'company-mode)
+  :config (progn
+            (setq company-tooltip-limit 20 ;bigger popup window
+                  company-idle-delay .1     ;decrease delay before autocompletion popup shows
+                  company-selection-wrap-around t
+                  company-minimum-prefix-length 1
+                  company-show-numbers t
+                  company-dabbrev-downcase nil
+                  company-transformers '(company-sort-by-occurrence))
+            (setq compan-begin-commands '(self-insert-command)) ;start autocompletion only after typing
+            (setq company-backends
+                  '(company-irony company-irony-c-headers company-bbdb company-nxml company-css company-eclim
+                                  company-semantic company-cmake company-capf
+                                  (company-dabbrev-code company-gtags company-keywords)
+                                  company-files company-dabbrev))
+            (global-company-mode)
+            (defun my-indent-or-complete()
+              (interactive)
+              (if (looking-at "\\_>")
+                  (company-complete-common)
+                (indent-according-to-mode))))
   )
 
 ;; Package - company-irony
@@ -90,9 +86,12 @@
 ;; Package -flycheck
 (use-package flycheck
   :ensure t
+  :defer t
   :bind
   (("C-c e n" . flycheck-next-error)
-   ("C-c e p" . flycheck-previour-error))
+   ("C-c e p" . flycheck-previour-error)
+   ("C-c e l" . flycheck-list-errors))
+  :init (global-flycheck-mode)
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode)
   )
@@ -142,7 +141,7 @@
 ;; Package: projejctile
 (use-package projectile
   :ensure t
-  :config (projectile-global-mode t)
+  :config (projectile-mode t)
   )
 ;; helm-projectile
 (use-package helm-projectile
@@ -161,8 +160,10 @@
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
 
 ;; uniquify
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'post-forward uniquify-separator ":")
+(use-package 'uniquify
+  :config
+  (setq uniquify-buffer-name-style 'post-forward uniquify-separator ":")
+  )
 
 ;; replace the `completion-at-point' and `completion-symbol' bindings in
 ;; irony-mode's buffers by irony-modes function
@@ -200,7 +201,6 @@
                             (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)
                             (local-set-key (kbd "C-c C-g") 'go-goto-imports)
                             (local-set-key (kbd "C-c C-k") 'godoc)
-
                             (set (make-local-variable 'company-backends) '(company-go))
                             (company-go)))
   :mode ("\\.go$" . go-mode)
@@ -215,7 +215,7 @@
           (add-to-list 'company-backends 'company-go))
   :after go-mode
   :bind (:map go-mode-map
-              ;Godef jump key binding
+                                        ;Godef jump key binding
               ("M-." . godef-jump)))
 
 

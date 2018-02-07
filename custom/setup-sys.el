@@ -64,14 +64,13 @@
  indent-tabs-mode                   nil
  inhibit-startup-message            t
  fringes-outside-margins            t
- x-select-enable-clipboard          t
+ select-enable-clipboard          t
  use-package-always-ensure          t
  vc-follow-symlinks                 t
- auto-revert-check-vc-info          nil
  frame-resize-pixelwise t)
 
 (setq column-number-mode t)
-(setenv "GOPATH" "~/Programme/googleGo/")
+(setenv "GOPATH" "/Users/wangchang/go")
 
 ;;set the font
 (if (member "Monaco" (font-family-list))
@@ -98,6 +97,7 @@
 ;; symon settings
 (use-package symon
   :ensure t
+  :disabled t
   :init (symon-mode)
   )
 

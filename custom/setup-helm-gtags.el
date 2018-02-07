@@ -22,7 +22,6 @@
   (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark))
 
 (require 'helm-gtags)
-
 (setq
  helm-gtags-ignore-case t
  helm-gtags-auto-update t

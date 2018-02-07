@@ -26,9 +26,11 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+;; load use-package, used for loading packages everywhere else
+(require 'use-package)
+;; Set to t to debug package loading
+(setq use-package-verbose nil)
 
-
-(setenv "GOPATH" "/home/wangchang/go")
 ;; add the module path
 (add-to-list 'load-path "~/.emacs.d/custom")
 (add-to-list 'load-path (concat user-emacs-directory "custom"))

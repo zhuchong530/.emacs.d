@@ -6,8 +6,8 @@
   ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
   ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
   ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-  :demand t
-  :disminish helm-mode
+  :ensure t
+  :diminish helm-mode
   :init (progn
           (require 'helm-config)
           (let ((ad-redefinition-action 'accept))
@@ -48,53 +48,34 @@
                   ;; scroll 8 lines other window using M-<next>/M-<prior>
                   helm-scroll-amount 8
                   helm-ff-file-name-history-use-recentf t
+                  helm-quick-update t
                   helm-autoresize-max-height 25
                   helm-autoresize-min-height 25)))
 
-  (use-package helm-descbinds
-    :defer 5
-    :init
-    (fset 'describe-bindings 'helm-descbinds)
-    :bind (("C-h b" . helm-descbinds)
-           ("C-h w" . helm-descbinds))
-    )
-  ;; use helm to list eshell history
-  (add-hook 'eshell-mode-hook
-            #'(lambda ()
-                (define-key eshell-mode-map (kbd "M-l")  'helm-eshell-history)))
+(use-package helm-descbinds
+  :defer 5
+  :init
+  (fset 'describe-bindings 'helm-descbinds)
+  :bind (("C-h b" . helm-descbinds)
+         ("C-h w" . helm-descbinds))
+  :config
+  (helm-descbinds-mode)
+  )
+;; PACKAGE: helm-swoop
+;; Locate the helm-swoop folder to your path
+(use-package helm-swoop
+  :ensure t
+  :bind (("C-c h o" . helm-swoop)
+         ("C-c s" . helm-multi-swoop-all)
+         :map helm-swoop-map
+         ("M-i" . helm-multi-swoop-all-from-helm-swoop)
+         )
+  :config (setq helm-multi-swoop-edit-save t)
+  )
+(use-package helm-ag
+  :ensure t
+  :after helm
+  :bind ("C-c a g" . helm-do-ag-project-root))
 
-;;; save current position to mark ring
-  (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
-
-  ;; show minibuffer history with Helm
-  (define-key minibuffer-local-map (kbd "M-p") 'helm-minibuffer-history)
-  (define-key minibuffer-local-map (kbd "M-n") 'helm-minibuffer-history)
-
-  (define-key global-map [remap find-tag] 'helm-etags-select)
-  (define-key global-map [remap list-buffers] 'helm-buffers-list)
-
-  ;; PACKAGE: helm-swoop
-  ;; Locate the helm-swoop folder to your path
-  (use-package helm-swoop
-    :ensure t
-    :bind (("C-c h o" . helm-swoop)
-           ("C-c s" . helm-multi-swoop-all)
-           :map helm-swoop-map
-           ("M-i" . helm-multi-swoop-all-from-helm-swoop)
-           )
-    :config (setq helm-multi-swoop-edit-save t)
-    )
-  (use-package helm-ag
-    :ensure t
-    :after helm
-    :bind ("C-c a g" . helm-do-ag-project-root))
-  ;; When doing isearch, hand the word over to helm-swoop
-  (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-  ;; If this value is t, split window inside the current window
-  (setq helm-swoop-split-with-multiple-windows t)
-  ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-  (setq helm-swoop-split-direction 'split-window-vertically)
-  ;; If nil, you can slightly boost invoke speed in exchange for text color
-  (setq helm-swoop-speed-or-color t)
 (provide 'setup-helm)
 ;;; setup-helm.el ends here

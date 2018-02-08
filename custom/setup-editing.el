@@ -75,7 +75,7 @@
 ;; Package: yasnippet
 (use-package yasnippet
   :after prog-mode
-  :defer 10
+  :defer t
   :diminish yas-minor-mode
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))

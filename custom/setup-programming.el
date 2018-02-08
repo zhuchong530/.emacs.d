@@ -61,20 +61,29 @@
                   (company-complete-common)
                 (indent-according-to-mode))))
   )
-
+;; Pakcage - irony
+(use-package irony
+  :config
+  (progn
+    ;; if irony server was never installed, install it
+    (unless (irony--find-server-executable) (call-interactively #'irony-install-server))
+    (add-hook 'c++-mode-hook 'irony-mode)
+    (add-hook 'c-mode-hook 'irony-mode)
+    ;; use compilation database first, clang_complete as fallback
+    (setq-default irony-cdb-compilation-database '(irony-cdb-libclang
+                                                   irony-cdb-clang-complete))
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+    )
+  )
 ;; Package - company-irony
 (use-package company-irony
   :after company-mode
   :defer t
   :ensure t
-  :init
-  (add-hook 'c-mode-common-hook
-            (lambda()
-              (when (derived-mode-p 'c-mode 'c++-mode)
-                (progn
-                  (add-to-list 'company-backends 'company-irony)
-                  (irony-mode)))))
-  )
+  :config
+  (progn
+    (eval-after-load 'company '(add-to-list 'company-backends 'company-irony))
+    ))
 
 ;; Package - company-irony-c-headers
 (use-package company-irony-c-headers
@@ -87,36 +96,36 @@
 (use-package flycheck
   :ensure t
   :defer t
+  :commands global-flycheck-mode
+  :init (global-flycheck-mode)
   :bind
   (("C-c e n" . flycheck-next-error)
    ("C-c e p" . flycheck-previour-error)
    ("C-c e l" . flycheck-list-errors))
-  :init (global-flycheck-mode)
   :config
-  (add-hook 'after-init-hook #'global-flycheck-mode)
+  (progn
+    (setq flycheck-check-syntax-automatically '(save-mode-enabled))
+    (setq flycheck-standard-error-navigation nil)
+    ;;flycheck errors on a tooltip(doesn't work on console)
+    (when (display-graphic-p (selected-frame))
+      (eval-after-load 'flycheck
+        '(custom-set-variables
+          '(flycheck-display-errors-function
+            #'flycheck-pos-tip-error-messages))))
+    )
   )
 ;; Package - flycheck-irony
 (use-package flycheck-irony
   :after flycheck-mode
   :config
-  (add-hook 'flycheck-mode-hook  #'flycheck-irony-setup)
-  (add-hook 'c++-mode-hook 'flycheck-mode)
-  (add-hook 'c-mode-hook 'flycheck-mode)
-  (add-hook 'c++-mode-hook
-            (lambda () (setq flycheck-clang-include-path
-                             (list (expand-file-name "/usr/include"))))))
-
+  (progn
+    (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))))
 ;; Package - irony-eldoc
 (use-package irony-eldoc
   :ensure t
-  :config (add-hook 'irony-mode-hook 'irony-eldoc)
-  )
-
-;; hs-minor-mode for folding source code
-(add-hook 'c-mode-common-hook 'hs-minor-mode)
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-
+  :config
+  (progn
+    (add-hook 'irony-mode-hook #'irony-eldoc)))
 
 ;; activate whitespace-mode to view all whitespace characters
 (global-set-key (kbd "C-c w") 'whitespace-mode)
@@ -141,12 +150,13 @@
 ;; Package: projejctile
 (use-package projectile
   :ensure t
-  :config (projectile-mode t)
-  )
+  :config
+  (progn
+    (projectile-global-mode)
+    ))
 ;; helm-projectile
 (use-package helm-projectile
   :ensure t
-  :if (display-graphic-p)
   :diminish projectile-mode
   :init
   (setq projectile-enable-caching t
@@ -154,17 +164,23 @@
         projectile-completion-system 'helm
         projectile-mode-line '(:eval (format " {%s}" (projectile-project-name))))
   :config
-  (helm-projectile-on)
-  )
+  (progn
+    (setq projectile-completion-system 'helm)
+  (helm-projectile-on)))
 ;; Package zygospore
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
 
 ;; uniquify
-(use-package 'uniquify
+(use-package uniquify
+  :ensure nil
   :config
-  (setq uniquify-buffer-name-style 'post-forward uniquify-separator ":")
+  (setq
+   uniquify-buffer-name-style 'reverse
+   uniquify-separator ":"
+   uniquify-after-kill-buffer-p t
+   uniquify-ignore-buffers-re "^\\*"
+   )
   )
-
 ;; replace the `completion-at-point' and `completion-symbol' bindings in
 ;; irony-mode's buffers by irony-modes function
 (defun my-irony-mode-hook()
@@ -180,6 +196,26 @@
   :mode "\\.\\(nasm\\|s\\)$"
   )
 
+(use-package go-guru
+  :ensure t
+  :config
+  (go-guru-hl-identifier-mode)
+  (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+  )
+(use-package company-go
+  :disabled t
+  :init (with-eval-after-load 'company
+          (add-to-list 'company-backends 'company-go))
+  :after go-mode
+  :bind (:map go-mode-map
+              ;Godef jump key binding
+              ("M-." . godef-jump)))
+
+(defun setup-go-mode-compile()
+  ;; Customize compile command to run go build
+  (if (not (string-match "go" compile-command))
+      (set (make-local-variable 'compile-command)
+           "go build -v && go test -v && go vet")))
 ;;go-mode packages
 ;; REQUIREMENTS:
 ;; go get -u golang.org/x/tools/cmd/...
@@ -191,37 +227,35 @@
   :ensure t
   :config
   ;; Use goimports instead of go-fmt
-  (setq gofmt-command "goimports")
+  (setq gofmt-command "goimports"
+        go-fontify-function-calls nil
+        company-idle-delay .1
+        )
   ;; Call gofmt before saving
-  (add-hook 'before-save-hook 'gofmt-before-save)
+  (add-hook 'before-save-hook #'gofmt-before-save)
   (add-hook 'go-mode-hook 'setup-go-mode-compile)
   (add-hook 'go-mode-hook #'smartparens-mode)
-  (add-hook 'go-mode-hook (lambda ()
-                            (setq tab-width 4)
-                            (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)
-                            (local-set-key (kbd "C-c C-g") 'go-goto-imports)
-                            (local-set-key (kbd "C-c C-k") 'godoc)
-                            (set (make-local-variable 'company-backends) '(company-go))
-                            (company-go)))
-  :mode ("\\.go$" . go-mode)
-  )
-
+  (add-hook 'go-mode-hook
+            (lambda()
+              (set (make-local-variable 'company-backends) '(company-go))
+              (company-mode)))
+  :bind
+  (:map go-mode-map
+        ("M-." . go-guru-definition)
+        ("C-c d" . godoc-at-point)
+        ("C-c g" . godoc)
+        ("C-c h" . go-guru-hl-identifier)
+        )
+  :mode "\\.go\\'"
+)
 (use-package go-errcheck)
 
 (use-package go-add-tags)
 
-(use-package company-go
-  :init (with-eval-after-load 'company
-          (add-to-list 'company-backends 'company-go))
-  :after go-mode
-  :bind (:map go-mode-map
-                                        ;Godef jump key binding
-              ("M-." . godef-jump)))
-
-
 ;; go-eldoc packages
 (use-package go-eldoc
-  :init (add-hook 'go-mode-hook 'go-eldoc-setup)
+  :config
+  (add-hook 'go-mode-hook 'go-eldoc-setup)
   )
 
 (use-package flycheck-gometalinter
@@ -246,19 +280,7 @@
   ;; Set different deadline (default: 5s)
   (setq flycheck-gometalinter-deadline "10s"))
 
-;; go-guru packages
-(use-package go-guru
-  :ensure t
-  :config
-  (go-guru-hl-identifier-mode)
-  (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
-  )
 
-(defun setup-go-mode-compile()
-  ;; Customize compile command to run go build
-  (if (not (string-match "go" compile-command))
-      (set (make-local-variable 'compile-command)
-           "go build -v && go test -v && go vet")))
 
 
 ;;magit package

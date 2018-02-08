@@ -12,6 +12,13 @@
   :ensure t
   :defer t
   )
+;; (require 'exec-path-from-shell)
+;; (exec-path-from-shell-initialize)
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize)
+  )
 
 (use-package try                        ;let's you try packages without install them
   :ensure t)

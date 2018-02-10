@@ -1,6 +1,8 @@
 ;;; Package -- Summary
 ;;; Commentary:
 ;;; Code:
+
+;; Package web-mode
 (use-package web-mode
   :ensure t
   :config

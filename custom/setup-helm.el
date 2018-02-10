@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; code:
 
+
+;; Package helm
+;; Helm is an Emacs incremental and narrowing framework
 (use-package helm
   ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
   ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
@@ -51,7 +54,8 @@
                   helm-quick-update t
                   helm-autoresize-max-height 25
                   helm-autoresize-min-height 25)))
-
+;; Package helm-descbinds
+;; A convenient `describe-bindings' with `helm'
 (use-package helm-descbinds
   :defer 5
   :init
@@ -61,7 +65,9 @@
   :config
   (helm-descbinds-mode)
   )
+
 ;; PACKAGE: helm-swoop
+;; Efficiently hopping squeezed lines powered by helm interface
 (use-package helm-swoop
   :ensure t
   :bind (("C-c h o" . helm-swoop)
@@ -71,10 +77,43 @@
          )
   :config (setq helm-multi-swoop-edit-save t)
   )
+
+;; Package helm-ag
+;; the silver searcher with helm interface
 (use-package helm-ag
   :ensure t
   :after helm
   :bind ("C-c a g" . helm-do-ag-project-root))
+
+;; Package helm-gtags
+;; GNU GLOBAL helm interface
+(if (executable-find "global")
+    (use-package helm-gtags
+      :defer t
+      :init
+      (add-hook 'c++-mode-hook 'helm-gtags-mode)
+      (add-hook 'c-mode-hook 'helm-gtags-mode)
+      :config
+      (setq helm-gtags-auto-update t
+            helm-gtags-direct-helm-completing t
+            helm-gtags-fuzzy-match t
+            helm-gtags-ignore-case t
+            helm-gtags-use-input-at-cursor t
+            helm-gtags-pulse-at-cursor t
+            helm-gtags-suggested-key-mapping t
+            )
+      )
+  (with-eval-after-load 'helm-gtags
+    ;; key bindings
+    (define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
+    (define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
+    (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+    (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+    (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+    (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+    )
+  )
+
 
 (provide 'setup-helm)
 ;;; setup-helm.el ends here

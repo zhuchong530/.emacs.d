@@ -30,6 +30,7 @@
                             (whitespace-mode 1)))
 
 ;; Package: volatile-highlights
+;; Minor mode for visual feedback on some operations.
 (use-package volatile-highlights
   :ensure t
   :diminish volatile-highlights-mode
@@ -42,6 +43,7 @@
   )
 
 ;; Package: clean-aindent-mode
+;; Simple indent and unindent, trims indent white-space
 (use-package clean-aindent-mode
   :ensure t
   :commands (clean-aindent-mode)
@@ -50,6 +52,7 @@
   )
 
 ;; PACKAGE: dtrt-indent
+;; Adapt to foreign indentation offsets
 (use-package dtrt-indent
   :ensure t
   :config
@@ -58,12 +61,14 @@
   )
 
 ;; PACKAGE: ws-butler
+;; Unobtrusively remove trailing whitespace.
 (use-package ws-butler
   :ensure t
   :diminish
   :hook (prog-mode . ws-butler-mode))
 
 ;; Package: undo-tree
+;; Treat undo history as a tree
 (use-package undo-tree
   :ensure t
   :init (progn
@@ -72,16 +77,20 @@
           (setq undo-tree-visualizer-diff t))
   )
 
-;; Package: yasnippet
-(use-package yasnippet
-  :after prog-mode
-  :defer t
-  :diminish yas-minor-mode
+;; uniquify
+(use-package uniquify
+  :ensure nil
   :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-  :init (yas-global-mode 1))
+  (setq
+   uniquify-buffer-name-style 'reverse
+   uniquify-separator ":"
+   uniquify-after-kill-buffer-p t
+   uniquify-ignore-buffers-re "^\\*"
+   )
+  )
 
 ;; PACKAGE: smartparens
+;; Automatic insertion, wrapping and paredit-like navigation with user defined pairs.
 (use-package smartparens
   :ensure t
   :diminish smartparens-mode
@@ -92,55 +101,21 @@
   (sp-use-paredit-bindings)
   (show-smartparens-global-mode 1)
   (smartparens-global-mode 1)
+  (sp-with-modes '(c-mode c++-mode javascript-mode)
+    (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
+    (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
+                                              ("* ||\n[i]" "RET"))))
   )
-(sp-with-modes '(c-mode c++-mode javascript-mode)
-  (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
-  (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
-                                            ("* ||\n[i]" "RET"))))
 
 ;; PACKAGE: comment-dwim-2
+;; An all-in-one comment command to rule them all
 (use-package comment-dwim-2
   :ensure t
   :bind ("M-;" . comment-dwim-2)
 )
 
-;; Jump to end of snippet definition
-(define-key yas-keymap (kbd "<return>") 'yas/exit-all-snippets)
-
-;; Inter-field navigation
-(defun yas/goto-end-of-active-field ()
-  (interactive)
-  (let* ((snippet (car (yas--snippets-at-point)))
-         (position (yas--field-end (yas--snippet-active-field snippet))))
-    (if (= (point) position)
-        (move-end-of-line 1)
-      (goto-char position))))
-
-(defun yas/goto-start-of-active-field ()
-  (interactive)
-  (let* ((snippet (car (yas--snippets-at-point)))
-         (position (yas--field-start (yas--snippet-active-field snippet))))
-    (if (= (point) position)
-        (move-beginning-of-line 1)
-      (goto-char position))))
-
-(define-key yas-keymap (kbd "C-e") 'yas/goto-end-of-active-field)
-(define-key yas-keymap (kbd "C-a") 'yas/goto-start-of-active-field)
-;; (define-key yas-minor-mode-map [(tab)] nil)
-;; (define-key yas-minor-mode-map (kbd "TAB") nil)
-;; (define-key yas-minor-mode-map (kbd "C-<tab>") 'yas-expand)
-;; No dropdowns please, yas
-(setq yas-prompt-functions '(yas/ido-prompt yas/completing-prompt))
-
-;; No need to be so verbose
-(setq yas-verbosity 1)
-
-;; Wrap around region
-(setq yas-wrap-around-region t)
-
-(add-hook 'term-mode-hook (lambda() (setq yas-dont-activate t)))
-
 ;; PACKAGE: anzu
+;; Show number of matches in mode-line while searching
 (use-package anzu
   :ensure t
   :diminish anzu-mode
@@ -152,6 +127,7 @@
   )
 
 ;; PACKAGE: iedit
+;; Edit multiple regions in the same way simultaneously.
 (use-package iedit
   :ensure t
   :init (setq iedit-toggle-key-default nil)
@@ -159,6 +135,7 @@
   )
 
 ;; PACKAGE: duplicate-thing
+;; Duplicate current line & selection
 (use-package duplicate-thing
   :ensure t
   :bind ("M-c" . duplicate-thing)

@@ -12,8 +12,6 @@
   :ensure t
   :defer t
   )
-;; (require 'exec-path-from-shell)
-;; (exec-path-from-shell-initialize)
 (use-package exec-path-from-shell
   :ensure t
   :config
@@ -77,7 +75,6 @@
  frame-resize-pixelwise t)
 
 (setq column-number-mode t)
-(setenv "GOPATH" "/Users/wangchang/go")
 
 ;;set the font
 (if (member "Monaco" (font-family-list))
@@ -104,7 +101,7 @@
 ;; symon settings
 (use-package symon
   :ensure t
-  :disabled t
+  ;; :disabled t
   :init (symon-mode)
   )
 

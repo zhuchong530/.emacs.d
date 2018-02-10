@@ -100,7 +100,39 @@
 	 ("\\.md\\'" . markdown-mode)
 	 ("README\\.md\\'" . gfm-mode))
   )
+;; Package cmake-mode
+;; major-mode for editing CMake sources
+(use-package cmake-mode
+  :mode ("CMakeLists.txt" "\\.cmake\\'")
+  )
+;; Package cmake-ide
+;; Calls CMake to find out include paths and other compiler flags
+(use-package cmake-ide
+  :defer t
+  :ensure t
+  :init
+  (cmake-ide-setup)
+  )
 
+
+(use-package gud
+  :commands gud-gdb
+  :bind (("<f9>" . gud-cont)
+         ("<f10>" . gud-next)
+         ("<f11>" . gud-step)
+         ("S-<f11>" . gud-finish))
+  :init
+  (defun show-debugger ()
+    (interactive)
+    (let ((gud-buf
+           (catch 'found
+             (dolist (buf (buffer-list))
+               (if (string-match "\\*gud-" (buffer-name buf))
+                   (throw 'found buf))))))
+      if (gud-buf
+          (switch-to-buffer-other-window gud-buf)
+          (call-interactively 'gud-gdb))))
+)
 
 (provide 'setup-misc)
 ;;; setup-misc.el ends here

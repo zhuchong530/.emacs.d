@@ -3,6 +3,10 @@
 ;;; Code:
 
 (use-package cc-mode
+  :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
+         ("\\.m\\'" . c-mode)
+         ("\\.mm\\'" . c-mode))
+
   :config
   ;; Available C style:
   ;; “gnu”: The default style for GNU projects
@@ -18,12 +22,9 @@
   (setq c-default-style "k&r") ;; set style to "k&r"
   (setq c-basic-offset 4)
   (global-set-key (kbd "RET") 'newline-and-indent)  ; automatically indent when press RET
-  (setq gdb-many-windows t ;; use gdb-many-windows by default
-        gdb-show-main t)
   :mode (("\\.h\\(h?\\|x\\|pp\\)\\'" . c++-mode)
          ("\\.m\\'" . c-mode)
          ("\\.mm\=\\'" . c++-mode))
-
   )
 
 ;; function-args
@@ -31,6 +32,10 @@
   :disabled
   :ensure t
   :config (fa-config-default)
+  )
+(use-package eldoc
+  :diminish
+  :hook ((c-mode-common emacs-lisp-mode) . eldoc-mode)
   )
 
 ;; company

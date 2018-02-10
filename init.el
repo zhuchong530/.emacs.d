@@ -1,19 +1,15 @@
 ;;; Package -- main init file
 ;;; Commentary:
-;;; Cathy.chang's GNU Emacs configuration
+;;; My GNU Emacs configuration
 ;;; code:
-
 
 (when (version< emacs-version "25")
   (error "Requires at least GNU Emacs 25, but you're running %s" emacs-version))
 
 ;; Always load newest byte code
 (setq load-prefer-newer t)
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(require 'package)                      ;package manager
+;package manager
+(require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -29,7 +25,13 @@
 ;; load use-package, used for loading packages everywhere else
 (require 'use-package)
 ;; Set to t to debug package loading
-(setq use-package-verbose nil)
+(if init-file-debug
+    (setq use-package-verbose t
+          use-package-expand-minimally nil
+          use-package-compute-statistics t
+          debug-on-error t)
+  (setq use-package-verbose nil
+        use-package-expand-minimally t))
 
 ;; add the module path
 (add-to-list 'load-path "~/.emacs.d/custom")
@@ -41,10 +43,6 @@
 (load "setup-misc")
 (load "setup-python")
 (load "setup-programming")
-;; On MacOS?
-(when (eq system-type 'darwin)
-  (load "setup-osx"))
-
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

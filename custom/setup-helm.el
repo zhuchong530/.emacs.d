@@ -62,7 +62,6 @@
   (helm-descbinds-mode)
   )
 ;; PACKAGE: helm-swoop
-;; Locate the helm-swoop folder to your path
 (use-package helm-swoop
   :ensure t
   :bind (("C-c h o" . helm-swoop)

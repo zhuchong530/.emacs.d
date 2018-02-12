@@ -67,6 +67,9 @@
 ;; (load-theme 'ujelly t)
 ;; (load-theme 'autumn-light t)            ;light theme
 ;; (load-theme 'infodoc t)                 ;light theme
+;; (load-theme 'leuven t)                  ;light theme
+;; (load-theme 'zenburn t)                 ;dark theme, grey background
+;; (load-theme 'monokai t)                 ;dark theme
 
 ;;smart-mode-line
 (use-package smart-mode-line

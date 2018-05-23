@@ -80,6 +80,16 @@
   (sml/apply-theme 'respectful)
   )
 
+(use-package zeal-at-point
+  :defer 10
+  :bind ("C-c d" . 'zeal-at-point)
+  :config
+  (add-to-list 'zeal-at-point-mode-alist '(python-mode . ("python" "django")))
+  (add-to-list 'zeal-at-point-mode-alist '(c-mode . "C"))
+  (add-to-list 'zeal-at-point-mode-alist '(c++-mode . "C++"))
+  (add-to-list 'zeal-at-point-mode-alist '(cc-mode . ("C" "C++")))
+  )
+
 ;;tramp
 ;;;;;;;;;;;;;;;;;;;;;;;;;tramp setting;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;Enable you to edit the file which on the REMOTE machines;;;;;

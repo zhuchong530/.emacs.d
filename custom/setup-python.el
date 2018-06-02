@@ -1,6 +1,8 @@
 ;;; Package -- Summary
 ;;; Commentary:
 ;;; Code:
+
+;; Package web-mode
 (use-package web-mode
   :ensure t
   :config
@@ -72,14 +74,18 @@
   :init
   (add-hook 'python-mode-hook 'hs-minor-mode)
   )
-
+;; python3.3 build-in virtualenv environments
+(use-package pyvenv
+  :demand
+  :config
+  (pyvenv-mode 1)
+  )
 ;; using elpy instead jedi
 (use-package elpy
   :ensure t
   :after python
   :commands (elpy-enable)
   :init
-  (elpy-enable)
   (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
   :bind (:map elpy-mode-map
               ("<M-left>" . nil)
@@ -90,27 +96,25 @@
               ("M-," . pop-tag-mark)
               )
   :config
-  (setq elpy-default-minor-mode '(elpy-module-company
-                                  elpy-module-eldoc
-                                  elpy-module-flycheck
-                                  elpy-module-pyvenv
-                                  elpy-module-yasnippet
-                                  elpy-module-django
-                                  elpy-module-sane-defaults))
+  (elpy-enable)
+  ;; (setq elpy-default-minor-mode '(elpy-module-company
+  ;;                                 elpy-module-eldoc
+  ;;                                 elpy-module-flycheck
+  ;;                                 elpy-module-pyvenv
+  ;;                                 elpy-module-yasnippet
+  ;;                                 elpy-module-django
+  ;;                                 elpy-module-sane-defaults))
   ;; (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
   ;; (flycheck-python-flake8-executable "/usr/bin/flake8-3.4")
+  (add-hook 'python-mode-hook 'elpy-mode)
   (setq python-check-command "flake8")
   (setq elpy-rpc-backend "jedi")
-  (setq elpy-use-cpython "/usr/bin/python3")
+  (setq elpy-use-cpython "/usr/local/bin/python3")
   (setq elpy-rpc-python-command "python3")
   (setq python-shell-interpreter "python3")
-  )
-;; python3.3 build-in virtualenv environments
-(use-package pyvenv
-  :demand
-  :config
   (pyvenv-mode 1)
   )
+
 
 (provide 'setup-python)
 ;;; setup-python.el ends here

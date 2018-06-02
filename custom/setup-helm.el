@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; code:
 
+;; Pakcage: helm
+;; Helm is an Emacs incremental and narrowing framework
 (use-package helm
   ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
   ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
@@ -52,6 +54,8 @@
                   helm-autoresize-max-height 25
                   helm-autoresize-min-height 25)))
 
+;; Package: helm-descbinds
+;; A convenient 'describe-bindings' with 'helm'
 (use-package helm-descbinds
   :defer 5
   :init
@@ -61,6 +65,7 @@
   :config
   (helm-descbinds-mode)
   )
+
 ;; PACKAGE: helm-swoop
 ;; Locate the helm-swoop folder to your path
 (use-package helm-swoop
@@ -72,6 +77,9 @@
          )
   :config (setq helm-multi-swoop-edit-save t)
   )
+
+;; Package helm-ag
+;; the silver searcher with helm interface
 (use-package helm-ag
   :ensure t
   :after helm

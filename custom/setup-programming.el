@@ -18,22 +18,27 @@
   (setq c-default-style "k&r") ;; set style to "k&r"
   (setq c-basic-offset 4)
   (global-set-key (kbd "RET") 'newline-and-indent)  ; automatically indent when press RET
-  (setq gdb-many-windows t ;; use gdb-many-windows by default
-        gdb-show-main t)
   :mode (("\\.h\\(h?\\|x\\|pp\\)\\'" . c++-mode)
          ("\\.m\\'" . c-mode)
          ("\\.mm\=\\'" . c++-mode))
-
   )
 
-;; function-args
+;; Package function-args
+;; C++ completion for GNU Emacs
 (use-package function-args
   :disabled
   :ensure t
   :config (fa-config-default)
   )
 
+;; Package eldoc
+(use-package eldoc
+  :diminish
+  :hook ((c-mode-common emacs-lisp-mode) . eldoc-mode)
+  )
+
 ;; company
+;; Modular text completion framework
 (use-package company
   :ensure t
   :defer 5
@@ -62,6 +67,7 @@
                 (indent-according-to-mode))))
   )
 ;; Pakcage - irony
+;; C/C++ minor mode powered by libclang
 (use-package irony
   :config
   (progn
@@ -74,8 +80,18 @@
                                                    irony-cdb-clang-complete))
     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
     )
+  ;; ;; replace the `completion-at-point' and `completion-symbol' bindings in
+  ;; ;; irony-mode's buffers by irony-modes function
+  ;; (defun my-irony-mode-hook()
+  ;;   (define-key irony-mode-map [remap completion-at-point]
+  ;;     'irony-completion-at-point-async)
+  ;;   (define-key irony-mode-map [remap complete-symbol]
+  ;;     'irony-completion-at-point-async))
+  ;; (add-hook 'irony-mode-hook 'my-irony-mode-hook)
   )
+
 ;; Package - company-irony
+;; company-mode completion back-end for irony-mode
 (use-package company-irony
   :after company-mode
   :defer t
@@ -86,17 +102,22 @@
     ))
 
 ;; Package - company-irony-c-headers
+;; Company mode backend for C/C++ header files with Irony
 (use-package company-irony-c-headers
   :ensure t
   :after company-mode
   :config
   (add-to-list 'company-backends '(company-irony-c-headers company-irony))
   )
+
 ;; Package -flycheck
+;; On-the-fly syntax checking
 (use-package flycheck
   :ensure t
   :defer t
-  :commands global-flycheck-mode
+  :commands (flycheck-mode
+             flycheck-next-error
+             flycheck-previous-error)
   :init (global-flycheck-mode)
   :bind
   (("C-c e n" . flycheck-next-error)
@@ -115,12 +136,15 @@
     )
   )
 ;; Package - flycheck-irony
+;; Flycheck: C/C++ support via Irony
 (use-package flycheck-irony
-  :after flycheck-mode
+  :after irony-mode
   :config
   (progn
     (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))))
+
 ;; Package - irony-eldoc
+;; irony-mode support for eldoc-mode
 (use-package irony-eldoc
   :ensure t
   :config
@@ -135,10 +159,8 @@
 
 ;; use space to indent by default
 (setq-default indent-tabs-mode nil)
-
 ;; set appearance of a tab that is represented by 4 spaces
 (setq-default tab-width 4)
-
 ;; Compilation
 (global-set-key (kbd "<f5>") (lambda ()
                                (interactive)
@@ -148,13 +170,16 @@
 
 
 ;; Package: projejctile
+;; Manage and navigate projects in Emacs easily
 (use-package projectile
   :ensure t
   :config
   (progn
     (projectile-global-mode)
     ))
-;; helm-projectile
+
+;; Package: helm-projectile
+;; Helm integration for Projectile
 (use-package helm-projectile
   :ensure t
   :diminish projectile-mode
@@ -167,41 +192,47 @@
   (progn
     (setq projectile-completion-system 'helm)
   (helm-projectile-on)))
-;; Package zygospore
-(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
 
-;; uniquify
-(use-package uniquify
-  :ensure nil
+;; Package: yasnippet
+;; Yet another snippet extension for Emacs
+(use-package yasnippet
+  :after prog-mode
+  :defer t
+  :diminish yas-minor-mode
+  :bind (("C-c y d" . yas-load-directory)
+         ("C-c y i" . yas-insert-snippet)
+         ("C-c y f" . yas-visit-snippet-file)
+         ("C-c y n" . yas-new-snippet)
+         ("C-c y t" . yas-tryout-snippet)
+         ("C-c y l" . yas-describe-tables)
+         ("C-c y g" . yas/global-mode)
+         ("C-c y m" . yas/minor-mode)
+         ("C-c y a" . yas-reload-all)
+         ("C-c y x" . yas-expand))
+  :bind (:map yas-keymap
+              ("C-i" . yas-next-field-or-maybe-expand))
+  :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
   :config
-  (setq
-   uniquify-buffer-name-style 'reverse
-   uniquify-separator ":"
-   uniquify-after-kill-buffer-p t
-   uniquify-ignore-buffers-re "^\\*"
-   )
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-global-mode 1)
   )
-;; replace the `completion-at-point' and `completion-symbol' bindings in
-;; irony-mode's buffers by irony-modes function
-(defun my-irony-mode-hook()
-  (define-key irony-mode-map [remap completion-at-point]
-    'irony-completion-at-point-async)
-  (define-key irony-mode-map [remap complete-symbol]
-    'irony-completion-at-point-async))
-(add-hook 'irony-mode-hook 'my-irony-mode-hook)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
 ;;nasm-mode
 (use-package nasm-mode
   :mode "\\.\\(nasm\\|s\\)$"
   )
 
+;; Package go-guru
+;; Integration of the Go 'guru' analysis tool into Emacs.
 (use-package go-guru
   :ensure t
   :config
   (go-guru-hl-identifier-mode)
   (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
   )
+
+;; Package company-go
+;; company-mode backend for Go (using gocode)
 (use-package company-go
   :disabled t
   :init (with-eval-after-load 'company
@@ -211,18 +242,18 @@
               ;Godef jump key binding
               ("M-." . godef-jump)))
 
-(defun setup-go-mode-compile()
-  ;; Customize compile command to run go build
-  (if (not (string-match "go" compile-command))
-      (set (make-local-variable 'compile-command)
-           "go build -v && go test -v && go vet")))
+;; (defun setup-go-mode-compile()
+;;   ;; Customize compile command to run go build
+;;   (if (not (string-match "go" compile-command))
+;;       (set (make-local-variable 'compile-command)
+;;            "go build -v && go test -v && go vet")))
+
 ;;go-mode packages
 ;; REQUIREMENTS:
 ;; go get -u golang.org/x/tools/cmd/...
 ;; go get -u github.com/rogpeppe/godef
 ;; go get -u github.com/nsf/gocode
 ;; go get -u github.com/kisielk/errcheck
-
 (use-package go-mode
   :ensure t
   :config
@@ -233,7 +264,7 @@
         )
   ;; Call gofmt before saving
   (add-hook 'before-save-hook #'gofmt-before-save)
-  (add-hook 'go-mode-hook 'setup-go-mode-compile)
+  ;;(add-hook 'go-mode-hook 'setup-go-mode-compile)
   (add-hook 'go-mode-hook #'smartparens-mode)
   (add-hook 'go-mode-hook
             (lambda()

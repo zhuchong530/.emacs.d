@@ -13,6 +13,7 @@
   )
 
 ;; highlight-symbol
+;; automatic and manual symbol highlighting
 (use-package highlight-symbol
   :ensure t
   :bind(("C-<f3>" . highlight-symbol)
@@ -22,7 +23,8 @@
 	)
   )
 
-;;package tabbar
+;; Package: tabbar
+;; Display a tab bar in the header line
 (use-package tabbar
   :ensure t
   :demand
@@ -33,15 +35,18 @@
 	 ("C-0". tabbar-forward))
   )
 
-;;package ace-jump-mode
+;; Package ace-jump-mode
+;; a quick cursor location minor mode for emacs
 (use-package ace-jump-mode
   :ensure t
   :bind ("C-c <SPC>" . ace-jump-mode)
   )
 
-;;package golden-ratio
+;; Package golden-ratio
+;; Automatic resizing of Emacs windows to the golden ratio
 (use-package golden-ratio
   :ensure t
+  :diminish golden-ratio-mode
   :config (setq golden-ratio-exclude-modes '("ediff-mode"
                                    "gud-mode"
                                    "gdb-locals-mode"
@@ -56,6 +61,7 @@
                                    "gdb-memory-mode"
                                    "IELM"
                                    "eshell-mode" "dired-mode"))
+  (golden-ratio-mode 1)
   )
 
 ;; load-theme
@@ -68,7 +74,8 @@
 ;; (load-theme 'autumn-light t)            ;light theme
 ;; (load-theme 'infodoc t)                 ;light theme
 
-;;smart-mode-line
+;; Package: smart-mode-line
+;; A color coded smart mode-line
 (use-package smart-mode-line
   :ensure t
   :defer 10
@@ -93,14 +100,14 @@
   :ensure t
   )
 
-;;; markdown mode
+;; Package: markdown mode
+;; Major mode for Markdown-formatted text
 (use-package markdown-mode
   :ensure t
   :mode (("\\.markdown\\'" . markdown-mode)
 	 ("\\.md\\'" . markdown-mode)
 	 ("README\\.md\\'" . gfm-mode))
   )
-
 
 (provide 'setup-misc)
 ;;; setup-misc.el ends here

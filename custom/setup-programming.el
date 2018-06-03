@@ -191,7 +191,7 @@
   :config
   (progn
     (setq projectile-completion-system 'helm)
-  (helm-projectile-on)))
+    (helm-projectile-on)))
 
 ;; Package: yasnippet
 ;; Yet another snippet extension for Emacs
@@ -239,7 +239,7 @@
           (add-to-list 'company-backends 'company-go))
   :after go-mode
   :bind (:map go-mode-map
-              ;Godef jump key binding
+                                        ;Godef jump key binding
               ("M-." . godef-jump)))
 
 ;; (defun setup-go-mode-compile()
@@ -278,7 +278,7 @@
         ("C-c h" . go-guru-hl-identifier)
         )
   :mode "\\.go\\'"
-)
+  )
 (use-package go-errcheck)
 
 (use-package go-add-tags)

@@ -17,10 +17,10 @@
 (use-package highlight-symbol
   :ensure t
   :bind(("C-<f3>" . highlight-symbol)
-	("<f3>" . highlight-symbol-next)
-	("S-<f3>" . highlight-symbol-prev)
-	("M-<f3>" . highlight-symbol-query-replace)
-	)
+        ("<f3>" . highlight-symbol-next)
+        ("S-<f3>" . highlight-symbol-prev)
+        ("M-<f3>" . highlight-symbol-query-replace)
+        )
   )
 
 ;; Package: tabbar
@@ -30,9 +30,9 @@
   :demand
   :config (tabbar-mode t)
   :bind (("C-M-9" . tabbar-backward-group)
-	 ("C-M-0" . tabbar-forward-group)
-	 ("C-9" . tabbar-backward)
-	 ("C-0". tabbar-forward))
+         ("C-M-0" . tabbar-forward-group)
+         ("C-9" . tabbar-backward)
+         ("C-0". tabbar-forward))
   )
 
 ;; Package ace-jump-mode
@@ -48,19 +48,19 @@
   :ensure t
   :diminish golden-ratio-mode
   :config (setq golden-ratio-exclude-modes '("ediff-mode"
-                                   "gud-mode"
-                                   "gdb-locals-mode"
-                                   "gdb-registers-mode"
-                                   "gdb-breakpoints-mode"
-                                   "gdb-threads-mode"
-                                   "gdb-frames-mode"
-                                   "gdb-inferior-io-mode"
-                                   "gud-mode"
-                                   "gdb-inferior-io-mode"
-                                   "gdb-disassembly-mode"
-                                   "gdb-memory-mode"
-                                   "IELM"
-                                   "eshell-mode" "dired-mode"))
+                                             "gud-mode"
+                                             "gdb-locals-mode"
+                                             "gdb-registers-mode"
+                                             "gdb-breakpoints-mode"
+                                             "gdb-threads-mode"
+                                             "gdb-frames-mode"
+                                             "gdb-inferior-io-mode"
+                                             "gud-mode"
+                                             "gdb-inferior-io-mode"
+                                             "gdb-disassembly-mode"
+                                             "gdb-memory-mode"
+                                             "IELM"
+                                             "eshell-mode" "dired-mode"))
   (golden-ratio-mode 1)
   )
 
@@ -69,10 +69,9 @@
 ;; (load-theme 'badger t)                  ;dark theme, grey background
 ;; (load-theme 'grandshell t)              ;dark theme, balck background
 (load-theme 'dracula t)                ;dark theme, purple background
+;; (load-theme 'monokai t)                 ;; dark theme monokai
 ;; (load-theme 'tomorrow-night-paradise t)    ;dark theme, black background
 ;; (load-theme 'ujelly t)
-;; (load-theme 'autumn-light t)            ;light theme
-;; (load-theme 'infodoc t)                 ;light theme
 
 ;; Package: smart-mode-line
 ;; A color coded smart mode-line
@@ -105,8 +104,8 @@
 (use-package markdown-mode
   :ensure t
   :mode (("\\.markdown\\'" . markdown-mode)
-	 ("\\.md\\'" . markdown-mode)
-	 ("README\\.md\\'" . gfm-mode))
+         ("\\.md\\'" . markdown-mode)
+         ("README\\.md\\'" . gfm-mode))
   )
 
 (provide 'setup-misc)

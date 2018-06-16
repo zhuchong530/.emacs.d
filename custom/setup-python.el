@@ -73,13 +73,10 @@
   :interpreter ("python3" . python-mode)
   :init
   (add-hook 'python-mode-hook 'hs-minor-mode)
-  )
-;; python3.3 build-in virtualenv environments
-(use-package pyvenv
-  :demand
   :config
-  (pyvenv-mode 1)
+  (setq python-indent-offset 4)
   )
+
 ;; using elpy instead jedi
 (use-package elpy
   :ensure t
@@ -97,15 +94,6 @@
               )
   :config
   (elpy-enable)
-  ;; (setq elpy-default-minor-mode '(elpy-module-company
-  ;;                                 elpy-module-eldoc
-  ;;                                 elpy-module-flycheck
-  ;;                                 elpy-module-pyvenv
-  ;;                                 elpy-module-yasnippet
-  ;;                                 elpy-module-django
-  ;;                                 elpy-module-sane-defaults))
-  ;; (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
-  ;; (flycheck-python-flake8-executable "/usr/bin/flake8-3.4")
   (add-hook 'python-mode-hook 'elpy-mode)
   (setq python-check-command "flake8")
   (setq elpy-rpc-backend "jedi")
@@ -115,6 +103,14 @@
   (pyvenv-mode 1)
   )
 
+;; python3.3 build-in virtualenv environments
+(use-package pyenv-mode
+  :init
+  (add-to-list 'exec-path "~/.pyenv/wangchang")
+  (setenv "WORKON_HOME" "~/Programme/PythonEnvs")
+  :config
+  (pyvenv-mode 1)
+  )
 
 (provide 'setup-python)
 ;;; setup-python.el ends here

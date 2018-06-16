@@ -42,6 +42,18 @@
   :bind ("C-c <SPC>" . ace-jump-mode)
   )
 
+;; Package dash-at-point
+(use-package dash-at-point
+  :ensure t
+  :defer 15
+  :config
+  (autoload 'dash-at-point "dash-at-point"
+    "Search the word at point with Dash." t nil)
+  (global-set-key "\C-cd" 'dash-at-point)
+  ;; (global-set-key "\C-ce" 'dash-at-point-docset)  ;; key coflict with flycheck, disable first
+  (add-to-list 'dash-at-point-mode-alist '(python-mode . "python3"))
+  )
+
 ;; Package golden-ratio
 ;; Automatic resizing of Emacs windows to the golden ratio
 (use-package golden-ratio

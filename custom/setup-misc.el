@@ -72,7 +72,7 @@
                                              "gdb-disassembly-mode"
                                              "gdb-memory-mode"
                                              "IELM"
-                                             "eshell-mode" "dired-mode"))
+                                             "dired-mode"))
   (golden-ratio-mode 1)
   )
 

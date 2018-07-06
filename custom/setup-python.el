@@ -16,21 +16,21 @@
   (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.api\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("/some/react/path/.*\\.js[x]?\\'" . web-mode))
+  ;; (add-to-list 'auto-mode-alist '("/some/react/path/.*\\.js[x]?\\'" . web-mode))
   (setq web-mode-engines-alist
         '(("php"    . "\\.phtml\\'")
           ("blade"  . "\\.blade\\."))
         )
-  (setq web-mode-content-types-alist
-        '(("json" . "/some/path/.*\\.api\\'")
-          ("xml"  . "/other/path/.*\\.api\\'")
-          ("jsx"  . "/some/react/path/.*\\.js[x]?\\'")))
+  ;; (setq web-mode-content-types-alist
+  ;;       '(("json" . "/some/path/.*\\.api\\'")
+  ;;         ("xml"  . "/other/path/.*\\.api\\'")
+  ;;         ("jsx"  . "/some/react/path/.*\\.js[x]?\\'")))
   (setq web-mode-enable-auto-pairing t)
   (setq web-mode-enable-css-colorization t)
   (setq web-mode-enable-current-column-highlight t)
   (defun my-web-mode-hook ()
     "Hooks for Web mode."
-    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-markup-indent-offset 4)
     )
   (add-hook 'web-mode-hook  'my-web-mode-hook)
 
@@ -106,7 +106,6 @@
 ;; python3.3 build-in virtualenv environments
 (use-package pyenv-mode
   :init
-  (add-to-list 'exec-path "~/.pyenv/wangchang")
   (setenv "WORKON_HOME" "~/Programme/PythonEnvs")
   :config
   (pyvenv-mode 1)

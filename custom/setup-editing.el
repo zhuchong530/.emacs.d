@@ -137,6 +137,12 @@
   :bind ("M-c" . duplicate-thing)
   )
 
+;; Package: rainbow-delimiters
+(use-package rainbow-delimiters
+  :ensure t
+  :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+  )
+
 ;; Customized functions
 (defun prelude-move-beginning-of-line (arg)
   "Move point back to indentation of beginning of line.

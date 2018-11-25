@@ -157,10 +157,6 @@
 ;; show unncessary whitespace that can mess up your diff
 (add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
 
-;; use space to indent by default
-(setq-default indent-tabs-mode nil)
-;; set appearance of a tab that is represented by 4 spaces
-(setq-default tab-width 4)
 ;; Compilation
 (global-set-key (kbd "<f5>") (lambda ()
                                (interactive)
@@ -288,29 +284,27 @@
   (add-hook 'go-mode-hook 'go-eldoc-setup)
   )
 
-(use-package flycheck-gometalinter
-  :ensure t
-  :config
-  (progn
-    (flycheck-gometalinter-setup))
-  ;; skips 'vendor' directories and sets GO15VENDOREXPERIMENT=1
-  (setq flycheck-gometalinter-vendor t)
-  ;; only show errors
-  (setq flycheck-gometalinter-errors-only t)
-  ;; only run fast linters
-  (setq flycheck-gometalinter-fast t)
-  ;; use in tests files
-  (setq flycheck-gometalinter-test t)
-  ;; disable linters
-  (setq flycheck-gometalinter-disable-linters '("gotype" "gocyclo"))
-  ;; Only enable selected linters
-  (setq flycheck-gometalinter-disable-all t)
-  ;; Only enable selected linters
-  (setq flycheck-gometalinter-enable-linters '("golint"))
-  ;; Set different deadline (default: 5s)
-  (setq flycheck-gometalinter-deadline "10s"))
-
-
+;; (use-package flycheck-gometalinter
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (flycheck-gometalinter-setup))
+;;   ;; skips 'vendor' directories and sets GO15VENDOREXPERIMENT=1
+;;   (setq flycheck-gometalinter-vendor t)
+;;   ;; only show errors
+;;   (setq flycheck-gometalinter-errors-only t)
+;;   ;; only run fast linters
+;;   (setq flycheck-gometalinter-fast t)
+;;   ;; use in tests files
+;;   (setq flycheck-gometalinter-test t)
+;;   ;; disable linters
+;;   (setq flycheck-gometalinter-disable-linters '("gotype" "gocyclo"))
+;;   ;; Only enable selected linters
+;;   (setq flycheck-gometalinter-disable-all t)
+;;   ;; Only enable selected linters
+;;   (setq flycheck-gometalinter-enable-linters '("golint"))
+;;   ;; Set different deadline (default: 5s)
+;;   (setq flycheck-gometalinter-deadline "10s"))
 
 
 ;;magit package

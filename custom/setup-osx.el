@@ -10,5 +10,9 @@
   (exec-path-from-shell-initialize)
   )
 
+(when (eq system-type 'darwin)
+  (setq mac-option-modifier 'super)
+  (setq mac-command-modifier 'meta))
+
 (provide 'setup-osx)
 ;;; setup-osx.el ends here

@@ -13,14 +13,19 @@
   :defer t
   )
 
+;;native line numbering in Emacs 26
+(setq-default display-line-numbers-width 3)
+(setq-default display-line-number-type 'relative)
+(setq display-line-numbers-current-absolute t)
+(global-display-line-numbers-mode t)
+
+
 (use-package exec-path-from-shell
   :ensure t
   :config
   (exec-path-from-shell-initialize)
   )
 
-(use-package try                        ;let's you try packages without install them
-  :ensure t)
 (use-package which-key                  ;bring up help on key combinations
   :ensure t
   :defer 10
@@ -28,6 +33,7 @@
   :commands which-key-mode
   :config
   (which-key-mode))
+
 
 ;; UTF-8
 (set-charset-priority 'unicode)
@@ -40,8 +46,6 @@
 (defalias 'yes-or-no-p 'y-or-n-p)       ;using y-or-n instead yes-or-no
 (global-auto-revert-mode t)
 (setq gc-cons-threshold 100000000)     ;garbage collect threshold
-(setq inhibit-startup-message t)        ;disable startup message
-
 (setq
  confirm-kill-emacs 'y-or-n-p
  confirm-nonexistent-file-or-buffer  t
@@ -57,7 +61,6 @@
  ;; Disable backups (that's what git/dropbox are for)
  history-length                     1000
  auto-save-default                  nil
- make-backup-files                  nil
  create-lockfiles                   nil
  ;; Disable non selected window highlight
  cursor-in-non-selected-windows     nil
@@ -69,10 +72,12 @@
  make-backup-files                  nil
  indent-tabs-mode                   nil
  inhibit-startup-message            t
+ inhibit-splash-screen              t
  fringes-outside-margins            t
- select-enable-clipboard          t
+ select-enable-clipboard            t
  use-package-always-ensure          t
  vc-follow-symlinks                 t
+ tab-width                          4
  frame-resize-pixelwise t)
 
 (setq column-number-mode t)
@@ -80,7 +85,7 @@
 
 ;;set the font
 (if (member "Monaco" (font-family-list))
-    (set-frame-font "Monaco-14"))
+    (set-frame-font "Monaco-16"))
 
 ;; window-system settings
 (if window-system
@@ -99,13 +104,6 @@
 (toggle-frame-maximized)
 ;; Shift + up/down/left/right  to move among window
 (windmove-default-keybindings)
-
-;; symon settings
-(use-package symon
-  :ensure t
-  :disabled t
-  :init (symon-mode)
-  )
 
 (provide 'setup-sys)
 ;;; setup-sys.el ends here

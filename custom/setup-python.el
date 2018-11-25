@@ -59,7 +59,9 @@
                     "__dirname"
                     "console"
                     "JSON"))
-    (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode)))
+    (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
+    (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+    )
   )
 ;; rainbow mode for display the color
 (use-package rainbow-mode

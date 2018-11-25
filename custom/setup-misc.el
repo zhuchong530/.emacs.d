@@ -6,12 +6,6 @@
 (setq backup-directory-alist '(("." . "~/.emacs.d/saves")))
 (desktop-save-mode 1)
 
-;;linum-mode
-(use-package linum
-  :ensure t
-  :config (global-linum-mode 1)
-  )
-
 ;; highlight-symbol
 ;; automatic and manual symbol highlighting
 (use-package highlight-symbol
@@ -118,6 +112,7 @@
   :mode (("\\.markdown\\'" . markdown-mode)
          ("\\.md\\'" . markdown-mode)
          ("README\\.md\\'" . gfm-mode))
+  :init (setq markdown-command "multimarkdown")
   )
 
 (provide 'setup-misc)

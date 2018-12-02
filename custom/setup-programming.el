@@ -229,14 +229,16 @@
 ;; Package company-go
 ;; company-mode backend for Go (using gocode)
 (use-package company-go
-  :disabled t
-  :init (with-eval-after-load 'company
-          (add-to-list 'company-backends 'company-go))
-  :after go-mode
-  :bind (:map go-mode-map
-                                        ;Godef jump key binding
-              ("M-." . godef-jump)))
+  :ensure t
 
+  :after go-mode
+  :init
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-go))
+  :config
+  (add-hook 'go-mode-hook 'company-mode)
+  (add-to-list 'company-backends 'company-go)
+  )
 ;; (defun setup-go-mode-compile()
 ;;   ;; Customize compile command to run go build
 ;;   (if (not (string-match "go" compile-command))
@@ -257,9 +259,11 @@
         go-fontify-function-calls nil
         company-idle-delay .1
         )
+  (setq go-packages-function 'go-packages-go-list)
   ;; Call gofmt before saving
   (add-hook 'before-save-hook #'gofmt-before-save)
   ;;(add-hook 'go-mode-hook 'setup-go-mode-compile)
+  (add-hook 'go-mode-hook 'flycheck-mode)
   (add-hook 'go-mode-hook #'smartparens-mode)
   (add-hook 'go-mode-hook
             (lambda()

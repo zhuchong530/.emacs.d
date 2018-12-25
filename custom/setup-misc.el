@@ -71,23 +71,48 @@
   )
 
 ;; load-theme
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-;; (load-theme 'badger t)                  ;dark theme, grey background
-;; (load-theme 'grandshell t)              ;dark theme, balck background
-(load-theme 'dracula t)                ;dark theme, purple background
+;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+;; (load-theme 'dracula t)                ;dark theme, purple background
 ;; (load-theme 'monokai t)                 ;; dark theme monokai
-;; (load-theme 'tomorrow-night-paradise t)    ;dark theme, black background
-;; (load-theme 'ujelly t)
 
 ;; Package: smart-mode-line
 ;; A color coded smart mode-line
-(use-package smart-mode-line
+;; (use-package smart-mode-line
+;;   :ensure t
+;;   :defer 10
+;;   :config
+;;   (sml/setup)
+;;   (sml/apply-theme 'respectful)
+;;   )
+
+;; Package all-the-icons
+;;
+(use-package all-the-icons)
+
+;; Package doom-modeline
+;; A minimal and modern modeline
+(use-package doom-modeline
   :ensure t
-  :defer 10
+  :defer t
+  :hook (after-init . doom-modeline-init)
   :config
-  (sml/setup)
-  (sml/apply-theme 'respectful)
+  (setq doom-modeline-python-execuable "python")
+  (setq doom-modeline-icon t)
+  (setq doom-modeline-minor-modes nil)
+  (setq doom-modeline-persp-name t)
+  ;; (setq doom-modeline-github t)         ;requires "ghub" packages. not installed
   )
+
+;; Package doom-themes
+(use-package doom-themes
+  :ensure t
+  :defer t
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (doom-themes-visual-bell-config)
+  )
+(load-theme 'doom-dracula t)
 
 ;;tramp
 ;;;;;;;;;;;;;;;;;;;;;;;;;tramp setting;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

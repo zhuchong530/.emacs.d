@@ -272,7 +272,7 @@
   :bind
   (:map go-mode-map
         ("M-." . go-guru-definition)
-        ("C-c d" . godoc-at-point)
+        ;("C-c d" . godoc-at-point)
         ("C-c g" . godoc)
         ("C-c h" . go-guru-hl-identifier)
         )

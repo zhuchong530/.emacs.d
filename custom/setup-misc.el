@@ -89,6 +89,11 @@
 ;;
 (use-package all-the-icons)
 
+;; Package all-the-icons-dired
+;;
+(load "all-the-icons-dired.el")
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+
 ;; Package doom-modeline
 ;; A minimal and modern modeline
 (use-package doom-modeline
@@ -97,6 +102,9 @@
   :hook (after-init . doom-modeline-init)
   :config
   (setq doom-modeline-python-execuable "python")
+  (setq doom-modeline-major-mode-icon t)
+  (setq doom-modeline-major-mode-color-icon t)
+  (setq doom-modeline-buffer-file-name-style 'file-name)
   (setq doom-modeline-icon t)
   (setq doom-modeline-minor-modes nil)
   (setq doom-modeline-persp-name t)

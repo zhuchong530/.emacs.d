@@ -217,34 +217,6 @@
   :mode "\\.\\(nasm\\|s\\)$"
   )
 
-;; Package go-guru
-;; Integration of the Go 'guru' analysis tool into Emacs.
-(use-package go-guru
-  :ensure t
-  :config
-  (go-guru-hl-identifier-mode)
-  (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
-  )
-
-;; Package company-go
-;; company-mode backend for Go (using gocode)
-(use-package company-go
-  :ensure t
-
-  :after go-mode
-  :init
-  (with-eval-after-load 'company
-    (add-to-list 'company-backends 'company-go))
-  :config
-  (add-hook 'go-mode-hook 'company-mode)
-  (add-to-list 'company-backends 'company-go)
-  )
-;; (defun setup-go-mode-compile()
-;;   ;; Customize compile command to run go build
-;;   (if (not (string-match "go" compile-command))
-;;       (set (make-local-variable 'compile-command)
-;;            "go build -v && go test -v && go vet")))
-
 ;;go-mode packages
 ;; REQUIREMENTS:
 ;; go get -u golang.org/x/tools/cmd/...
@@ -278,6 +250,35 @@
         )
   :mode "\\.go\\'"
   )
+
+;; Package go-guru
+;; Integration of the Go 'guru' analysis tool into Emacs.
+(use-package go-guru
+  :ensure t
+  :config
+  (go-guru-hl-identifier-mode)
+  (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+  )
+
+;; Package company-go
+;; company-mode backend for Go (using gocode)
+(use-package company-go
+  :ensure t
+  :after go-mode
+  :init
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-go))
+  :config
+  (add-hook 'go-mode-hook 'company-mode)
+  (add-to-list 'company-backends 'company-go)
+  )
+;; (defun setup-go-mode-compile()
+;;   ;; Customize compile command to run go build
+;;   (if (not (string-match "go" compile-command))
+;;       (set (make-local-variable 'compile-command)
+;;            "go build -v && go test -v && go vet")))
+
+
 (use-package go-errcheck)
 
 (use-package go-add-tags)

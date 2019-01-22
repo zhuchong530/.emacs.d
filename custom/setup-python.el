@@ -4,42 +4,67 @@
 
 ;; Package web-mode
 (use-package web-mode
-  :ensure t
+  :bind (("C-c ]" . emmet-next-edit-point)
+         ("C-c [" . emmet-prev-edit-point)
+         ("C-c o b" . browse-url-of-file))
+  :mode
+  (("\\.js\\'" . web-mode)
+   ("\\.html?\\'" . web-mode)
+   ("\\.phtml?\\'" . web-mode)
+   ("\\.tpl\\.php\\'" . web-mode)
+   ("\\.as[cp]x\\'" . web-mode)
+   ("\\.[agj]sp\\'" . web-mode)
+   ("\\.erb\\'" . web-mode)
+   ("\\.mustache\\'" . web-mode)
+   ("\\.djhtml\\'" . web-mode)
+   ("\\.jsx$" . web-mode)
+   )
   :config
-  (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.api\\'" . web-mode))
-  ;; (add-to-list 'auto-mode-alist '("/some/react/path/.*\\.js[x]?\\'" . web-mode))
-  (setq web-mode-engines-alist
-        '(("php"    . "\\.phtml\\'")
-          ("blade"  . "\\.blade\\."))
-        )
-  ;; (setq web-mode-content-types-alist
-  ;;       '(("json" . "/some/path/.*\\.api\\'")
-  ;;         ("xml"  . "/other/path/.*\\.api\\'")
-  ;;         ("jsx"  . "/some/react/path/.*\\.js[x]?\\'")))
-  (setq web-mode-enable-auto-pairing t)
-  (setq web-mode-enable-css-colorization t)
-  (setq web-mode-enable-current-column-highlight t)
-  (defun my-web-mode-hook ()
-    "Hooks for Web mode."
-    (setq web-mode-markup-indent-offset 4)
-    )
-  (add-hook 'web-mode-hook  'my-web-mode-hook)
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2)
+  ;;highlight enclosing tags of the element under cursor
+  (setq web-mode-enable-current-element-highlight t)
+  (use-package web-mode-edit-element
+    :config (add-hook 'web-mode-hook 'web-mode-edit-element-minor-mode))
 
-  )
+  ;;snippets for HTML
+  (use-package emmet-mode
+    :init (setq emmet-move-cursor-between-quotes t)
+    :diminish (emmet-mode . " e"))
+  (add-hook 'web-mode-hook 'emmet-mode)
+
+  (defun my-web-mode-hook ()
+    "Hook for `web-mode' config for company-backends."
+    (set (make-local-variable 'company-backends)
+         '((company-tern company-css company-web-html company-files))))
+  (add-hook 'web-mode-hook 'my-web-mode-hook)
+
+  ;; Enable JavaScript completion between <script>...</script> etc.
+  (defadvice company-tern (before web-mode-set-up-ac-sources activate)
+    "Set `tern-mode' based on current language before running company-tern."
+    (message "advice")
+    (if (equal major-mode 'web-mode)
+        (let ((web-mode-cur-language
+               (web-mode-language-at-pos)))
+          (if (or (string= web-mode-cur-language "javascript")
+                  (string= web-mode-cur-language "jsx"))
+              (unless tern-mode (tern-mode))
+            (if tern-mode (tern-mode -1))))))
+  (add-hook 'web-mode-hook 'company-mode)
+
+  ;; to get completion for HTML stuff
+  ;; https://github.com/osv/company-web
+  (use-package company-web)
+
+  (add-hook 'web-mode-hook 'company-mode))
 
 ;;js2-mode --- improved mode on editting .js
 (use-package js2-mode
   :ensure t
-  :mode "\\.js\\'"
+  :mode
+  ("\\.js$" . js2-mode)
+  ("\\.json$" . js2-jsx-mode)
   :bind (("C-c ! n" . js2-next-error))
   :init
   (progn
@@ -70,48 +95,55 @@
   )
 
 (use-package python
-  :defer t
-  :mode ("\\.py\\'" . python-mode)
+  :mode ("\\.py" . python-mode)
   :interpreter ("python3" . python-mode)
   :init
   (add-hook 'python-mode-hook 'hs-minor-mode)
   :config
-  (setq python-indent-offset 4)
   )
-
 ;; using elpy instead jedi
 (use-package elpy
-  :ensure t
-  :after python
-  :commands (elpy-enable)
   :init
   (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
-  :bind (:map elpy-mode-map
-              ("<M-left>" . nil)
-              ("<M-right>" . nil)
-              ("<M-S-left>" . elpy-nav-indent-shift-left)
-              ("<M-S-right>" . elpy-nav-indent-shift-right)
-              ("M-." . elpy-goto-definition)
-              ("M-," . pop-tag-mark)
-              )
   :config
-  (elpy-enable)
-  (add-hook 'python-mode-hook 'elpy-mode)
   (setq python-check-command "flake8")
   (setq elpy-rpc-backend "jedi")
   (setq elpy-use-cpython "/usr/local/bin/python3")
   (setq elpy-rpc-python-command "python3")
   (setq python-shell-interpreter "python3")
-  (pyvenv-mode 1)
-  )
-
+  ;; :bind-keymap (:map elpy-mode-map
+  ;;             ("M-." . elpy-goto-definition)
+  ;;             ("M-," . pop-tag-mark))
+  (elpy-enable)
+  (setq python-indent-offset 4))
 ;; python3.3 build-in virtualenv environments
 (use-package pyenv-mode
   :init
+  (add-to-list 'exec-path "~/Programme/PythonEnvs")
   (setenv "WORKON_HOME" "~/Programme/PythonEnvs")
   :config
-  (pyvenv-mode 1)
+  (pyvenv-mode)
+  :bind
+  ("C-x p e" . pyenv-activate-current-project)
   )
+
+
+(use-package php-mode
+  :mode
+  (("\\.php\\'" . php-mode))
+  :config
+  (add-hook 'php-mode-hook
+            '(lambda ()
+               (require 'company-php)
+               (company-mode t)
+               (add-to-list 'company-backends 'company-ac-php-backend)))
+  )
+(use-package phpunit
+  :mode
+  (("\\.php\\'" . phpunit-mode))
+  )
+
+(use-package xah-css-mode)
 
 (provide 'setup-python)
 ;;; setup-python.el ends here

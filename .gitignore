@@ -24,3 +24,5 @@ projectile*
 /games/
 list
 tramp
+/elpy/
+/transient/

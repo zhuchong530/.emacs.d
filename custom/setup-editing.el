@@ -113,7 +113,7 @@
 (use-package comment-dwim-2
   :ensure t
   :bind ("M-;" . comment-dwim-2)
-)
+  )
 
 ;; PACKAGE: anzu
 ;; Show number of matches in mode-line while searching
@@ -124,7 +124,7 @@
   :init
   (add-hook 'after-init-hook '(lambda() (global-anzu-mode +1)))
   :bind (("M-%" . anzu-query-replace)
-	 ("C-M-%" . anzu-query-replace))
+         ("C-M-%" . anzu-query-replace))
   )
 
 ;; PACKAGE: iedit

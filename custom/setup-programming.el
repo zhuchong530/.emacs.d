@@ -22,9 +22,6 @@
   (setq c-default-style "k&r") ;; set style to "k&r"
   (setq c-basic-offset 4)
   (global-set-key (kbd "RET") 'newline-and-indent)  ; automatically indent when press RET
-  :mode (("\\.h\\(h?\\|x\\|pp\\)\\'" . c++-mode)
-         ("\\.m\\'" . c-mode)
-         ("\\.mm\=\\'" . c++-mode))
   )
 
 ;; Package function-args

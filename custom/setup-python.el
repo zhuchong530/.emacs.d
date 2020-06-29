@@ -33,7 +33,7 @@
     (setq web-mode-markup-indent-offset 2)
     )
   (add-hook 'web-mode-hook  'my-web-mode-hook)
-  
+
   )
 
 ;;js2-mode --- improved mode on editting .js
@@ -110,8 +110,8 @@
   (setq python-check-command "flake8")
   (setq elpy-rpc-backend "jedi")
   (setq elpy-use-cpython "/usr/bin/python3")
-  (setq elpy-rpc-python-command "python3")
-  (setq python-shell-interpreter "python3")
+  (setq elpy-rpc-python-command "/usr/bin/python3")
+  (setq python-shell-interpreter "/usr/bin/python3")
   (pyvenv-mode 1)
   )
 

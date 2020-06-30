@@ -74,12 +74,29 @@
 ;; (load-theme 'monokai t)                 ;dark theme
 
 ;;smart-mode-line
-(use-package smart-mode-line
+;; (use-package smart-mode-line
+;;   :ensure t
+;;   :defer 10
+;;   :init (setq sml/no-confirm-load-theme t)
+;;   :config
+;;   (sml/setup)
+;;   (sml/apply-theme 'respectful)
+;;   )
+;; all-the-icons
+(use-package all-the-icons)
+
+;; doom-modeline
+(use-package doom-modeline
   :ensure t
-  :defer 10
+  :hook (after-init . doom-modeline-mode)
+  )
+
+(use-package doom-themes
+  :ensure t
   :config
-  (sml/setup)
-  (sml/apply-theme 'respectful)
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (doom-themes-visual-bell-config)
   )
 
 (use-package zeal-at-point

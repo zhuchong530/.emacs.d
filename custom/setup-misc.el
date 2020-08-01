@@ -16,10 +16,10 @@
 (use-package highlight-symbol
   :ensure t
   :bind(("C-<f3>" . highlight-symbol)
-	("<f3>" . highlight-symbol-next)
-	("S-<f3>" . highlight-symbol-prev)
-	("M-<f3>" . highlight-symbol-query-replace)
-	)
+        ("<f3>" . highlight-symbol-next)
+        ("S-<f3>" . highlight-symbol-prev)
+        ("M-<f3>" . highlight-symbol-query-replace)
+        )
   )
 
 ;;package tabbar
@@ -28,9 +28,9 @@
   :demand
   :config (tabbar-mode t)
   :bind (("C-M-9" . tabbar-backward-group)
-	 ("C-M-0" . tabbar-forward-group)
-	 ("C-9" . tabbar-backward)
-	 ("C-0". tabbar-forward))
+         ("C-M-0" . tabbar-forward-group)
+         ("C-9" . tabbar-backward)
+         ("C-0". tabbar-forward))
   )
 
 ;;package ace-jump-mode
@@ -45,19 +45,19 @@
   :diminish golden-ratio-mode
   :init (golden-ratio-mode 1)
   :config (setq golden-ratio-exclude-modes '("ediff-mode"
-                                   "gud-mode"
-                                   "gdb-locals-mode"
-                                   "gdb-registers-mode"
-                                   "gdb-breakpoints-mode"
-                                   "gdb-threads-mode"
-                                   "gdb-frames-mode"
-                                   "gdb-inferior-io-mode"
-                                   "gud-mode"
-                                   "gdb-inferior-io-mode"
-                                   "gdb-disassembly-mode"
-                                   "gdb-memory-mode"
-                                   "IELM"
-                                   "eshell-mode" "dired-mode"))
+                                             "gud-mode"
+                                             "gdb-locals-mode"
+                                             "gdb-registers-mode"
+                                             "gdb-breakpoints-mode"
+                                             "gdb-threads-mode"
+                                             "gdb-frames-mode"
+                                             "gdb-inferior-io-mode"
+                                             "gud-mode"
+                                             "gdb-inferior-io-mode"
+                                             "gdb-disassembly-mode"
+                                             "gdb-memory-mode"
+                                             "IELM"
+                                             "eshell-mode" "dired-mode"))
   )
 
 ;; load-theme
@@ -129,8 +129,8 @@
 (use-package markdown-mode
   :ensure t
   :mode (("\\.markdown\\'" . markdown-mode)
-	 ("\\.md\\'" . markdown-mode)
-	 ("README\\.md\\'" . gfm-mode))
+         ("\\.md\\'" . markdown-mode)
+         ("README\\.md\\'" . gfm-mode))
   )
 ;; Package cmake-mode
 ;; major-mode for editing CMake sources
@@ -164,7 +164,12 @@
       if (gud-buf
           (switch-to-buffer-other-window gud-buf)
           (call-interactively 'gud-gdb))))
-)
+  )
+
+(require 'rainbow-fart)
+(add-hook 'prog-mode-hook #'rainbow-fart-mode)
+(setq rainbow-fart-keyword-interval nil)
+
 
 (provide 'setup-misc)
 ;;; setup-misc.el ends here

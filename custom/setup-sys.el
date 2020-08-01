@@ -32,6 +32,12 @@
          (if (not (display-graphic-p))
              (use-package exec-path-from-shell
                :config (exec-path-from-shell-initialize))))
+(exec-path-from-shell-copy-env "GOPATH")
+(exec-path-from-shell-copy-env "GOROOT")
+(exec-path-from-shell-copy-env "GOBIN")
+(exec-path-from-shell-copy-env "PATH")
+(exec-path-from-shell-copy-env "WORKON_HOME")
+
 
 (use-package try                        ;let's you try packages without install them
   :ensure t)

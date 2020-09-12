@@ -57,7 +57,8 @@
                                              "gdb-disassembly-mode"
                                              "gdb-memory-mode"
                                              "IELM"
-                                             "eshell-mode" "dired-mode"))
+                                             ;; "eshell-mode" "dired-mode"))
+                                             ))
   )
 
 ;; load-theme

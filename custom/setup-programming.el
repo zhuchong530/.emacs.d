@@ -57,7 +57,7 @@
             (setq compan-begin-commands '(self-insert-command)) ;start autocompletion only after typing
             (setq company-backends
                   '(company-irony company-irony-c-headers company-bbdb company-nxml company-css company-eclim
-                                  company-semantic company-cmake company-capf
+                                  company-semantic company-cmake company-capf company-irony
                                   (company-dabbrev-code company-gtags company-keywords)
                                   company-files company-dabbrev))
             (global-company-mode)
@@ -80,6 +80,7 @@
     (setq-default irony-cdb-compilation-database '(irony-cdb-libclang
                                                    irony-cdb-clang-complete))
     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+
     )
   ;; ;; replace the `completion-at-point' and `completion-symbol' bindings in
   ;; ;; irony-mode's buffers by irony-modes function

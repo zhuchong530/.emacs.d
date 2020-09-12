@@ -86,7 +86,6 @@
   :after python
   :commands (elpy-enable)
   :init
-  (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
   :bind (:map elpy-mode-map
               ("<M-left>" . nil)
               ("<M-right>" . nil)
@@ -107,12 +106,11 @@
   ;; (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
   ;; (flycheck-python-flake8-executable "/usr/bin/flake8-3.4")
   (add-hook 'python-mode-hook 'elpy-mode)
-  (setq python-check-command "flake8")
-  (setq elpy-rpc-backend "jedi")
-  (setq elpy-use-cpython "/usr/bin/python3")
-  (setq elpy-rpc-python-command "/usr/bin/python3")
-  (setq python-shell-interpreter "/usr/bin/python3")
-  (pyvenv-mode 1)
+  ;; (setq python-check-command "flake8")
+  ;; (setq elpy-rpc-backend "jedi")
+  ;; (setq elpy-use-cpython "/usr/bin/python3")
+  ;; (setq elpy-rpc-python-command "/usr/bin/python3")
+  ;; (setq python-shell-interpreter "/usr/bin/python3")
   )
 
 

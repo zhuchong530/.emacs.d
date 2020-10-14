@@ -56,7 +56,7 @@
                   company-transformers '(company-sort-by-occurrence))
             (setq compan-begin-commands '(self-insert-command)) ;start autocompletion only after typing
             (setq company-backends
-                  '(company-irony company-irony-c-headers company-bbdb company-nxml company-css company-eclim
+                  '(company-irony company-irony-c-headers company-bbdb company-nxml company-css
                                   company-semantic company-cmake company-capf company-irony
                                   (company-dabbrev-code company-gtags company-keywords)
                                   company-files company-dabbrev))

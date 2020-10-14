@@ -48,6 +48,7 @@
 (load "setup-misc")
 (load "setup-python")
 (load "setup-programming")
+(load "setup-web")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

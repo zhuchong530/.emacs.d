@@ -46,9 +46,13 @@
 (load "setup-helm")
 (load "setup-editing")
 (load "setup-misc")
-(load "setup-python")
+(load "setup-lsp")
+(load "setup-company")
 (load "setup-programming")
+(load "setup-python")
+(load "setup-go")
 (load "setup-web")
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -62,7 +66,7 @@
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(package-selected-packages
    (quote
-    (company-jedi doom-modeline rainbow-fart zeal-at-point cmake-ide cmake-mode bug-hunter diminish symon web-mode flycheck-go projejctile zygospore ws-butler which-key volatile-highlights use-package undo-tree try tabbar switch-window swiper smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode markdown-mode magit js2-mode jedi irony-eldoc iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio go-guru go-errcheck go-eldoc go-add-tags function-args flycheck-irony flycheck-gometalinter exec-path-from-shell elpy duplicate-thing dtrt-indent company-irony-c-headers company-irony company-go company-c-headers comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode))))
+    (lsp-python-ms eglot company-lsp helm-lsp lsp-mode lsp-ui company-jedi doom-modeline rainbow-fart zeal-at-point cmake-ide cmake-mode bug-hunter diminish symon web-mode flycheck-go projejctile zygospore ws-butler which-key volatile-highlights use-package undo-tree try tabbar switch-window swiper smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode markdown-mode magit js2-mode jedi iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell elpy duplicate-thing dtrt-indent company-c-headers comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode))))
 
 ;;; init.el ends here
 (custom-set-faces

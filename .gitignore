@@ -22,3 +22,5 @@ projectile*
 /eshell/
 /elpy/
 places
+/pylsms/
+.lsp-session-v1

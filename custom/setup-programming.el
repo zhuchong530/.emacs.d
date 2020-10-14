@@ -38,79 +38,14 @@
   :hook ((c-mode-common emacs-lisp-mode) . eldoc-mode)
   )
 
-;; company
-;; Modular text completion framework
-(use-package company
-  :ensure t
-  :defer 5
-  :diminish ""
-  :bind ("C-." . company-complte)
-  :init (add-hook 'prog-mode-hook 'company-mode)
-  :config (progn
-            (setq company-tooltip-limit 20 ;bigger popup window
-                  company-idle-delay .1     ;decrease delay before autocompletion popup shows
-                  company-selection-wrap-around t
-                  company-minimum-prefix-length 1
-                  company-show-numbers t
-                  company-dabbrev-downcase nil
-                  company-transformers '(company-sort-by-occurrence))
-            (setq compan-begin-commands '(self-insert-command)) ;start autocompletion only after typing
-            (setq company-backends
-                  '(company-irony company-irony-c-headers company-bbdb company-nxml company-css
-                                  company-semantic company-cmake company-capf company-irony
-                                  (company-dabbrev-code company-gtags company-keywords)
-                                  company-files company-dabbrev))
-            (global-company-mode)
-            (defun my-indent-or-complete()
-              (interactive)
-              (if (looking-at "\\_>")
-                  (company-complete-common)
-                (indent-according-to-mode))))
-  )
-;; Pakcage - irony
-;; C/C++ minor mode powered by libclang
-(use-package irony
-  :config
-  (progn
-    ;; if irony server was never installed, install it
-    (unless (irony--find-server-executable) (call-interactively #'irony-install-server))
-    (add-hook 'c++-mode-hook 'irony-mode)
-    (add-hook 'c-mode-hook 'irony-mode)
-    ;; use compilation database first, clang_complete as fallback
-    (setq-default irony-cdb-compilation-database '(irony-cdb-libclang
-                                                   irony-cdb-clang-complete))
-    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
-    )
-  ;; ;; replace the `completion-at-point' and `completion-symbol' bindings in
-  ;; ;; irony-mode's buffers by irony-modes function
-  ;; (defun my-irony-mode-hook()
-  ;;   (define-key irony-mode-map [remap completion-at-point]
-  ;;     'irony-completion-at-point-async)
-  ;;   (define-key irony-mode-map [remap complete-symbol]
-  ;;     'irony-completion-at-point-async))
-  ;; (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-  )
-
-;; Package - company-irony
-;; company-mode completion back-end for irony-mode
-(use-package company-irony
-  :after company-mode
-  :defer t
+;; Package - eglot
+(use-package eglot
   :ensure t
-  :config
-  (progn
-    (eval-after-load 'company '(add-to-list 'company-backends 'company-irony))
-    ))
-
-;; Package - company-irony-c-headers
-;; Company mode backend for C/C++ header files with Irony
-(use-package company-irony-c-headers
-  :ensure t
-  :after company-mode
-  :config
-  (add-to-list 'company-backends '(company-irony-c-headers company-irony))
-  )
+  :config (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+           (add-hook 'c-mode-hook 'eglot-ensure)
+           (add-hook 'c++-mode-hook 'eglot-ensure)
+)
 
 ;; Package -flycheck
 ;; On-the-fly syntax checking
@@ -137,21 +72,6 @@
             #'flycheck-pos-tip-error-messages))))
     )
   )
-;; Package - flycheck-irony
-;; Flycheck: C/C++ support via Irony
-(use-package flycheck-irony
-  :after irony-mode
-  :config
-  (progn
-    (eval-after-load 'flycheck '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))))
-
-;; Package - irony-eldoc
-;; irony-mode support for eldoc-mode
-(use-package irony-eldoc
-  :ensure t
-  :config
-  (progn
-    (add-hook 'irony-mode-hook #'irony-eldoc)))
 
 ;; activate whitespace-mode to view all whitespace characters
 (global-set-key (kbd "C-c w") 'whitespace-mode)
@@ -230,98 +150,6 @@
 (use-package nasm-mode
   :mode "\\.\\(nasm\\|s\\)$"
   )
-
-;; Package go-guru
-;; Integration of the Go 'guru' analysis tool into Emacs.
-(use-package go-guru
-  :ensure t
-  :config
-  (go-guru-hl-identifier-mode)
-  (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
-  )
-
-;; Package company-go
-;; company-mode backend for Go (using gocode)
-(use-package company-go
-  :disabled t
-  :init (with-eval-after-load 'company
-          (add-to-list 'company-backends 'company-go))
-  :after go-mode
-  :bind (:map go-mode-map
-              ;Godef jump key binding
-              ("M-." . godef-jump)))
-
-;; (defun setup-go-mode-compile()
-;;   ;; Customize compile command to run go build
-;;   (if (not (string-match "go" compile-command))
-;;       (set (make-local-variable 'compile-command)
-;;            "go build -v && go test -v && go vet")))
-
-;;go-mode packages
-;; REQUIREMENTS:
-;; go get -u golang.org/x/tools/cmd/...
-;; go get -u github.com/rogpeppe/godef
-;; go get -u github.com/nsf/gocode
-;; go get -u github.com/kisielk/errcheck
-(use-package go-mode
-  :ensure t
-  :config
-  ;; Use goimports instead of go-fmt
-  (setq gofmt-command "goimports"
-        go-fontify-function-calls nil
-        company-idle-delay .1
-        )
-  ;; Call gofmt before saving
-  (add-hook 'before-save-hook #'gofmt-before-save)
-  ;;(add-hook 'go-mode-hook 'setup-go-mode-compile)
-  (add-hook 'go-mode-hook #'smartparens-mode)
-  (add-hook 'go-mode-hook
-            (lambda()
-              (set (make-local-variable 'company-backends) '(company-go))
-              (company-mode)))
-  :bind
-  (:map go-mode-map
-        ("M-." . go-guru-definition)
-        ("C-c d" . godoc-at-point)
-        ("C-c g" . godoc)
-        ("C-c h" . go-guru-hl-identifier)
-        )
-  :mode "\\.go\\'"
-)
-(use-package go-errcheck)
-
-(use-package go-add-tags)
-
-;; go-eldoc packages
-(use-package go-eldoc
-  :config
-  (add-hook 'go-mode-hook 'go-eldoc-setup)
-  )
-
-(use-package flycheck-gometalinter
-  :ensure t
-  :config
-  (progn
-    (flycheck-gometalinter-setup))
-  ;; skips 'vendor' directories and sets GO15VENDOREXPERIMENT=1
-  (setq flycheck-gometalinter-vendor t)
-  ;; only show errors
-  (setq flycheck-gometalinter-errors-only t)
-  ;; only run fast linters
-  (setq flycheck-gometalinter-fast t)
-  ;; use in tests files
-  (setq flycheck-gometalinter-test t)
-  ;; disable linters
-  (setq flycheck-gometalinter-disable-linters '("gotype" "gocyclo"))
-  ;; Only enable selected linters
-  (setq flycheck-gometalinter-disable-all t)
-  ;; Only enable selected linters
-  (setq flycheck-gometalinter-enable-linters '("golint"))
-  ;; Set different deadline (default: 5s)
-  (setq flycheck-gometalinter-deadline "10s"))
-
-
-
 
 ;;magit package
 (use-package magit

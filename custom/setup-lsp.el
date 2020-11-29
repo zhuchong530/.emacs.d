@@ -5,7 +5,6 @@
 ;; lsp-mode package
 (use-package lsp-mode
   :ensure t
-  :diminish (lsp-mode . "lsp")
   :bind (:map lsp-mode-map
               ("C-c C-d" . lsp-describe-thing-at-point))
   :commands (lsp lsp-deferred)
@@ -26,9 +25,9 @@
         ;; To defer LSP server startup(and DidOen notifications) until the buffer is
         ;; visible, use `lsp-deferred` instead of `lsp`
         (python-mode . #'lsp-deferred)
-        (c++-mode . #'lsp-deferred)
-        (c-mode . #'lsp-deferred)
-        (go-mode . #'lsp-deferred)
+        (go-mode-hook . #'lsp-deferred)
+        (c-mode-hook . #'lsp-deferred)
+        (c++-mode-hook . #'lsp-deferred)
         (lsp-mode . lsp-enable-which-key-integration)))
 
 ;; Package lsp-ui
@@ -67,7 +66,6 @@
               (set-face-background 'lsp-ui-dock-background
                                    (face-background 'tooltip))))
   )
-
 ;; Package helm-lsp
 ;; for helm user
 (use-package helm-lsp

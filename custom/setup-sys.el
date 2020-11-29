@@ -2,25 +2,11 @@
 ;;; Commentary:
 ;;; code:
 
-(eval-and-compile
-  (require 'use-package))
-(require 'diminish)
+(use-package diminish
+  :defer 5
+  :config (diminish 'org-indent-mode)
+  )
 (require 'bind-key)
-
-(defmacro with-os (type &rest body)
-  "Evaluate BODY if `system-type' equals TYPE."
-  `(when (eq system-type ,type)
-	 ,@body))
-
-(defmacro except-os (type &rest body)
-  "Evaluate BODY if `system-type' not equals TYPE."
-  `(when (not (eq system-type ,type))
-	 ,@body))
-
-(defmacro with-graphic (&rest body)
-  "Evaluate BODY if display-graphic-p is not nil."
-  `(when (display-graphic-p)
-	 ,@body))
 
 ;; bug-hunter settings
 (use-package bug-hunter
@@ -28,26 +14,22 @@
   :defer t
   )
 
-(with-os 'gnu/linux
-         (if (not (display-graphic-p))
-             (use-package exec-path-from-shell
-               :config (exec-path-from-shell-initialize))))
-(exec-path-from-shell-copy-env "GOPATH")
-(exec-path-from-shell-copy-env "GOROOT")
-(exec-path-from-shell-copy-env "GOBIN")
-(exec-path-from-shell-copy-env "PATH")
-(exec-path-from-shell-copy-env "WORKON_HOME")
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+;; (exec-path-from-shell-copy-env "GOPATH")
+;; (exec-path-from-shell-copy-env "GOROOT")
+;; (exec-path-from-shell-copy-env "GOBIN")
+;; (exec-path-from-shell-copy-env "PATH")
+;; (exec-path-from-shell-copy-env "WORKON_HOME")
 
 
-(use-package try                        ;let's you try packages without install them
-  :ensure t)
+(use-package try)                        ;let's you try packages without install the
 (use-package which-key                  ;bring up help on key combinations
-  :ensure t
   :defer 10
   :diminish
-  :commands which-key-mode
   :config
-  (which-key-mode))
+  (which-key-mode)
+  (which-key-setup-side-window-bottom))
 
 ;; UTF-8
 (set-charset-priority 'unicode)
@@ -122,11 +104,8 @@
 
 ;; symon settings
 (use-package symon
-  :ensure t
-  ;; :disabled t
   :init (symon-mode)
   )
-
 
 
 (provide 'setup-sys)

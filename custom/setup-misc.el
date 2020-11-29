@@ -39,6 +39,7 @@
   :bind ("C-c <SPC>" . ace-jump-mode)
   )
 
+
 ;;package golden-ratio
 (use-package golden-ratio
   :ensure t
@@ -63,28 +64,9 @@
 
 ;; load-theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-;; (load-theme 'badger t)                  ;dark theme, grey background
-;; (load-theme 'grandshell t)              ;dark theme, balck background
 (load-theme 'dracula t)                ;dark theme, purple background
+;; (load-theme 'doom-dark+ t)
 ;; (load-theme 'tomorrow-night-paradise t)    ;dark theme, black background
-;; (load-theme 'ujelly t)
-;; (load-theme 'autumn-light t)            ;light theme
-;; (load-theme 'infodoc t)                 ;light theme
-;; (load-theme 'leuven t)                  ;light theme
-;; (load-theme 'zenburn t)                 ;dark theme, grey background
-;; (load-theme 'monokai t)                 ;dark theme
-
-;;smart-mode-line
-;; (use-package smart-mode-line
-;;   :ensure t
-;;   :defer 10
-;;   :init (setq sml/no-confirm-load-theme t)
-;;   :config
-;;   (sml/setup)
-;;   (sml/apply-theme 'respectful)
-;;   )
-;; all-the-icons
-(use-package all-the-icons)
 
 ;; doom-modeline
 (use-package doom-modeline
@@ -100,11 +82,16 @@
   (doom-themes-visual-bell-config)
   )
 
+(use-package rainbow-delimiters
+  :ensure t
+  :init (progn (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+  )
+
 (use-package zeal-at-point
   :defer 10
   :bind ("C-c d" . 'zeal-at-point)
   :config
-  (add-to-list 'zeal-at-point-mode-alist '(python-mode . ("python" "django")))
+  (add-to-list 'zeal-at-point-mode-alist '(python-mode . "python3"))
   (add-to-list 'zeal-at-point-mode-alist '(c-mode . "C"))
   (add-to-list 'zeal-at-point-mode-alist '(c++-mode . "C++"))
   (add-to-list 'zeal-at-point-mode-alist '(cc-mode . ("C" "C++")))
@@ -126,13 +113,6 @@
   :ensure t
   )
 
-;;; markdown mode
-(use-package markdown-mode
-  :ensure t
-  :mode (("\\.markdown\\'" . markdown-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("README\\.md\\'" . gfm-mode))
-  )
 ;; Package cmake-mode
 ;; major-mode for editing CMake sources
 (use-package cmake-mode
@@ -146,7 +126,6 @@
   :init
   (cmake-ide-setup)
   )
-
 
 (use-package gud
   :commands gud-gdb

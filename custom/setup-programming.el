@@ -35,17 +35,8 @@
 ;; Package eldoc
 (use-package eldoc
   :diminish
-  :hook ((c-mode-common emacs-lisp-mode) . eldoc-mode)
+  :hook ((c-mode-common) . eldoc-mode)
   )
-
-
-;; Package - eglot
-(use-package eglot
-  :ensure t
-  :config (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-           (add-hook 'c-mode-hook 'eglot-ensure)
-           (add-hook 'c++-mode-hook 'eglot-ensure)
-)
 
 ;; Package -flycheck
 ;; On-the-fly syntax checking
@@ -102,25 +93,24 @@
 
 ;; Package: helm-projectile
 ;; Helm integration for Projectile
-(use-package helm-projectile
-  :ensure t
-  :diminish projectile-mode
-  :init
-  (setq projectile-enable-caching t
-        projectile-indexing-method 'alien
-        projectile-completion-system 'helm
-        projectile-mode-line '(:eval (format " {%s}" (projectile-project-name))))
-  :config
-  (progn
-    (setq projectile-completion-system 'helm)
-  (helm-projectile-on)))
+;; (use-package helm-projectile
+;;   :ensure t
+;;   :diminish projectile-mode
+;;   :init
+;;   (setq projectile-enable-caching t
+;;         projectile-indexing-method 'alien
+;;         projectile-completion-system 'helm
+;;         projectile-mode-line '(:eval (format " {%s}" (projectile-project-name))))
+;;   :config
+;;   (progn
+;;     (setq projectile-completion-system 'helm)
+;;   (helm-projectile-on)))
 
 ;; Package zygospore
 (use-package zygospore
   :ensure t
   :bind (("C-x 1" . zygospore-toggle-delete-other-windows))
   )
-
 
 ;; Package: yasnippet
 ;; Yet another snippet extension for Emacs

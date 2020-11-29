@@ -2,7 +2,6 @@
 ;;; Commentary:
 ;;; code:
 
-
 ;; Package helm
 ;; Helm is an Emacs incremental and narrowing framework
 (use-package helm

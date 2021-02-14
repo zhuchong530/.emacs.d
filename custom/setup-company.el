@@ -15,13 +15,13 @@
   (setq company-minimum-prefix-length 1
         company-require-match nil
         company-selection-wrap-around t
-        company-dabbrev-downcase t
+        company-show-numbers t
         company-tooltip-limit 30        ;bigger popup window
         company-tooltip-minimum-width 40
         company-tooltip-align-annotations t ;align annotations to the right tooltip border
         company-eclim-auto-save nil)        ;ends setq
   (eval-after-load 'company
-    '(add-to-list 'company-backends '(company-yasnippet company-abbrev company-dabbrev company-capf)))
+    '(add-to-list 'company-backends '(company-yasnippet company-abbrev company-dabbrev company-capf company-lsp)))
   :config
   ;; dropdown by default=0, no dropdown=1
   (setq company-idle-delay 0)
@@ -57,15 +57,18 @@
   )
 (message "after loading company-box")
 
-;;Package compnay-lsp
+;; Package compnay-lsp
 ;; add compnay-lsp as a backend
-;; (use-package company-lsp
-;;   :ensure t
-;;   :after (lsp-mode)
-;;   :commands company-lsp
-;;   :custom
-;;   (company-lsp-cache-candidates t)      ;always using a cache
-;;   )
+(use-package company-lsp
+  :ensure t
+  :after lsp-mode
+  :commands company-lsp
+  :config
+  (push 'company-lsp company-backends)
+  (set company-transformers nil
+       company-lsp-async t
+       company-lsp-cache-candidates nil)
+  )
 
 ;; (message "after loading comapny-lsp")
 

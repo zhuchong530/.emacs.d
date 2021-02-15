@@ -21,7 +21,7 @@
         company-tooltip-align-annotations t ;align annotations to the right tooltip border
         company-eclim-auto-save nil)        ;ends setq
   (eval-after-load 'company
-    '(add-to-list 'company-backends '(company-yasnippet company-abbrev company-dabbrev company-capf company-lsp)))
+    '(add-to-list 'company-backends '(company-yasnippet company-abbrev company-dabbrev company-capf)))
   :config
   ;; dropdown by default=0, no dropdown=1
   (setq company-idle-delay 0)
@@ -49,26 +49,24 @@
                ("C-o" . company-search-toggle-filtering)
                ));end bind
   );end use-package company
-(message "after loading company")
+;; (message "after loading company")
 ;; Package company-box
 ;; A company front-end - Differences with the built-in front-end
 (use-package company-box
   :hook (company-mode . company-box-mode)
+  :config
   )
-(message "after loading company-box")
+;; (message "after loading company-box")
 
 ;; Package compnay-lsp
 ;; add compnay-lsp as a backend
-(use-package company-lsp
-  :ensure t
-  :after lsp-mode
-  :commands company-lsp
-  :config
-  (push 'company-lsp company-backends)
-  (set company-transformers nil
-       company-lsp-async t
-       company-lsp-cache-candidates nil)
-  )
+;; (use-package company-lsp
+;;   :ensure t
+;;   :config
+;;   (push 'company-lsp company-backends)
+;;   (setq company-lsp-cache-candidates nil
+;;        company-lsp-enable-snippet t
+;;        company-lsp-enable-recompletion t))
 
 ;; (message "after loading comapny-lsp")
 

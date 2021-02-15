@@ -21,7 +21,7 @@
         company-tooltip-align-annotations t ;align annotations to the right tooltip border
         company-eclim-auto-save nil)        ;ends setq
   (eval-after-load 'company
-    '(add-to-list 'company-backends '(company-yasnippet company-abbrev company-dabbrev company-capf)))
+    '(add-to-list 'company-backends '(company-tabnine company-capf company-yasnippet company-abbrev company-dabbrev)))
   :config
   ;; dropdown by default=0, no dropdown=1
   (setq company-idle-delay 0)
@@ -56,6 +56,24 @@
   :hook (company-mode . company-box-mode)
   :config
   )
+
+;; comapny-tabnine
+;; OpenAI completion backend
+(use-package company-tabnine
+  :ensure t
+  )
+;; The free version of TabNine is good enough,
+;; and below code is recommended that TabNine not always
+;; prompt me to purchase a paid version in a large project.
+(defadvice company-echo-show (around disable-tabnine-upgrade-message activate)
+  (let ((company-message-func (ad-get-arg 0)))
+    (when (and company-message-func
+               (stringp (funcall company-message-func)))
+      (unless (string-match "The free version of TabNine only indexes up to" (funcall company-message-func))
+        ad-do-it))))
+
+
+
 ;; (message "after loading company-box")
 
 ;; Package compnay-lsp

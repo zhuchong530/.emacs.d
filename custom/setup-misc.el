@@ -22,15 +22,14 @@
         )
   )
 
-;;package tabbar
-(use-package tabbar
-  :ensure t
-  :demand
-  :config (tabbar-mode t)
-  :bind (("C-M-9" . tabbar-backward-group)
-         ("C-M-0" . tabbar-forward-group)
-         ("C-9" . tabbar-backward)
-         ("C-0". tabbar-forward))
+;; package awesome-tab
+(use-package awesome-tab
+  :load-path "~/.emacs.d/site-lisp/awesome-tab"
+  :config (awesome-tab-mode t)
+  :bind (("C-M-9" . awesome-tab-backward-group)
+         ("C-M-0" . awesome-tab-forward-group)
+         ("C-9" . awesome-tab-backward-tab)
+         ("C-0" . awesome-tab-forward-tab))
   )
 
 ;;package ace-jump-mode
@@ -38,7 +37,6 @@
   :ensure t
   :bind ("C-c <SPC>" . ace-jump-mode)
   )
-
 
 ;;package golden-ratio
 (use-package golden-ratio
@@ -59,8 +57,7 @@
                                              "gdb-memory-mode"
                                              "IELM"
                                              ;; "eshell-mode" "dired-mode"))
-                                             ))
-  )
+                                             )))
 
 ;; load-theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")

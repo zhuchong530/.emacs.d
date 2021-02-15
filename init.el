@@ -61,7 +61,7 @@
  '(delete-selection-mode nil)
  '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)
  '(package-selected-packages
-   '(company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui company-jedi doom-modeline rainbow-fart zeal-at-point cmake-ide cmake-mode diminish symon web-mode flycheck-go projejctile zygospore ws-butler which-key volatile-highlights use-package try tabbar switch-window swiper smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode jedi iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell elpy duplicate-thing dtrt-indent company-c-headers comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
+   '(all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui company-jedi doom-modeline rainbow-fart zeal-at-point cmake-ide cmake-mode diminish symon web-mode flycheck-go projejctile zygospore ws-butler which-key volatile-highlights use-package try tabbar switch-window swiper smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode jedi iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell elpy duplicate-thing dtrt-indent company-c-headers comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
 
 ;;; init.el ends here
 (custom-set-faces

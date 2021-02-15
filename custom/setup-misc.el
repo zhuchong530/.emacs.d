@@ -79,6 +79,8 @@
   (doom-themes-visual-bell-config)
   )
 
+(use-package all-the-icons)
+
 (use-package rainbow-delimiters
   :ensure t
   :init (progn (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))

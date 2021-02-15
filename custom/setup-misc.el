@@ -86,6 +86,9 @@
   :init (progn (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
   )
 
+;; (use-package posframe)
+
+
 (use-package zeal-at-point
   :defer 10
   :bind ("C-c d" . 'zeal-at-point)

@@ -50,12 +50,19 @@
                ));end bind
   );end use-package company
 ;; (message "after loading company")
+
 ;; Package company-box
 ;; A company front-end - Differences with the built-in front-end
 (use-package company-box
   :hook (company-mode . company-box-mode)
   :config
   )
+
+;; package company-posframe
+;; (use-package company-posframe
+;;   :config (company-posframe-mode 1)
+;;   :hook (company-mode . company-posframe-mode)
+;;   )
 
 ;; comapny-tabnine
 ;; OpenAI completion backend

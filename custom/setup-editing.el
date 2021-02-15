@@ -32,6 +32,9 @@
 
 ;; Package: volatile-highlights
 ;; Minor mode for visual feedback on some operations.
+;; An example is that if you paste (yank) a block of text,
+;; it will be highlighted until you press the next key.
+;; This is just a small tweak, but gives a nice bit of visual feedback.
 (use-package volatile-highlights
   :ensure t
   :diminish volatile-highlights-mode

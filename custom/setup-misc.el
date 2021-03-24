@@ -148,9 +148,29 @@
           (call-interactively 'gud-gdb))))
   )
 
-(require 'rainbow-fart)
-(add-hook 'prog-mode-hook #'rainbow-fart-mode)
-(setq rainbow-fart-keyword-interval nil)
+;; Package dashboard
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+  (setq dashboard-banner-logo-title "Cathy.Chang's Emacs - For The Horder"
+        dashboard-startup-banner 'logo
+        dashboard-center-content t
+        dashboard-set-heading-icons t
+        dashboard-set-file-icons t
+        dashboard-set-navigator t))
+
+
+
+;; package rainbow-fart settings
+(use-package rainbow-fart
+  :ensure t
+  :init (rainbow-fart-mode 1)
+  :config
+  (setq rainbow-fart-keyword-interval nil) ;play voice for every key word
+  ;; (setq rainbow-fart-voice-model "AcFun")
+  (setq rainbow-fart-voice-model "JustKowalski")
+  )
 
 
 (provide 'setup-misc)

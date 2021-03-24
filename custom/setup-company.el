@@ -2,8 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(message "start loading setup-programming.el")
-
 ;; company
 ;; Modular text completion framework
 (use-package company

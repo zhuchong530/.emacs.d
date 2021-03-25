@@ -7,33 +7,30 @@
 (when (version< emacs-version "25")
   (error "Requires at least GNU Emacs 25, but you're running %s" emacs-version))
 
-;; Always load newest byte code
-(setq load-prefer-newer t)
 ;package manager
 (require 'package)
-(setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+(setq package-enable-at-startup nil)
+(unless (assoc-default "melpa" package-archives)
+  (add-to-list 'package-archives '("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/") t))
+(unless (assoc-default "gnu" package-archives)
+  (add-to-list 'package-archives '("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/") t))
+;; (unless (assoc-default "org" package-archives)
+;;   (add-to-list 'package-archives '("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/") t))
+;; (unless (assoc-default "marmalade" package-archives)
+;;   (add-to-list 'package-archives '("marmalade" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/marmalade/") t))
+
 (package-initialize)
-
-
-(when (not package-archive-contents)
-  (package-refresh-contents))
 
 ;; bootstrap 'use-package'
 (unless (package-installed-p 'use-package)
+  (package-refresh-contents)
   (package-install 'use-package))
 
 ;; load use-package, used for loading packages everywhere else
-(require 'use-package)
+(eval-when-compile
+  (require 'use-package))
+(setq use-package-verbose t)
 (setq use-package-always-ensure t)
-;; Set to t to debug package loading
-(if init-file-debug
-    (setq use-package-verbose t
-          use-package-expand-minimally nil
-          use-package-compute-statistics t
-          debug-on-error t)
-  (setq use-package-verbose nil
-        use-package-expand-minimally t))
 
 ;; add the module path
 (add-to-list 'load-path "~/.emacs.d/custom")
@@ -61,7 +58,7 @@
  '(delete-selection-mode nil)
  '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)
  '(package-selected-packages
-   '(company-posframe all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui company-jedi doom-modeline rainbow-fart zeal-at-point cmake-ide cmake-mode diminish symon web-mode flycheck-go projejctile zygospore ws-butler which-key volatile-highlights use-package try tabbar switch-window swiper smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode jedi iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell elpy duplicate-thing dtrt-indent company-c-headers comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
+   '(yasnippet-snippets indent-guide company-posframe all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui company-jedi doom-modeline rainbow-fart zeal-at-point cmake-ide cmake-mode diminish symon web-mode flycheck-go projejctile zygospore ws-butler which-key volatile-highlights use-package tabbar switch-window swiper smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode jedi iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell elpy duplicate-thing dtrt-indent company-c-headers comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

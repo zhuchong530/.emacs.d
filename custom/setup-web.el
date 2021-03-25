@@ -61,11 +61,7 @@
                     "JSON"))
     (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode)))
   )
-;; rainbow mode for display the color
-(use-package rainbow-mode
-  :ensure t
-  :mode "\\.css\\'"
-  )
+
 
 (provide 'setup-web)
 ;;; setup-web.el ends here

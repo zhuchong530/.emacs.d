@@ -24,3 +24,6 @@ projectile*
 places
 /pylsms/
 .lsp-session-v1
+/transient/
+abbrev_defs
+savehist

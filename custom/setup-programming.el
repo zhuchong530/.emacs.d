@@ -86,25 +86,22 @@
 ;; Manage and navigate projects in Emacs easily
 (use-package projectile
   :ensure t
+  :requires (helm)
+  :bind (:map projectile-mode-map
+              ("C-c p" . 'projectile-command-map))
   :config
-  (progn
-    (projectile-global-mode)
-    ))
+  (setq projectile-enable-caching t
+        projectile-indexing-method 'alien
+        projectile-completion-system 'helm)
+  (projectile-mode +1))
 
 ;; Package: helm-projectile
 ;; Helm integration for Projectile
-;; (use-package helm-projectile
-;;   :ensure t
-;;   :diminish projectile-mode
-;;   :init
-;;   (setq projectile-enable-caching t
-;;         projectile-indexing-method 'alien
-;;         projectile-completion-system 'helm
-;;         projectile-mode-line '(:eval (format " {%s}" (projectile-project-name))))
-;;   :config
-;;   (progn
-;;     (setq projectile-completion-system 'helm)
-;;   (helm-projectile-on)))
+(use-package helm-projectile
+  :ensure t
+  :requires (helm projectile)
+  :config
+  (helm-projectile-on))
 
 ;; Package zygospore
 (use-package zygospore
@@ -136,6 +133,11 @@
   (yas-global-mode 1)
   )
 
+;; Pakcage yasnippet-snippets
+(use-package yasnippet-snippets
+  :ensure t
+  :after yasnippet)
+
 ;;nasm-mode
 (use-package nasm-mode
   :mode "\\.\\(nasm\\|s\\)$"
@@ -156,6 +158,11 @@
   :config (magit-auto-revert-mode)
   )
 
+(use-package git-gutter+
+  :ensure t
+  :config
+  (progn
+    (global-git-gutter+-mode)))
 
 (provide 'setup-programming)
 ;;; setup-programming.el ends here

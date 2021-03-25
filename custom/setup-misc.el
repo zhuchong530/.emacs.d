@@ -60,34 +60,64 @@
                                              )))
 
 ;; load-theme
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'dracula t)                ;dark theme, purple background
+;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+;; (load-theme 'dracula t)                ;dark theme, purple background
 ;; (load-theme 'doom-dark+ t)
 ;; (load-theme 'tomorrow-night-paradise t)    ;dark theme, black background
+
+
+(use-package doom-themes
+  :ensure t
+  :init (load-theme 'doom-one t)
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (doom-themes-visual-bell-config)
+  (doom-themes-neotree-config)
+  (doom-themes-org-config))
 
 ;; doom-modeline
 (use-package doom-modeline
   :ensure t
   :hook (after-init . doom-modeline-mode)
-  )
-
-(use-package doom-themes
-  :ensure t
   :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-  (doom-themes-visual-bell-config)
-  )
+  (setq-default doom-modeline-height 13)
+  (setq-default doom-modeline-bar-width 3))
 
 (use-package all-the-icons)
+
+;; rainbow mode for display the color
+(use-package rainbow-mode
+  :ensure t
+  :config
+  (progn
+    (defun @-enable-rainbow ()
+      (rainbow-mode t))
+    (add-hook 'progn-mode-hook '@-enable-rainbow)))
 
 (use-package rainbow-delimiters
   :ensure t
   :init (progn (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+  :config
+  (set-face-foreground 'rainbow-delimiters-depth-1-face "chartreuse3")
+  (set-face-foreground 'rainbow-delimiters-depth-2-face "DodgerBlue1")
+  (set-face-foreground 'rainbow-delimiters-depth-3-face "DarkOrange2")
+  (set-face-foreground 'rainbow-delimiters-depth-4-face "deep pink")
+  (set-face-foreground 'rainbow-delimiters-depth-5-face "medium orchid")
+  (set-face-foreground 'rainbow-delimiters-depth-6-face "turquoise")
+  (set-face-foreground 'rainbow-delimiters-depth-7-face "lime green")
+  (set-face-foreground 'rainbow-delimiters-depth-9-face "gold")
+  (set-face-foreground 'rainbow-delimiters-depth-9-face "cyan")
+  (set-face-bold 'rainbow-delimiters-depth-1-face "t")
+  (set-face-bold 'rainbow-delimiters-depth-2-face "t")
+  (set-face-bold 'rainbow-delimiters-depth-3-face "t")
+  (set-face-bold 'rainbow-delimiters-depth-4-face "t")
+  (set-face-bold 'rainbow-delimiters-depth-5-face "t")
+  (set-face-bold 'rainbow-delimiters-depth-6-face "t")
+  (set-face-bold 'rainbow-delimiters-depth-7-face "t")
+  (set-face-bold 'rainbow-delimiters-depth-8-face "t")
+  (set-face-bold 'rainbow-delimiters-depth-9-face "t")
   )
-
-;; (use-package posframe)
-
 
 (use-package zeal-at-point
   :defer 10

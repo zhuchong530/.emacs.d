@@ -12,7 +12,6 @@
 (add-hook 'sh-mode-hook (lambda ()
                           (setq tab-width 4)))
 
-(setq-default indent-tabs-mode nil)
 (delete-selection-mode)
 (global-set-key (kbd "RET") 'newline-and-indent)
 ;; show whitespace in diff-mode
@@ -43,8 +42,7 @@
   (add-hook 'after-init-hook '(lambda() (volatile-highlights-mode t)))
   :config
   (set-face-attribute 'vhl/default-face nil
-                      :underline "light slate gray")
-  )
+                      :underline "light slate gray"))
 
 ;; Package: clean-aindent-mode
 ;; Simple indent and unindent, trims indent white-space
@@ -144,6 +142,11 @@
   :ensure t
   :bind ("M-c" . duplicate-thing)
   )
+
+;; package indent-guide
+(use-package indent-guide
+  :ensure t
+  :hook (after-init-hook . indent-guide-global-mode))
 
 
 (provide 'setup-editing)

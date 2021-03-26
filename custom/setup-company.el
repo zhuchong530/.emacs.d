@@ -56,12 +56,6 @@
   :config
   )
 
-;; package company-posframe
-;; (use-package company-posframe
-;;   :config (company-posframe-mode 1)
-;;   :hook (company-mode . company-posframe-mode)
-;;   )
-
 ;; comapny-tabnine
 ;; OpenAI completion backend
 (use-package company-tabnine
@@ -77,21 +71,6 @@
       (unless (string-match "The free version of TabNine only indexes up to" (funcall company-message-func))
         ad-do-it))))
 
-
-
-;; (message "after loading company-box")
-
-;; Package compnay-lsp
-;; add compnay-lsp as a backend
-;; (use-package company-lsp
-;;   :ensure t
-;;   :config
-;;   (push 'company-lsp company-backends)
-;;   (setq company-lsp-cache-candidates nil
-;;        company-lsp-enable-snippet t
-;;        company-lsp-enable-recompletion t))
-
-;; (message "after loading comapny-lsp")
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

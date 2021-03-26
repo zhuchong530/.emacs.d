@@ -150,14 +150,6 @@
 (use-package cmake-mode
   :mode ("CMakeLists.txt" "\\.cmake\\'")
   )
-;; Package cmake-ide
-;; Calls CMake to find out include paths and other compiler flags
-(use-package cmake-ide
-  :defer t
-  :ensure t
-  :init
-  (cmake-ide-setup)
-  )
 
 (use-package gud
   :commands gud-gdb
@@ -189,18 +181,6 @@
         dashboard-set-heading-icons t
         dashboard-set-file-icons t
         dashboard-set-navigator t))
-
-
-
-;; package rainbow-fart settings
-(use-package rainbow-fart
-  :ensure t
-  :init (rainbow-fart-mode 1)
-  :config
-  (setq rainbow-fart-keyword-interval nil) ;play voice for every key word
-  ;; (setq rainbow-fart-voice-model "AcFun")
-  (setq rainbow-fart-voice-model "JustKowalski")
-  )
 
 
 (provide 'setup-misc)

@@ -114,7 +114,7 @@
 (use-package comment-dwim-2
   :ensure t
   :bind ("M-;" . comment-dwim-2)
-  )                                     ;
+  )
 
 ;; PACKAGE: anzu
 ;; Show number of matches in mode-line while searching
@@ -134,13 +134,6 @@
   :ensure t
   :init (setq iedit-toggle-key-default nil)
   :bind ("C-;" . iedit-mode)
-  )
-
-;; PACKAGE: duplicate-thing
-;; Duplicate current line & selection
-(use-package duplicate-thing
-  :ensure t
-  :bind ("M-c" . duplicate-thing)
   )
 
 ;; package indent-guide

@@ -58,7 +58,7 @@
  '(delete-selection-mode nil)
  '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)
  '(package-selected-packages
-   '(yasnippet-snippets indent-guide company-posframe all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui company-jedi doom-modeline rainbow-fart zeal-at-point cmake-ide cmake-mode diminish symon web-mode flycheck-go projejctile zygospore ws-butler which-key volatile-highlights use-package tabbar switch-window swiper smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode jedi iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell elpy duplicate-thing dtrt-indent company-c-headers comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
+   '(yasnippet-snippets indent-guide all-the-icons company-tabnine go-eldoc rainbow-delimiters company-box undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui doom-modeline  zeal-at-point cmake-mode diminish symon web-mode flycheck-go projejctile zygospore ws-butler which-key volatile-highlights use-package switch-window smartparens rainbow-mode python-mode nasm-mode magit js2-mode iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell elpy dtrt-indent comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

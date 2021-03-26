@@ -6,11 +6,12 @@
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t)
   )
+(add-hook 'go-mode-hook #'lsp-go-install-save-hook)
 
-(use-package go-mode
-  :mode (("\\.go\\'" . go-mode))
-  :init (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
-  )
+;; (use-package go-mode
+;;   :mode (("\\.go\\'" . go-mode))
+;;   ;; :init (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+;;   )
 
 
 (use-package go-eldoc

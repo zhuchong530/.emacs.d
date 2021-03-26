@@ -24,10 +24,10 @@
   :hook(
         ;; To defer LSP server startup(and DidOen notifications) until the buffer is
         ;; visible, use `lsp-deferred` instead of `lsp`
-        (python-mode . #'lsp-deferred)
-        (go-mode-hook . #'lsp-deferred)
-        (c-mode-hook . #'lsp-deferred)
-        (c++-mode-hook . #'lsp-deferred)
+        (python-mode . lsp-deferred)
+        (go-mode . lsp-deferred)
+        (c-mode . lsp-deferred)
+        (c++-mode . lsp-deferred)
         (lsp-mode . lsp-enable-which-key-integration)))
 
 ;; Package lsp-ui

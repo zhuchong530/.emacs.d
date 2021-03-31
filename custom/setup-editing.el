@@ -36,7 +36,6 @@
 ;; This is just a small tweak, but gives a nice bit of visual feedback.
 (use-package volatile-highlights
   :ensure t
-  :diminish volatile-highlights-mode
   :commands (volatile-highlights-mode)
   :init
   (add-hook 'after-init-hook '(lambda() (volatile-highlights-mode t)))
@@ -66,7 +65,6 @@
 ;; Unobtrusively remove trailing whitespace.
 (use-package ws-butler
   :ensure t
-  :diminish
   :hook (prog-mode . ws-butler-mode))
 
 ;; Package: undo-tree
@@ -95,7 +93,6 @@
 ;; Automatic insertion, wrapping and paredit-like navigation with user defined pairs.
 (use-package smartparens
   :ensure t
-  :diminish smartparens-mode
   :config
   (setq sp-base-key-bindings 'paredit)
   (setq sp-autoskip-closing-pair 'always)
@@ -120,7 +117,6 @@
 ;; Show number of matches in mode-line while searching
 (use-package anzu
   :ensure t
-  :diminish anzu-mode
   :commands (global-anzu-mode)
   :init
   (add-hook 'after-init-hook '(lambda() (global-anzu-mode +1)))

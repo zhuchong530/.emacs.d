@@ -34,7 +34,6 @@
 
 ;; Package eldoc
 (use-package eldoc
-  :diminish
   :hook ((c-mode-common) . eldoc-mode)
   )
 
@@ -112,7 +111,6 @@
 (use-package yasnippet
   :after prog-mode
   :defer t
-  :diminish yas-minor-mode
   :bind (("C-c y d" . yas-load-directory)
          ("C-c y i" . yas-insert-snippet)
          ("C-c y f" . yas-visit-snippet-file)
@@ -138,7 +136,7 @@
 
 ;;nasm-mode
 (use-package nasm-mode
-  :mode "\\.\\(nasm\\|s\\)$"
+  :mode "\\.\\(nasm\\|s\\|asm\\)$"
   )
 
 ;;magit package

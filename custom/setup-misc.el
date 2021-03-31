@@ -41,7 +41,6 @@
 ;;package golden-ratio
 (use-package golden-ratio
   :ensure t
-  :diminish golden-ratio-mode
   :init (golden-ratio-mode 1)
   :config (setq golden-ratio-exclude-modes '("ediff-mode"
                                              "gud-mode"
@@ -68,7 +67,7 @@
 
 (use-package doom-themes
   :ensure t
-  :init (load-theme 'doom-one t)
+  :init (load-theme 'doom-acario-dark t)
   :config
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
@@ -129,6 +128,13 @@
   (add-to-list 'zeal-at-point-mode-alist '(cc-mode . ("C" "C++")))
   )
 
+
+(use-package youdao-dictionary
+  :ensure t
+  :config
+  (setq url-automatic-caching t)
+  )
+(global-set-key (kbd "C-c k") 'youdao-dictionary-search-at-point)
 ;;tramp
 ;;;;;;;;;;;;;;;;;;;;;;;;;tramp setting;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;Enable you to edit the file which on the REMOTE machines;;;;;
@@ -169,18 +175,6 @@
           (switch-to-buffer-other-window gud-buf)
           (call-interactively 'gud-gdb))))
   )
-
-;; Package dashboard
-(use-package dashboard
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook)
-  (setq dashboard-banner-logo-title "Cathy.Chang's Emacs - For The Horder"
-        dashboard-startup-banner 'logo
-        dashboard-center-content t
-        dashboard-set-heading-icons t
-        dashboard-set-file-icons t
-        dashboard-set-navigator t))
 
 
 (provide 'setup-misc)

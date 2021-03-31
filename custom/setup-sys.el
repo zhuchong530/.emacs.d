@@ -63,10 +63,6 @@
 (setq history-length t
       history-delete-duplicates t)
 
-(use-package diminish
-  :defer 5
-  :config (diminish 'org-indent-mode)
-  )
 (require 'bind-key)
 
 (when (memq window-system '(mac ns x))
@@ -79,10 +75,15 @@
 
 (use-package which-key                  ;bring up help on key combinations
   :defer 10
-  :diminish
   :config
   (which-key-mode)
   (which-key-setup-side-window-bottom))
+
+;; package ace-window
+(use-package ace-window
+  :ensure t
+  :config
+  (global-set-key (kbd "C-c p") 'ace-window))
 
 ;; symon settings
 (use-package symon

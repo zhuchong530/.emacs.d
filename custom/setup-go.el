@@ -20,6 +20,7 @@
   :init
   (add-hook 'go-mode-hook 'go-eldoc-setup)
   )
+(add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
 
 (provide 'setup-go)
 ;;; setup-go.el ends here

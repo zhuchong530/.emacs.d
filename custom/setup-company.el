@@ -19,7 +19,8 @@
         company-tooltip-align-annotations t ;align annotations to the right tooltip border
         company-eclim-auto-save nil)        ;ends setq
   (eval-after-load 'company
-    '(add-to-list 'company-backends '(company-tabnine company-capf company-yasnippet company-abbrev company-dabbrev)))
+    ;;'(add-to-list 'company-backends '(company-tabnine company-capf company-yasnippet company-abbrev company-dabbrev)))
+    '(add-to-list 'company-backends '(company-tabnine company-capf compnay-yasnippet)))
   :config
   ;; dropdown by default=0, no dropdown=1
   (setq company-idle-delay 0)

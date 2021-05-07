@@ -22,14 +22,14 @@
         )
   )
 
-;; package awesome-tab
-(use-package awesome-tab
-  :load-path "~/.emacs.d/site-lisp/awesome-tab"
-  :config (awesome-tab-mode t)
-  :bind (("C-M-9" . awesome-tab-backward-group)
-         ("C-M-0" . awesome-tab-forward-group)
-         ("C-9" . awesome-tab-backward-tab)
-         ("C-0" . awesome-tab-forward-tab))
+;; package centaur-tabs
+(use-package centaur-tabs
+  :demand
+  :config
+  (centaur-tabs-mode t)
+  :bind
+  ("C-0" . centaur-tabs-backward)
+  ("C-9" . centaur-tabs-forward)
   )
 
 ;;package ace-jump-mode

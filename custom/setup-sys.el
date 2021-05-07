@@ -91,5 +91,11 @@
   )
 
 
+(use-package rainbow-fart
+  :ensure t
+  :init (rainbow-fart-mode 1)
+  :config (setq rainbow-fart-voice-mode "JustKowalski"))
+
+
 (provide 'setup-sys)
 ;;; setup-sys.el ends here

@@ -20,7 +20,8 @@
         company-eclim-auto-save nil)        ;ends setq
   (eval-after-load 'company
     ;;'(add-to-list 'company-backends '(company-tabnine company-capf company-yasnippet company-abbrev company-dabbrev)))
-    '(add-to-list 'company-backends '(company-tabnine company-capf compnay-yasnippet)))
+    ;; '(add-to-list 'company-backends '(company-tabnine company-capf compnay-yasnippet)))
+    '(add-to-list 'company-backends '(company-capf company-yasnippet)))
   :config
   ;; dropdown by default=0, no dropdown=1
   (setq company-idle-delay 0)
@@ -53,24 +54,23 @@
 ;; Package company-box
 ;; A company front-end - Differences with the built-in front-end
 (use-package company-box
-  :hook (company-mode . company-box-mode)
-  :config
-  )
+ :hook (company-mode . company-box-mode)
+ )
 
 ;; comapny-tabnine
 ;; OpenAI completion backend
-(use-package company-tabnine
-  :ensure t
-  )
-;; The free version of TabNine is good enough,
-;; and below code is recommended that TabNine not always
-;; prompt me to purchase a paid version in a large project.
-(defadvice company-echo-show (around disable-tabnine-upgrade-message activate)
-  (let ((company-message-func (ad-get-arg 0)))
-    (when (and company-message-func
-               (stringp (funcall company-message-func)))
-      (unless (string-match "The free version of TabNine only indexes up to" (funcall company-message-func))
-        ad-do-it))))
+;; (use-package company-tabnine
+;;   :ensure t
+;;   )
+;; ;; The free version of TabNine is good enough,
+;; ;; and below code is recommended that TabNine not always
+;; ;; prompt me to purchase a paid version in a large project.
+;; (defadvice company-echo-show (around disable-tabnine-upgrade-message activate)
+;;   (let ((company-message-func (ad-get-arg 0)))
+;;     (when (and company-message-func
+;;                (stringp (funcall company-message-func)))
+;;       (unless (string-match "The free version of TabNine only indexes up to" (funcall company-message-func))
+;;         ad-do-it))))
 
 
 (provide 'setup-company)

@@ -28,8 +28,8 @@
   :config
   (centaur-tabs-mode t)
   :bind
-  ("C-0" . centaur-tabs-backward)
-  ("C-9" . centaur-tabs-forward)
+  ("C-9" . centaur-tabs-backward)
+  ("C-0" . centaur-tabs-forward)
   )
 
 ;;package ace-jump-mode
@@ -80,8 +80,14 @@
   :ensure t
   :hook (after-init . doom-modeline-mode)
   :config
-  (setq-default doom-modeline-height 13)
-  (setq-default doom-modeline-bar-width 3))
+  (setq doom-modeline-height 25)
+  (setq doom-modeline-bar-width 3)
+  (setq doom-modeline-project-detection 'project)
+  (setq doom-modeline-buffer-file-name-style 'auto)
+  (setq doom-modeline-icon (display-graphic-p))
+  (setq doom-modeline-major-mode-icon t)
+  (setq doom-modeline-buffer-modification-icon t)
+  )
 
 (use-package all-the-icons)
 
@@ -126,6 +132,7 @@
   (add-to-list 'zeal-at-point-mode-alist '(c-mode . "C"))
   (add-to-list 'zeal-at-point-mode-alist '(c++-mode . "C++"))
   (add-to-list 'zeal-at-point-mode-alist '(cc-mode . ("C" "C++")))
+  (add-to-list 'zeal-at-point-mode-alist '(go-mode . "Go"))
   )
 
 

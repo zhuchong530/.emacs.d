@@ -9,7 +9,7 @@
               ("C-c C-d" . lsp-describe-thing-at-point))
   :commands (lsp lsp-deferred)
   :init
-  (setq lsp-auto-guess-root t
+  (setq lsp-auto-guess-root t           ;detect project root
         lsp-log-io nil
         lsp-enable-indentation t
         lsp-enable-imenu t

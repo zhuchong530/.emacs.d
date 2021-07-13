@@ -24,8 +24,10 @@
   :ensure t
   :hook (python-mode . (lambda ()
                          (require 'lsp-python-ms)
-                         (lsp-deferred)))
-  :init (setq lsp-python-ms-executable "~/.emacs.d/pylsms/Microsoft.Python.LanguageServer")
+                         (lsp)))
+  ;; :init (setq lsp-python-ms-executable "~/.emacs.d/pylsms/Microsoft.Python.LanguageServer")
+  ;; :init (setq lsp-python-ms-executable "/usr/bin/mspyls")
+  :init (setq lsp-python-ms-auto-install-server t)
   )
 
 (provide 'setup-python)

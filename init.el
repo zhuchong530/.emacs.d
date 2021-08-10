@@ -31,7 +31,7 @@
   (require 'use-package))
 (setq use-package-verbose t)
 (setq use-package-always-ensure t)
-(setq debug-on-error t)
+;; (setq debug-on-error t)
 
 ;; add the module path
 (add-to-list 'load-path "~/.emacs.d/custom")

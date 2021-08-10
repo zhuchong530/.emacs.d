@@ -2,6 +2,10 @@
 ;;; Commentary:
 ;;; code:
 
+
+(use-package dash :ensure t)
+(use-package diminish :ensure t)
+
 ;; encoding:
 (prefer-coding-system 'utf-8)
 
@@ -54,8 +58,8 @@
  create-lockfiles nil)
 
 ;;set the font
-(if (member "Monaco" (font-family-list))
-    (set-frame-font "Monaco-14"))
+(if (member "Consolas" (font-family-list))
+    (set-frame-font "Monaco-10"))
 
 ;; History
 (savehist-mode 1)
@@ -89,12 +93,6 @@
 (use-package symon
   :init (symon-mode)
   )
-
-
-(use-package rainbow-fart
-  :ensure t
-  :init (rainbow-fart-mode 1)
-  :config (setq rainbow-fart-voice-mode "JustKowalski"))
 
 
 (provide 'setup-sys)

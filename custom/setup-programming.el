@@ -28,7 +28,6 @@
 ;; C++ completion for GNU Emacs
 (use-package function-args
   :disabled
-  :ensure t
   :config (fa-config-default)
   )
 
@@ -40,7 +39,6 @@
 ;; Package -flycheck
 ;; On-the-fly syntax checking
 (use-package flycheck
-  :ensure t
   :defer t
   :commands (flycheck-mode
              flycheck-next-error

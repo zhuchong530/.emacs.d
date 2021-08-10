@@ -4,12 +4,10 @@
 
 ;; lsp-mode package
 (use-package lsp-mode
-  :ensure t
   :bind (:map lsp-mode-map
               ("C-c C-d" . lsp-describe-thing-at-point))
-  :commands (lsp lsp-deferred)
   :init
-  (setq lsp-auto-guess-root t           ;detect project root
+  (setq lsp-auto-guess-root nil           ;detect project root
         lsp-log-io nil
         lsp-enable-indentation t
         lsp-enable-imenu t
@@ -24,16 +22,16 @@
   :hook(
         ;; To defer LSP server startup(and DidOen notifications) until the buffer is
         ;; visible, use `lsp-deferred` instead of `lsp`
-        (python-mode . lsp-deferred)
-        (go-mode . lsp-deferred)
-        (c-mode . lsp-deferred)
-        (c++-mode . lsp-deferred)
+        (prog-mode-hook . lsp)
+        (python-mode . lsp)
+        (go-mode . lsp)
+        (c-mode . lsp)
+        (c++-mode . lsp)
         (lsp-mode . lsp-enable-which-key-integration)))
 
 ;; Package lsp-ui
 ;; Optionally
 (use-package lsp-ui
-  :ensure t
   :after (lsp-mode)
   :commands lsp-ui-mode
   :bind (:map lsp-ui-mode-map

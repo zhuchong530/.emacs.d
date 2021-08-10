@@ -20,7 +20,7 @@
         company-eclim-auto-save nil)        ;ends setq
   (eval-after-load 'company
     ;;'(add-to-list 'company-backends '(company-tabnine company-capf company-yasnippet company-abbrev company-dabbrev)))
-    ;; '(add-to-list 'company-backends '(company-tabnine company-capf compnay-yasnippet)))
+    ;; '(add-to-list 'company-backends '(company-tabnine company-capf company-yasnippet)))
     '(add-to-list 'company-backends '(company-capf company-yasnippet)))
   :config
   ;; dropdown by default=0, no dropdown=1
@@ -57,8 +57,8 @@
  :hook (company-mode . company-box-mode)
  )
 
-;; comapny-tabnine
-;; OpenAI completion backend
+;; ;; comapny-tabnine
+;; ;; OpenAI completion backend
 ;; (use-package company-tabnine
 ;;   :ensure t
 ;;   )

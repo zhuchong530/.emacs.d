@@ -8,13 +8,11 @@
 
 ;;linum-mode
 (use-package linum
-  :ensure t
   :config (global-linum-mode 1)
   )
 
 ;; highlight-symbol
 (use-package highlight-symbol
-  :ensure t
   :bind(("C-<f3>" . highlight-symbol)
         ("<f3>" . highlight-symbol-next)
         ("S-<f3>" . highlight-symbol-prev)
@@ -34,13 +32,11 @@
 
 ;;package ace-jump-mode
 (use-package ace-jump-mode
-  :ensure t
   :bind ("C-c <SPC>" . ace-jump-mode)
   )
 
 ;;package golden-ratio
 (use-package golden-ratio
-  :ensure t
   :init (golden-ratio-mode 1)
   :config (setq golden-ratio-exclude-modes '("ediff-mode"
                                              "gud-mode"
@@ -66,7 +62,6 @@
 
 
 (use-package doom-themes
-  :ensure t
   :init (load-theme 'doom-acario-dark t)
   :config
   (setq doom-themes-enable-bold t
@@ -77,7 +72,6 @@
 
 ;; doom-modeline
 (use-package doom-modeline
-  :ensure t
   :hook (after-init . doom-modeline-mode)
   :config
   (setq doom-modeline-height 25)
@@ -93,7 +87,6 @@
 
 ;; rainbow mode for display the color
 (use-package rainbow-mode
-  :ensure t
   :config
   (progn
     (defun @-enable-rainbow ()
@@ -101,7 +94,6 @@
     (add-hook 'progn-mode-hook '@-enable-rainbow)))
 
 (use-package rainbow-delimiters
-  :ensure t
   :init (progn (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
   :config
   (set-face-foreground 'rainbow-delimiters-depth-1-face "chartreuse3")
@@ -137,7 +129,6 @@
 
 
 (use-package youdao-dictionary
-  :ensure t
   :config
   (setq url-automatic-caching t)
   )
@@ -154,9 +145,7 @@
 ;;   /method:user@host#port:filepath
 ;;;;;; method stand for which protocol you want to use.
 ;;;;;;  host stand for the remote hostname/Ip Address
-(use-package tramp
-  :ensure t
-  )
+(use-package tramp)
 
 ;; Package cmake-mode
 ;; major-mode for editing CMake sources

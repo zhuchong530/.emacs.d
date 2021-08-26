@@ -67,7 +67,6 @@
 ;; Package helm-lsp
 ;; for helm user
 (use-package helm-lsp
-  :ensure t
   :after (lsp-mode)
   :commands help-lsp-workspace-symbol
   :init (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))

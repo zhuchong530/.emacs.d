@@ -8,7 +8,6 @@
   ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
   ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
   ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-  :ensure t
   :init (progn
           (require 'helm-config)
           (let ((ad-redefinition-action 'accept))
@@ -67,7 +66,6 @@
 ;; PACKAGE: helm-swoop
 ;; Efficiently hopping squeezed lines powered by helm interface
 (use-package helm-swoop
-  :ensure t
   :bind (("C-c h o" . helm-swoop)
          ("C-c s" . helm-multi-swoop-all)
          :map helm-swoop-map
@@ -79,7 +77,6 @@
 ;; Package helm-ag
 ;; the silver searcher with helm interface
 (use-package helm-ag
-  :ensure t
   :after helm
   :bind ("C-c a g" . helm-do-ag-project-root))
 

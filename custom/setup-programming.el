@@ -80,7 +80,6 @@
 ;; Package: projejctile
 ;; Manage and navigate projects in Emacs easily
 (use-package projectile
-  :ensure t
   :requires (helm)
   :bind (:map projectile-mode-map
               ("C-c p" . 'projectile-command-map))
@@ -93,14 +92,12 @@
 ;; Package: helm-projectile
 ;; Helm integration for Projectile
 (use-package helm-projectile
-  :ensure t
   :requires (helm projectile)
   :config
   (helm-projectile-on))
 
 ;; Package zygospore
 (use-package zygospore
-  :ensure t
   :bind (("C-x 1" . zygospore-toggle-delete-other-windows))
   )
 
@@ -129,7 +126,6 @@
 
 ;; Pakcage yasnippet-snippets
 (use-package yasnippet-snippets
-  :ensure t
   :after yasnippet)
 
 ;;nasm-mode
@@ -139,7 +135,6 @@
 
 ;;magit package
 (use-package magit
-  :ensure t
   :commands magit-get-top-dir
   :bind (("C-x g s" . magit-status)
          ("C-x g f" . magit-log-buffer-file)
@@ -153,7 +148,6 @@
   )
 
 (use-package git-gutter+
-  :ensure t
   :config
   (progn
     (global-git-gutter+-mode)))

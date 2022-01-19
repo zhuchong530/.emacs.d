@@ -72,18 +72,26 @@
 
 ;; doom-modeline
 (use-package doom-modeline
-  :hook (after-init . doom-modeline-mode)
-  :config
+  :custom
   (setq doom-modeline-height 25)
   (setq doom-modeline-bar-width 3)
-  (setq doom-modeline-project-detection 'project)
+  (setq doom-modeline-project-detection 'projectile)
   (setq doom-modeline-buffer-file-name-style 'auto)
   (setq doom-modeline-icon (display-graphic-p))
   (setq doom-modeline-major-mode-icon t)
   (setq doom-modeline-buffer-modification-icon t)
+  (setq doom-modeline-buffer-encoding t)
+  :config (doom-modeline-mode)
   )
 
-(use-package all-the-icons)
+(use-package all-the-icons
+  :if (display-graphic-p)
+  )
+
+(use-package all-the-icons-dired
+  :custom-face (all-the-icons-dired-dir-face ((t (:foreground nill))))
+  :hook (dired-mode . all-the-icons-dired-mode)
+  )
 
 ;; rainbow mode for display the color
 (use-package rainbow-mode
@@ -146,6 +154,15 @@
 ;;;;;; method stand for which protocol you want to use.
 ;;;;;;  host stand for the remote hostname/Ip Address
 (use-package tramp)
+
+
+;; Package markdown-mode
+(use-package markdown-mode
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
 
 ;; Package cmake-mode
 ;; major-mode for editing CMake sources

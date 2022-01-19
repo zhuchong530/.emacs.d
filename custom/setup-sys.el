@@ -58,8 +58,11 @@
  create-lockfiles nil)
 
 ;;set the font
-(if (member "Consolas" (font-family-list))
-    (set-frame-font "Monaco-10"))
+(set-frame-font "YaHei Consolas Hybrid-11")
+;; (set-frame-font "Azeret Mono Light-11")
+ ;; (if (member "Consolas" (font-family-list))
+     ;; (set-frame-font "Monaco-12"))
+;(sqet-frame-font "-MS  -YaHei Consolas Hybrid-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1 16")
 
 ;; History
 (savehist-mode 1)

@@ -4,10 +4,12 @@
 
 ;; lsp-mode package
 (use-package lsp-mode
+  :commands lsp
   :bind (:map lsp-mode-map
               ("C-c C-d" . lsp-describe-thing-at-point))
   :init
   (setq lsp-auto-guess-root nil           ;detect project root
+        lsp-diagnostics-provider :flycheck
         lsp-log-io nil
         lsp-enable-indentation t
         lsp-enable-imenu t

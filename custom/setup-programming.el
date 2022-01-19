@@ -20,7 +20,8 @@
   ;; “java”: The default style for java-mode (see below)
   ;; “user”: When you want to define your own style
   (setq c-default-style "k&r") ;; set style to "k&r"
-  (setq c-basic-offset 4)
+  ;; (setq c-basic-offset 4)
+  (setq tab-width 4) ; or any other preferred value
   (global-set-key (kbd "RET") 'newline-and-indent)  ; automatically indent when press RET
   )
 
@@ -39,26 +40,15 @@
 ;; Package -flycheck
 ;; On-the-fly syntax checking
 (use-package flycheck
-  :defer t
-  :commands (flycheck-mode
-             flycheck-next-error
-             flycheck-previous-error)
-  :init (global-flycheck-mode)
+  :hook (lsp-mode . flycheck-mode)
+  :diminish (flycheck-mode . "f")
+  :init (setq-default flycheck-check-syntax-automatically '(save-mode-enabled))
   :bind
   (("C-c e n" . flycheck-next-error)
    ("C-c e p" . flycheck-previour-error)
    ("C-c e l" . flycheck-list-errors))
   :config
-  (progn
-    (setq flycheck-check-syntax-automatically '(save-mode-enabled))
-    (setq flycheck-standard-error-navigation nil)
-    ;;flycheck errors on a tooltip(doesn't work on console)
-    (when (display-graphic-p (selected-frame))
-      (eval-after-load 'flycheck
-        '(custom-set-variables
-          '(flycheck-display-errors-function
-            #'flycheck-pos-tip-error-messages))))
-    )
+  (aset flycheck-error-list-format 5 '("Message" 0 t))
   )
 
 ;; activate whitespace-mode to view all whitespace characters

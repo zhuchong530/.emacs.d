@@ -5,7 +5,6 @@
 ;; company
 ;; Modular text completion framework
 (use-package company
-  :ensure t
   :defer 5
   :commands (company-mode company-complete company-complete-common company-complete-selection helm-company)
   :hook (after-init . global-company-mode)

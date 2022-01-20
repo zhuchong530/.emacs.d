@@ -7,7 +7,7 @@
       mode-require-final-newline t      ; add a newline to end of file
       tab-width 4                       ; default to 4 visible spaces to display a tab
       kill-whole-line t                 ;if NIL, kill whole line and move the next line up
-      )
+)
 
 (add-hook 'sh-mode-hook (lambda ()
                           (setq tab-width 4)))

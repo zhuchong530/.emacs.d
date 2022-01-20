@@ -3,7 +3,9 @@
 ;;; Code:
 
 (use-package cc-mode
-  :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
+  :mode (("\\.hpp\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
+         ("\\.c\\'" . c-mode)
+         ("\\.h\\'" . c-mode)
          ("\\.m\\'" . c-mode)
          ("\\.mm\\'" . c-mode))
 

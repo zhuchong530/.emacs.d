@@ -16,15 +16,12 @@
   :bind(("C-<f3>" . highlight-symbol)
         ("<f3>" . highlight-symbol-next)
         ("S-<f3>" . highlight-symbol-prev)
-        ("M-<f3>" . highlight-symbol-query-replace)
-        )
-  )
+        ("M-<f3>" . highlight-symbol-query-replace)))
 
 ;; package centaur-tabs
 (use-package centaur-tabs
   :demand
   :config
-  (centaur-tabs-headline-match)
   (setq centaur-tabs-set-bar t
         centaur-tabs-height 32
         centaur-tabs-set-icons t
@@ -67,7 +64,6 @@
 ;; (load-theme 'doom-dark+ t)
 ;; (load-theme 'tomorrow-night-paradise t)    ;dark theme, black background
 
-
 (use-package doom-themes
   :init (load-theme 'doom-acario-dark t)
   :config
@@ -96,7 +92,6 @@
   )
 
 (use-package all-the-icons-dired
-  :custom-face (all-the-icons-dired-dir-face ((t (:foreground nill))))
   :hook (dired-mode . all-the-icons-dired-mode)
   )
 
@@ -174,7 +169,7 @@
 ;; Package nov
 ;; for epub file reading
 (use-package nov
-  :mode ("\\.epub\\" . nov-mode)
+  :mode ("\\.epub\\'" . nov-mode)
   :config (setq nov-text-width 100)
   )
 

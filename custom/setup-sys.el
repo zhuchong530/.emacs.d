@@ -2,13 +2,11 @@
 ;;; Commentary:
 ;;; code:
 
-
-(use-package dash :ensure t)
-(use-package diminish :ensure t)
+(use-package dash)
+(use-package diminish)
 
 ;; encoding:
 (prefer-coding-system 'utf-8)
-
 (setenv "LANG" "en_US.UTF-8")
 (setenv "LC_ALL" "en_US.UTF-8")
 (setenv "LC_CTYPE" "en_US.UTF-8")
@@ -62,7 +60,6 @@
 ;; (set-frame-font "Azeret Mono Light-11")
  ;; (if (member "Consolas" (font-family-list))
      ;; (set-frame-font "Monaco-12"))
-;(sqet-frame-font "-MS  -YaHei Consolas Hybrid-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1 16")
 
 ;; History
 (savehist-mode 1)

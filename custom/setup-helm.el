@@ -8,6 +8,7 @@
   ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
   ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
   ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+  :requires (helm-mode)
   :init (progn
           (require 'helm-config)
           (let ((ad-redefinition-action 'accept))
@@ -51,6 +52,7 @@
                   helm-quick-update t
                   helm-autoresize-max-height 25
                   helm-autoresize-min-height 25)))
+
 ;; Package helm-descbinds
 ;; A convenient `describe-bindings' with `helm'
 (use-package helm-descbinds

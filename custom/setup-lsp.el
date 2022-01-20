@@ -4,7 +4,6 @@
 
 ;; lsp-mode package
 (use-package lsp-mode
-  :commands lsp
   :bind (:map lsp-mode-map
               ("C-c C-d" . lsp-describe-thing-at-point))
   :init
@@ -24,11 +23,11 @@
   :hook(
         ;; To defer LSP server startup(and DidOen notifications) until the buffer is
         ;; visible, use `lsp-deferred` instead of `lsp`
-        ;; (prog-mode-hook . lsp)
-        (python-mode . lsp)
-        (go-mode . lsp)
-        (c-mode . lsp)
-        (c++-mode . lsp)
+        (prog-mode-hook . lsp-deferred)
+        (python-mode . lsp-deferred)
+        (go-mode . lsp-deferred)
+        (c-mode . lsp-deferred)
+        (c++-mode . lsp-deferred)
         (lsp-mode . lsp-enable-which-key-integration)))
 
 ;; Package lsp-ui

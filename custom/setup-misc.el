@@ -171,6 +171,13 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+;; Package nov
+;; for epub file reading
+(use-package nov
+  :mode ("\\.epub\\" . nov-mode)
+  :config (setq nov-text-width 100)
+  )
+
 ;; Package cmake-mode
 ;; major-mode for editing CMake sources
 (use-package cmake-mode

@@ -67,13 +67,13 @@
  '(global-undo-tree-mode t)
  '(indent-guide-global-mode t)
  '(package-selected-packages
-   '(all-the-icons-dired rainbow-fart centaur-tabs flycheck-rust cargo rustic youdao-dictionary ace-window yasnippet-snippets indent-guide company-posframe all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui doom-modeline zeal-at-point cmake-ide cmake-mode diminish symon web-mode flycheck-go projejctile zygospore ws-butler which-key volatile-highlights use-package switch-window smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell duplicate-thing dtrt-indent comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
+   '(nov all-the-icons-dired rainbow-fart centaur-tabs flycheck-rust cargo rustic youdao-dictionary ace-window yasnippet-snippets indent-guide company-posframe all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui doom-modeline zeal-at-point cmake-ide cmake-mode diminish symon web-mode flycheck-go projejctile zygospore ws-butler which-key volatile-highlights use-package switch-window smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell duplicate-thing dtrt-indent comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(all-the-icons-dired-dir-face ((t (:foreground nill)))))
 
 ;;; init.el ends here

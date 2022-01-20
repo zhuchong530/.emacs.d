@@ -173,6 +173,15 @@
   :config (setq nov-text-width 100)
   )
 
+;; Package pdf-tools
+;; for pdf file reading
+(use-package pdf-tools
+  :config
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-width)
+  (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
+  )
+
 ;; Package cmake-mode
 ;; major-mode for editing CMake sources
 (use-package cmake-mode

@@ -24,6 +24,13 @@
 (use-package centaur-tabs
   :demand
   :config
+  (centaur-tabs-headline-match)
+  (setq centaur-tabs-set-bar t
+        centaur-tabs-height 32
+        centaur-tabs-set-icons t
+        centaur-tabs-set-modified-marker t
+        centaur-tabs-modified-marker " ● "
+        centaur-tabs-style "bar")
   (centaur-tabs-mode t)
   :bind
   ("C-9" . centaur-tabs-backward)

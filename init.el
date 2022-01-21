@@ -14,15 +14,10 @@
   (add-to-list 'package-archives '("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/") t))
   ;; (add-to-list 'package-archives '("melpa". "https://mepla.org/packages/") t))
   ;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t))
-  ;; (add-to-list 'package-archives '("melpa" . "http://elpa.zilongshanren.com/melpa/") t))
 (unless (assoc-default "gnu" package-archives)
   (add-to-list 'package-archives '("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/") t))
 ;;  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t))
-;; (add-to-list 'package-archives '("gnu" . "http://elpa.zilongshanren.com/gnu/") t))
-;; (unless (assoc-default "org" package-archives)
-;; (unless (assoc-default "marmalade" package-archives)
 ;;   (add-to-list 'package-archives '("marmalade" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/marmalade/") t))
-
 (package-initialize)
 
 ;; bootstrap 'use-package'
@@ -52,6 +47,7 @@
 (load "setup-lsp")
 (load "setup-web")
 (load "setup-rust")
+(load "setup-org")
 
 
 (custom-set-variables
@@ -66,7 +62,7 @@
  '(global-undo-tree-mode t)
  '(indent-guide-global-mode t)
  '(package-selected-packages
-   '(pdf-tools nov all-the-icons-dired rainbow-fart centaur-tabs flycheck-rust cargo rustic youdao-dictionary ace-window yasnippet-snippets indent-guide company-posframe all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui doom-modeline zeal-at-point cmake-ide cmake-mode diminish symon web-mode flycheck-go projejctile zygospore ws-butler which-key volatile-highlights use-package switch-window smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell duplicate-thing dtrt-indent comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
+   '(pdf-tools nov all-the-icons-dired rainbow-fart centaur-tabs flycheck-rust cargo rustic youdao-dictionary ace-window yasnippet-snippets indent-guide company-posframe all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui doom-modeline zeal-at-point cmake-ide cmake-mode diminish symon web-mode flycheck-go projejctile zygospore ws-butler which-key volatile-highlights use-package switch-window smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell duplicate-thing comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
 
 
 ;;; init.el ends here

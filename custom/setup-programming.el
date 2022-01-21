@@ -22,9 +22,9 @@
   ;; “java”: The default style for java-mode (see below)
   ;; “user”: When you want to define your own style
   (setq c-default-style "k&r") ;; set style to "k&r"
-  ;; (setq c-basic-offset 4)
+  (setq c-basic-offset 4)
   (setq tab-width 4) ; or any other preferred value
-  (global-set-key (kbd "RET") 'newline-and-indent)  ; automatically indent when press RET
+  ;; (global-set-key (kbd "RET") 'newline-and-indent)  ; automatically indent when press RET
   )
 
 ;; Package function-args

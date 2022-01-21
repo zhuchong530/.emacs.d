@@ -21,14 +21,14 @@
 ;; package centaur-tabs
 (use-package centaur-tabs
   :demand
-  :config
+  :config (centaur-tabs-mode t)
+  :custom
   (setq centaur-tabs-set-bar t
         centaur-tabs-height 32
         centaur-tabs-set-icons t
         centaur-tabs-set-modified-marker t
         centaur-tabs-modified-marker " ● "
-        centaur-tabs-style "bar")
-  (centaur-tabs-mode t)
+        centaur-tabs-style "rounded")
   :bind
   ("C-9" . centaur-tabs-backward)
   ("C-0" . centaur-tabs-forward)

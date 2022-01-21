@@ -13,7 +13,6 @@
                           (setq tab-width 4)))
 
 (delete-selection-mode)
-(global-set-key (kbd "RET") 'newline-and-indent)
 ;; show whitespace in diff-mode
 (add-hook 'diff-mode-hook (lambda ()
                             (setq-local whitespace-style
@@ -50,13 +49,6 @@
   (add-hook 'prog-mode-hook 'clean-aindent-mode)
   )
 
-;; PACKAGE: dtrt-indent
-;; Adapt to foreign indentation offsets
-(use-package dtrt-indent
-  :config
-  (setq global-mode-string (remove 'dtrt-indent-mode-line-info global-mode-string))
-  (dtrt-indent-mode 1)
-  )
 
 ;; PACKAGE: ws-butler
 ;; Unobtrusively remove trailing whitespace.
@@ -77,12 +69,10 @@
   :ensure nil
   :config
   (setq
-   uniquify-buffer-name-style 'reverse
+   uniquify-buffer-name-style 'forward
    uniquify-separator ":"
    uniquify-after-kill-buffer-p t
-   uniquify-ignore-buffers-re "^\\*"
-   )
-  )
+   uniquify-ignore-buffers-re "^\\*"))
 
 ;; PACKAGE: smartparens
 ;; Automatic insertion, wrapping and paredit-like navigation with user defined pairs.

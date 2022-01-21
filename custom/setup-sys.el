@@ -5,11 +5,20 @@
 (use-package dash)
 (use-package diminish)
 
+;; Package exec-path-from-shell
+(use-package exec-path-from-shell
+  :config (exec-path-from-shell-initialize))
+
 ;; encoding:
+(set-charset-priority 'unicode)
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
-(setenv "LANG" "en_US.UTF-8")
-(setenv "LC_ALL" "en_US.UTF-8")
-(setenv "LC_CTYPE" "en_US.UTF-8")
+;; (setenv "LANG" "en_US.UTF-8")
+;; (setenv "LC_ALL" "en_US.UTF-8")
+;; (setenv "LC_CTYPE" "en_US.UTF-8")
 
 ;; Feature mode
 (display-time-mode 1)
@@ -68,14 +77,6 @@
       history-delete-duplicates t)
 
 (require 'bind-key)
-
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
-;; (exec-path-from-shell-copy-env "GOPATH")
-;; (exec-path-from-shell-copy-env "GOROOT")
-;; (exec-path-from-shell-copy-env "GOBIN")
-;; (exec-path-from-shell-copy-env "PATH")
-;; (exec-path-from-shell-copy-env "WORKON_HOME")
 
 (use-package which-key                  ;bring up help on key combinations
   :defer 10

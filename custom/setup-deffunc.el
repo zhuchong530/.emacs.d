@@ -162,4 +162,14 @@ Position the cursor at it's beginning, according to the current mode."
 (global-set-key (kbd "M-o") 'prelude-smart-open-line)
 ;; (global-set-key (kbd "M-o") 'open-line)
 
+
+(defun set-proxy()
+  (interactive)
+  (customize-set-variable 'url-proxy-services
+                          '(("http" . "127.0.0.1:7890")
+                            ("https" . "127.0.0.1:7890"))))
+(defun unset-proxy()
+  (interactive)
+  (customize-set-variable 'url-proxy-services nil))
+
 (provide 'setup-deffunc)

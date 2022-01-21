@@ -79,7 +79,8 @@
 ;; the silver searcher with helm interface
 (use-package helm-ag
   :after helm
-  :bind ("C-c a g" . helm-do-ag-project-root))
+  ;; :bind ("C-c a g" . helm-do-ag-project-root)
+  )
 
 ;; Package helm-gtags
 ;; GNU GLOBAL helm interface

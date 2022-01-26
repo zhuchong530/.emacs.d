@@ -2,9 +2,15 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Save backup files in a dedicated directory
-(setq backup-directory-alist '(("." . "~/.emacs.d/saves")))
-(desktop-save-mode 1)
+
+;; socks设置
+;; (setq url-gateway-method 'socks)
+;; (setq socks-server '("Default server" "127.0.0.1" 7891 5))
+
+;; (setq url-proxy-services
+;;       '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+;;         ("http" . "127.0.0.1:7890")
+;;         ("https" . "127.0.0.1:7890")))
 
 ;;linum-mode
 (use-package linum
@@ -17,22 +23,6 @@
         ("<f3>" . highlight-symbol-next)
         ("S-<f3>" . highlight-symbol-prev)
         ("M-<f3>" . highlight-symbol-query-replace)))
-
-;; package centaur-tabs
-(use-package centaur-tabs
-  :demand
-  :config (centaur-tabs-mode t)
-  :custom
-  (setq centaur-tabs-set-bar t
-        centaur-tabs-height 32
-        centaur-tabs-set-icons t
-        centaur-tabs-set-modified-marker t
-        centaur-tabs-modified-marker " ● "
-        centaur-tabs-style "rounded")
-  :bind
-  ("C-9" . centaur-tabs-backward)
-  ("C-0" . centaur-tabs-forward)
-  )
 
 ;;package ace-jump-mode
 (use-package ace-jump-mode
@@ -65,12 +55,11 @@
 ;; (load-theme 'tomorrow-night-paradise t)    ;dark theme, black background
 
 (use-package doom-themes
-  :init (load-theme 'doom-acario-dark t)
+  :init (load-theme 'doom-dracula t)
   :config
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
   (doom-themes-visual-bell-config)
-  (doom-themes-neotree-config)
   (doom-themes-org-config))
 
 ;; doom-modeline
@@ -83,8 +72,28 @@
   (setq doom-modeline-icon (display-graphic-p))
   (setq doom-modeline-major-mode-icon t)
   (setq doom-modeline-buffer-modification-icon t)
+  ;; 不显示换行和编码(节省空间)
   (setq doom-modeline-buffer-encoding t)
-  :config (doom-modeline-mode)
+  :config (doom-modeline-mode))
+
+;; package centaur-tabs
+(use-package centaur-tabs
+  :demand
+  :hook (emacs-startup . centaur-tabs-mode)
+  :config
+  (centaur-tabs-mode t)
+  (centaur-tabs-headline-match)
+  (centaur-tabs-group-by-projectile-project)
+  :init
+  (setq centaur-tabs-set-bar t
+        centaur-tabs-height 32
+        centaur-tabs-set-icons t
+        centaur-tabs-set-modified-marker t
+        centaur-tabs-modified-marker " ● "
+        centaur-tabs-style "rounded")
+  :bind
+  ("C-9" . centaur-tabs-backward)
+  ("C-0" . centaur-tabs-forward)
   )
 
 (use-package all-the-icons
@@ -97,11 +106,9 @@
 
 ;; rainbow mode for display the color
 (use-package rainbow-mode
-  :config
-  (progn
-    (defun @-enable-rainbow ()
-      (rainbow-mode t))
-    (add-hook 'progn-mode-hook '@-enable-rainbow)))
+  :diminish
+  :hook (prog-mode . rainbow-mode))
+
 
 (use-package rainbow-delimiters
   :init (progn (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
@@ -137,12 +144,30 @@
   (add-to-list 'zeal-at-point-mode-alist '(go-mode . "Go"))
   )
 
+(use-package helpful
+  :config
+  (global-set-key (kbd "C-h f") #'helpful-callable)
+  (global-set-key (kbd "C-h v") #'helpful-variable)
+  (global-set-key (kbd "C-h k") #'helpful-key)
+  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+  (global-set-key (kbd "C-h F") #'helpful-function)
+  (global-set-key (kbd "C-h C") #'helpful-command)
+  )
+
+(use-package posframe)
+
+(use-package nyan-mode
+  :custom
+  (nyan-cat-face-number 2)
+  (nyan-animate-nyancat t)
+  :hook (doom-modeline-mode . nyan-mode))
 
 (use-package youdao-dictionary
   :config
   (setq url-automatic-caching t)
   )
-(global-set-key (kbd "C-c k") 'youdao-dictionary-search-at-point)
+(global-set-key (kbd "C-c k") 'youdao-dictionary-search-at-point-posframe)
+
 ;;tramp
 ;;;;;;;;;;;;;;;;;;;;;;;;;tramp setting;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;Enable you to edit the file which on the REMOTE machines;;;;;
@@ -180,31 +205,6 @@
   (pdf-tools-install)
   (setq-default pdf-view-display-size 'fit-width)
   (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
-  )
-
-;; Package cmake-mode
-;; major-mode for editing CMake sources
-(use-package cmake-mode
-  :mode ("CMakeLists.txt" "\\.cmake\\'")
-  )
-
-(use-package gud
-  :commands gud-gdb
-  :bind (("<f9>" . gud-cont)
-         ("<f10>" . gud-next)
-         ("<f11>" . gud-step)
-         ("S-<f11>" . gud-finish))
-  :init
-  (defun show-debugger ()
-    (interactive)
-    (let ((gud-buf
-           (catch 'found
-             (dolist (buf (buffer-list))
-               (if (string-match "\\*gud-" (buffer-name buf))
-                   (throw 'found buf))))))
-      if (gud-buf
-          (switch-to-buffer-other-window gud-buf)
-          (call-interactively 'gud-gdb))))
   )
 
 

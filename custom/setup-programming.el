@@ -21,10 +21,9 @@
   ;; “python”: What Python developers use for extension modules
   ;; “java”: The default style for java-mode (see below)
   ;; “user”: When you want to define your own style
-  (setq c-default-style "k&r") ;; set style to "k&r"
+  (setq c-set-style "gnu") ;; set style to "k&r"
   (setq c-basic-offset 4)
   (setq tab-width 4) ; or any other preferred value
-  ;; (global-set-key (kbd "RET") 'newline-and-indent)  ; automatically indent when press RET
   )
 
 ;; Package function-args
@@ -36,8 +35,8 @@
 
 ;; Package eldoc
 (use-package eldoc
-  :hook ((c-mode-common) . eldoc-mode)
-  )
+  :diminish eldoc-mode
+  :config (add-hook 'prog-mode-hook 'eldoc-mode))
 
 ;; Package -flycheck
 ;; On-the-fly syntax checking
@@ -88,33 +87,18 @@
   :config
   (helm-projectile-on))
 
-;; Package zygospore
-(use-package zygospore
-  :bind (("C-x 1" . zygospore-toggle-delete-other-windows))
-  )
-
 ;; Package: yasnippet
 ;; Yet another snippet extension for Emacs
 (use-package yasnippet
   :after prog-mode
-  :defer t
-  :bind (("C-c y d" . yas-load-directory)
-         ("C-c y i" . yas-insert-snippet)
-         ("C-c y f" . yas-visit-snippet-file)
-         ("C-c y n" . yas-new-snippet)
-         ("C-c y t" . yas-tryout-snippet)
-         ("C-c y l" . yas-describe-tables)
-         ("C-c y g" . yas/global-mode)
-         ("C-c y m" . yas/minor-mode)
-         ("C-c y a" . yas-reload-all)
-         ("C-c y x" . yas-expand))
+  :demand t
+  :commands yas-minor-mode
   :bind (:map yas-keymap
               ("C-i" . yas-next-field-or-maybe-expand))
-  :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
+  :hook ((prog-mode org-mode vterm-mode) . yas-minor-mode)
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-  (yas-global-mode 1)
-  )
+  (yas-global-mode 1))
 
 ;; Pakcage yasnippet-snippets
 (use-package yasnippet-snippets
@@ -143,6 +127,32 @@
   :config
   (progn
     (global-git-gutter+-mode)))
+
+;; Package cmake-mode
+;; major-mode for editing CMake sources
+(use-package cmake-mode
+  :mode ("CMakeLists.txt" "\\.cmake\\'")
+  )
+
+(use-package gud
+  :commands gud-gdb
+  :bind (("<f9>" . gud-cont)
+         ("<f10>" . gud-next)
+         ("<f11>" . gud-step)
+         ("S-<f11>" . gud-finish))
+  :init
+  (defun show-debugger ()
+    (interactive)
+    (let ((gud-buf
+           (catch 'found
+             (dolist (buf (buffer-list))
+               (if (string-match "\\*gud-" (buffer-name buf))
+                   (throw 'found buf))))))
+      if (gud-buf
+          (switch-to-buffer-other-window gud-buf)
+          (call-interactively 'gud-gdb))))
+  )
+
 
 (provide 'setup-programming)
 ;;; setup-programming.el ends here

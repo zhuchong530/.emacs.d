@@ -2,12 +2,18 @@
 ;;; Commentary:
 ;;; code:
 
-(use-package dash)
-(use-package diminish)
-
 ;; Package exec-path-from-shell
 (use-package exec-path-from-shell
   :config (exec-path-from-shell-initialize))
+
+
+;; Garbage Collector Magic Hack
+(use-package gcmh
+  :init
+  (setq gcmh-idel-delay 5)
+  (setq gcmh-high-cons-hreshold (* 64 1024 1024))
+  (gcmh-mode 1)
+  (gcmh-set-high-threshold))
 
 ;; encoding:
 (set-charset-priority 'unicode)
@@ -16,26 +22,42 @@
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
-;; (setenv "LANG" "en_US.UTF-8")
-;; (setenv "LC_ALL" "en_US.UTF-8")
-;; (setenv "LC_CTYPE" "en_US.UTF-8")
+(setenv "LANG" "en_US.UTF-8")
+(setenv "LC_ALL" "en_US.UTF-8")
+(setenv "LC_CTYPE" "en_US.UTF-8")
+
+(when (window-system)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (menu-bar-mode -1))
+
+(set-fringe-mode 10)
+
+(setq inhibit-startup-screen t)
+(setq inhibit-startup-message t)
+(setq inhibit-startup-echo-area-message t)
+(setq initial-scratch-message nil)
+
+(setq initial-major-mode 'fundamental-mode)
 
 ;; Feature mode
+(display-battery-mode t)
+(column-number-mode t)
+(size-indication-mode -1)
 (display-time-mode 1)
-(column-number-mode 1)
+(setq display-time-24hr-format t)
+(setq display-time-default-load-average nil)
+(setq display-time-format "%m/%d[%u] %H:%M%p")
+
+(toggle-frame-maximized)
+
 (show-paren-mode t)
 (setq-default show-paren-style 'expression)
-(display-battery-mode 1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(toggle-scroll-bar -1)
-(global-auto-revert-mode t)
+
+;; highlight syntax
+(global-font-lock-mode t)
 
 (fset 'yes-or-no-p 'y-or-n-p)       ;using y-or-n instead yes-or-no
-(toggle-frame-maximized)
-(setq gc-cons-threshold (* 8192 8192))     ;garbage collect threshold
-(setq read-process-output-max (* 1024 1024 128)) ; 128MB
-(setq inhibit-startup-message t)        ;disable startup message
 (setq delete-by-moving-to-trash t)      ;delete to trash
 
 (setq
@@ -55,45 +77,64 @@
 
 ;; file Operations
 (setq
- tab-width 4
- inhibit-splash-screen t
- initial-scratch-message nil
  sentence-end-double-space nil
  make-backup-files nil
  indent-tabs-mode nil
  auto-save-default nil
- create-lockfiles nil)
+ create-lockfiles nil
+ global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries
+ mark-ring-max 5000                ; increase kill ring to contains 5000 entries
+ mode-require-final-newline t      ; add a newline to end of file
+ tab-width 4                       ; default to 4 visible spaces to display a tab
+ kill-whole-line t                 ;if NIL, kill whole line and move the next line up
+ )
 
 ;;set the font
 (set-frame-font "YaHei Consolas Hybrid-11")
 ;; (set-frame-font "Azeret Mono Light-11")
- ;; (if (member "Consolas" (font-family-list))
-     ;; (set-frame-font "Monaco-12"))
+;; (if (member "Consolas" (font-family-list))
+;; (set-frame-font "Monaco-12"))
 
-;; History
-(savehist-mode 1)
-(setq savehist-file "~/.emacs.d/savehist")
-(setq history-length t
-      history-delete-duplicates t)
+(global-hl-line-mode t)
 
-(require 'bind-key)
-
-(use-package which-key                  ;bring up help on key combinations
-  :defer 10
+;; Save backup files in a dedicated directory
+(use-package desktop
   :config
-  (which-key-mode)
-  (which-key-setup-side-window-bottom))
+  (add-to-list 'desktop-globals-to-save 'register-alist)
+  (setq desktop-lazy-verbose nil
+        desktop-modes-not-to-save '(tags-table-mode emacs-lisp-mode)
+        desktop-restore-eager 15)
+  (desktop-save-mode 1))
 
-;; package ace-window
-(use-package ace-window
-  :ensure t
-  :config
-  (global-set-key (kbd "C-c p") 'ace-window))
+;; history
+(use-package saveplace
+  :hook (after-init . save-place-mode))
 
-;; symon settings
-(use-package symon
-  :init (symon-mode)
-  )
+;; Automatically reload files was modified by external program
+(use-package autorevert
+  :diminish
+  :hook (after-init . global-auto-revert-mode))
+
+
+
+(add-hook 'sh-mode-hook (lambda ()
+                          (setq tab-width 4)))
+
+(delete-selection-mode)
+;; show whitespace in diff-mode
+(add-hook 'diff-mode-hook (lambda ()
+                            (setq-local whitespace-style
+                                        '(face
+                                          tabs
+                                          tab-mark
+                                          spaces
+                                          space-mark
+                                          trailing
+                                          indentation::space
+                                          indentation::tab
+                                          newline
+                                          newline-mark))
+                            (whitespace-mode 1)))
 
 
 (provide 'setup-sys)

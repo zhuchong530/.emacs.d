@@ -19,8 +19,8 @@
         company-eclim-auto-save nil)        ;ends setq
   (eval-after-load 'company
     ;;'(add-to-list 'company-backends '(company-tabnine company-capf company-yasnippet company-abbrev company-dabbrev)))
-    ;; '(add-to-list 'company-backends '(company-tabnine company-capf company-yasnippet)))
-    '(add-to-list 'company-backends '(company-capf company-yasnippet)))
+    ;; '(add-to-list 'company-backends '(company-capf company-yasnippet)))
+  '(add-to-list 'company-backends '(company-capf)))
   :config
   ;; dropdown by default=0, no dropdown=1
   (setq company-idle-delay 0)
@@ -48,7 +48,6 @@
                ("C-o" . company-search-toggle-filtering)
                ));end bind
   );end use-package company
-;; (message "after loading company")
 
 ;; Package company-box
 ;; A company front-end - Differences with the built-in front-end
@@ -92,6 +91,13 @@
           (Operator . ,(all-the-icons-material "control_point" :height 0.9 :v-adjust -0.2))
           (TypeParameter . ,(all-the-icons-faicon "arrows" :height 0.85 :v-adjust -0.05))
           (Template . ,(all-the-icons-material "format_align_center" :height 0.9 :v-adjust -0.2)))))
+  )
+
+(use-package company-posframe
+  :diminish
+  :after company
+  :config (company-posframe-mode 1)
+  :hook (company-mode . company-posframe-mode)
   )
 
 ;; ;; comapny-tabnine

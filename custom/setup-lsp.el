@@ -29,7 +29,6 @@
         (c-mode . lsp-deferred)
         (c++-mode . lsp-deferred)
         (lsp-mode . lsp-enable-which-key-integration)))
-
 ;; Package lsp-ui
 ;; Optionally
 (use-package lsp-ui

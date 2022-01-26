@@ -46,7 +46,7 @@
                   ;; search for library in `require' and `declare-function' sexp.
                   helm-ff-search-library-in-sexp t
                   ;; scroll 8 lines other window using M-<next>/M-<prior>
-                  helm-scroll-amount 8
+                          helm-scroll-amount 8
                   helm-ff-file-name-history-use-recentf t
                   helm-quick-update t
                   helm-autoresize-max-height 25
@@ -55,7 +55,7 @@
 ;; Package helm-descbinds
 ;; A convenient `describe-bindings' with `helm'
 (use-package helm-descbinds
-  :defer 5
+  :after (helm)
   :init
   (fset 'describe-bindings 'helm-descbinds)
   :bind (("C-h b" . helm-descbinds)
@@ -82,10 +82,22 @@
   ;; :bind ("C-c a g" . helm-do-ag-project-root)
   )
 
+(use-package helm-posframe
+  :after helm
+  :config (helm-posframe-enable)
+  (setq helm-posframe-poshandler
+        #'posframe-poshandler-frame-center)
+  (setq helm-posframe-width 200)
+  ;; (setq helm-posframe-height 300)
+  (setq helm-posframe-parameters
+        '((left-fringe . 10)
+          (right-fringe . 10)))
+  )
+
 ;; Package helm-gtags
 ;; GNU GLOBAL helm interface
 (use-package helm-gtags
-  :defer t
+  :after helm
   :init
   (add-hook 'c++-mode-hook 'helm-gtags-mode)
   (add-hook 'c-mode-hook 'helm-gtags-mode)

@@ -62,7 +62,6 @@
 
 (setq
  confirm-kill-emacs 'y-or-n-p
- ;; Disable backups (that's what git/dropbox are for)
  history-length                     1000
  ;; Disable non selected window highlight
  cursor-in-non-selected-windows     nil
@@ -90,10 +89,17 @@
  )
 
 ;;set the font
-(set-frame-font "YaHei Consolas Hybrid-11")
-;; (set-frame-font "Azeret Mono Light-11")
-;; (if (member "Consolas" (font-family-list))
-;; (set-frame-font "Monaco-12"))
+;; (set-frame-font "YaHei Consolas Hybrid-11")
+;; (if (member "Fira Code" (font-family-list))
+;; (set-frame-font "Fira Code-12"))
+(set-face-attribute
+ 'default nil
+ :family "YaHei Consolas Hybrid"
+ :height 110
+ :weight 'normal)
+
+(font-family-list)
+
 
 (global-hl-line-mode t)
 

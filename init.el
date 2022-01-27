@@ -7,28 +7,12 @@
 (when (version< emacs-version "26")
   (error "Requires at least GNU Emacs 26, but you're running %s" emacs-version))
 
-;; Increase the amount of data which Emacs reads from the process.
-;; the default is 4 kilobytes make it 32 Megabyte
-(setq read-process-output-max (* 1024 1024 32)) ; 128MB
-
-(setq file-name-handler-alist nil)
-
-;; In Emacs 27+, package initialization occurs before `user-init-file` is
-;; loaded, but after `early-init-file`. Doom handles package initialization, so
-;; we must prevent Emacs from doing it early
-(setq package-enable-at-startup nil)
-(advice-add #'package--ensure-init-file :override #'ignore)
-
-;; Prevent the glimpse of un-styled Emacs by disabling these UI elements early.
-(push '(menu-bar-lines . 0) default-frame-alist)
-(push '(tool-bar-lines . 0) default-frame-alist)
-(push '(vertical-scroll-bars) default-frame-alist)
-
 ;package manager
 (require 'package)
 (setq package-enable-at-startup nil)
 (setq package-archives '(("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                         ("org" . "https://orgmode.org/elpa/")
+                         ;; ("org" . "https://orgmode.org/elpa/")
+                         ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
                          ("elpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 (package-initialize)
 
@@ -46,7 +30,7 @@
 (require 'bind-key)
 (setq use-package-verbose t)
 (setq use-package-always-ensure t)
-(setq debug-on-error t)
+;; (setq debug-on-error t)
 
 
 (require 'setup-sys)
@@ -79,7 +63,7 @@
  '(org-agenda-files
    '("~/Google Driver/All Notes/Agenda/study.org" "~/Google Driver/All Notes/Agenda/work.org" "~/Google Driver/All Notes/Agenda/life.org"))
  '(package-selected-packages
-   '(nyan-mode helm-posframe posframe gcmh pdf-tools nov all-the-icons-dired rainbow-fart centaur-tabs flycheck-rust cargo rustic youdao-dictionary ace-window yasnippet-snippets indent-guide company-posframe all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui doom-modeline zeal-at-point cmake-ide cmake-mode diminish web-mode flycheck-go projejctile ws-butler which-key volatile-highlights use-package switch-window smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell duplicate-thing comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
+   '(org-journal org-mime org-drill nyan-mode helm-posframe posframe gcmh pdf-tools nov all-the-icons-dired rainbow-fart centaur-tabs flycheck-rust cargo rustic youdao-dictionary ace-window yasnippet-snippets indent-guide company-posframe all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui doom-modeline zeal-at-point cmake-ide cmake-mode diminish web-mode flycheck-go projejctile ws-butler which-key volatile-highlights use-package switch-window smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell duplicate-thing comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

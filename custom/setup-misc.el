@@ -14,7 +14,9 @@
 
 ;;linum-mode
 (use-package linum
-  :config (global-linum-mode 1)
+  :config
+  (setq linum-format "%6d")
+  (global-linum-mode 1)
   )
 
 ;; highlight-symbol
@@ -158,9 +160,9 @@
 
 (use-package nyan-mode
   :custom
-  (nyan-cat-face-number 2)
+  (nyan-cat-face-number 3)
   (nyan-animate-nyancat t)
-  :hook (doom-modeline-mode . nyan-mode))
+  :config (nyan-mode 1))
 
 (use-package youdao-dictionary
   :config

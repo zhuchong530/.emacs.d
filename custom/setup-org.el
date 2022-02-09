@@ -18,7 +18,7 @@
         org-src-tab-acts-natively t
         org-confirm-babel-evaluate nil)
         (setq org-todo-keywords
-              '(("⚑ TODO(t)" "|" "✔ DONE(d)" "⚐ WAITING(w)" "|" "✘ CANCELED(c)")))
+              '(("⚑ TODO(t)" "✔ DONE(d)" "⚐ WAITING(w)" "|" "✘ CANCELED(c)")))
         (add-to-list 'auto-mode-alist '(".*/[0-9]*$" . org-mode)) ;Journal entries
         :custom
         (setq org-log-done 'time)

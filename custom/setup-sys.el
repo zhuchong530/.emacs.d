@@ -95,7 +95,7 @@
 (set-face-attribute
  'default nil
  :family "YaHei Consolas Hybrid"
- :height 110
+ :height 130
  :weight 'normal)
 
 (font-family-list)

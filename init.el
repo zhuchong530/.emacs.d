@@ -12,8 +12,8 @@
 (setq package-enable-at-startup nil)
 (setq package-archives '(("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
                          ;; ("org" . "https://orgmode.org/elpa/")
-                         ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-                         ("elpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+                         ;; ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+                         ("gnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 (package-initialize)
 
 ;; bootstrap 'use-package'
@@ -32,7 +32,6 @@
 (setq use-package-always-ensure t)
 ;; (setq debug-on-error t)
 
-
 (require 'setup-sys)
 (require 'setup-editing)
 (require 'setup-deffunc)
@@ -46,8 +45,6 @@
 (require 'setup-web)
 (require 'setup-rust)
 (require 'setup-org)
-
-
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -63,7 +60,7 @@
  '(org-agenda-files
    '("~/Google Driver/All Notes/Agenda/study.org" "~/Google Driver/All Notes/Agenda/work.org" "~/Google Driver/All Notes/Agenda/life.org"))
  '(package-selected-packages
-   '(org-journal org-mime org-drill nyan-mode helm-posframe posframe gcmh pdf-tools nov all-the-icons-dired rainbow-fart centaur-tabs flycheck-rust cargo rustic youdao-dictionary ace-window yasnippet-snippets indent-guide company-posframe all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui doom-modeline zeal-at-point cmake-ide cmake-mode diminish web-mode flycheck-go projejctile ws-butler which-key volatile-highlights use-package switch-window smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell duplicate-thing comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
+   '(nyan-mode helm-posframe posframe gcmh pdf-tools nov all-the-icons-dired rainbow-fart centaur-tabs flycheck-rust cargo rustic youdao-dictionary ace-window yasnippet-snippets indent-guide company-posframe all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode company-box bug-hunter undo-tree lsp-python-ms helm-lsp lsp-mode lsp-ui doom-modeline zeal-at-point cmake-ide cmake-mode diminish web-mode flycheck-go projejctile ws-butler which-key volatile-highlights use-package switch-window smartparens rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode iedit highlight-symbol helm-swoop helm-projectile helm-gtags helm-descbinds helm-ag golden-ratio function-args exec-path-from-shell duplicate-thing comment-dwim-2 color-theme clean-aindent-mode anzu ace-jump-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

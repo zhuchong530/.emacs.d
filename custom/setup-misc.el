@@ -15,7 +15,7 @@
 ;;linum-mode
 (use-package linum
   :config
-  (setq linum-format "%6d")
+  (setq linum-format "%6d \u2502")
   (global-linum-mode 1)
   )
 

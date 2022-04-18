@@ -53,6 +53,7 @@
   :init (progn
           (global-undo-tree-mode)
           (setq undo-tree-visualizer-timestamps t)
+          (setq undo-tree-auto-save-history nil)
           (setq undo-tree-visualizer-diff t))
   )
 

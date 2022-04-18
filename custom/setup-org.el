@@ -3,6 +3,7 @@
 ;;; Code:
 
 (use-package org
+  :pin gnu
   :mode ("\\.org\\'" . org-mode)
   :init
   (setq org-use-speed-commands t
@@ -16,6 +17,7 @@
         org-pretty-entities t           ;show entities as UTF-8 characters
         org-hide-leading-stars t        ;hide the stars
         org-src-tab-acts-natively t
+        truncate-lines nil
         org-confirm-babel-evaluate nil)
         (setq org-todo-keywords
               '(("⚑ TODO(t)" "✔ DONE(d)" "⚐ WAITING(w)" "|" "✘ CANCELED(c)")))
@@ -70,7 +72,7 @@
   ;; (setq org-bullets-bullet-list '("♠" "♣" "♥" "♦" "♤" "♧" "♡" "♢"))
   ;; special symbols
   ;; (setq org-bullets-bullet-list '("☀" "♼" "☼" "☾" "☽" "☣" "§" "¶" "‡" "※" "✕" "△" "◇" "▶" "◀" "◈"))
-  (setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷"))
+  (setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷")) ;
   (setq org-ellipsis "▼"))
 
 ;; for '<s/e/c... TAB'  completion
@@ -97,9 +99,7 @@
 (use-package toc-org
   :after org)
 
-;; For HTML exports
-(use-package org-drill
-  :ensure org-plus-contrib)
+
 ;; WYSIWYG, html mime composition using org-mode
 (use-package org-mime)
 

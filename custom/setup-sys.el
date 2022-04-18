@@ -74,6 +74,8 @@
  select-enable-clipboard          t
  frame-resize-pixelwise t)
 
+(setq-default tab-width 4)                       ; default to 4 visible spaces to display a tab
+
 ;; file Operations
 (setq
  sentence-end-double-space nil
@@ -84,7 +86,6 @@
  global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries
  mark-ring-max 5000                ; increase kill ring to contains 5000 entries
  mode-require-final-newline t      ; add a newline to end of file
- tab-width 4                       ; default to 4 visible spaces to display a tab
  kill-whole-line t                 ;if NIL, kill whole line and move the next line up
  )
 
@@ -94,12 +95,15 @@
 ;; (set-frame-font "Fira Code-12"))
 (set-face-attribute
  'default nil
- :family "YaHei Consolas Hybrid"
+ ;; :family "YaHei Consolas Hybrid"
+ ;; :family "JetBrains Mono"
+ ;; :family "MesloLGL Nerd Font Mono"
+ ;; :family "Monaco"
+ :family "Fira Code"
  :height 130
  :weight 'normal)
 
-(font-family-list)
-
+;; (font-family-list)
 
 (global-hl-line-mode t)
 

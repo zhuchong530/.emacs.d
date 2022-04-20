@@ -14,7 +14,7 @@
 (use-package gcmh
   :init
   (setq gcmh-idel-delay 5)
-  (setq gcmh-high-cons-hreshold (* 64 1024 1024))
+  (setq gcmh-high-cons-hreshold (* 64 1024 1024)) ;64MB
   (gcmh-mode 1)
   (gcmh-set-high-threshold))
 
@@ -36,10 +36,13 @@
 
 (global-so-long-mode)                   ;Handle long files
 (global-hl-line-mode t)
+(global-visual-line-mode t)
+;; highlight syntax
+(global-font-lock-mode t)
 (set-fringe-mode 10)
 
-(setq inhibit-startup-screen t)
-(setq inhibit-startup-message t)
+(setq inhibit-startup-screen t)         ; No need to see GNU agitprop
+(setq inhibit-startup-message t)        ; No need to remind me what a scratch buffer is
 (setq inhibit-startup-echo-area-message t)
 (setq initial-scratch-message nil)
 
@@ -59,10 +62,9 @@
 (show-paren-mode t)
 (setq-default show-paren-style 'expression)
 
-;; highlight syntax
-(global-font-lock-mode t)
 
-(fset 'yes-or-no-p 'y-or-n-p)       ;using y-or-n instead yes-or-no
+;; (fset 'yes-or-no-p 'y-or-n-p)       ;using y-or-n instead yes-or-no
+(setq use-short-answers t)
 (setq delete-by-moving-to-trash t)      ;delete to trash
 
 (setq
@@ -77,6 +79,7 @@
  backup-inhibited                   t
  fringes-outside-margins            t
  select-enable-clipboard          t
+ use-dialog-box nil                     ;do not show GUI dialogs
  frame-resize-pixelwise t)
 
 (setq-default tab-width 4)                       ; default to 4 visible spaces to display a tab
@@ -85,7 +88,7 @@
 (setq
  sentence-end-double-space nil
  make-backup-files nil
- indent-tabs-mode nil
+ indent-tabs-mode nil                   ; Ensure tabs are expanded, not inserted
  auto-save-default nil
  create-lockfiles nil
  global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries

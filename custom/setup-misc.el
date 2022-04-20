@@ -193,22 +193,5 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
-;; Package nov
-;; for epub file reading
-(use-package nov
-  :mode ("\\.epub\\'" . nov-mode)
-  :config (setq nov-text-width 100)
-  )
-
-;; Package pdf-tools
-;; for pdf file reading
-(use-package pdf-tools
-  :config
-  (pdf-tools-install)
-  (setq-default pdf-view-display-size 'fit-width)
-  (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
-  )
-
-
 (provide 'setup-misc)
 ;;; setup-misc.el ends here

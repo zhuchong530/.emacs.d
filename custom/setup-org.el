@@ -119,7 +119,17 @@
 ;; org-roam
 ;; org-roam is Version 2 now, So we use org-roam-ui for graphic,
 ;; not org-roam-server which only support org-roam Version 1
-
+(use-package org-roam
+  :custom
+  (setq org-roam-directory "~/Google Driver/All Notes/")
+  (setq org-roam-db-gc-threshold most-positive-fixnum)
+  (setq org-roam-completion-everywhere t)
+  (add-hook 'after-init-hook 'org-roam-mode)
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert))
+  :config (org-roam-setup)
+  )
 
 ;; org-roam-ui
 (use-package org-roam-ui

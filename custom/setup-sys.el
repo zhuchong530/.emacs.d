@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; code:
 
+(setq user-full-name "Wang Chang"
+      user-mail-address "wangchang0528@gmail.com")
+
 ;; Package exec-path-from-shell
 (use-package exec-path-from-shell
   :config (exec-path-from-shell-initialize))

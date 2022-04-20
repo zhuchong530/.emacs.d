@@ -5,55 +5,43 @@
 (use-package org
   :pin gnu
   :mode ("\\.org\\'" . org-mode)
-  :init
-  (setq org-use-speed-commands t
-        org-return-follows-link t
-        org-hide-emphasis-markers t     ; don't display the emphasis markers
-        org-outline-path-complete-in-steps nil
-        org-startup-indented t
-        org-startup-folded 'content
-        org-fontify-done-headline t     ;change the face of a headline if it's marked DONE
-        org-src-fontity-native t        ;Pretty code blocks
-        org-pretty-entities t           ;show entities as UTF-8 characters
-        org-hide-leading-stars t        ;hide the stars
-        org-src-tab-acts-natively t
-        truncate-lines nil
-        org-confirm-babel-evaluate nil)
-        (setq org-todo-keywords
-              '(("⚑ TODO(t)" "✔ DONE(d)" "⚐ WAITING(w)" "|" "✘ CANCELED(c)")))
-        (add-to-list 'auto-mode-alist '(".*/[0-9]*$" . org-mode)) ;Journal entries
-        :custom
-        (setq org-log-done 'time)
-        (setq org-agenda-files (list "~/Google Driver/All Notes/Agenda/work.org"
-                                     "~/Google Driver/All Notes/Agenda/study.org"
-                                     "~/Google Driver/All Notes/Agenda/life.org"))
-        :config
-        (font-lock-add-keywords            ; A bit silly but my headers are now
-         'org-mode `(("^\\*+ \\(TODO\\) "  ; shorter, and that is nice canceled
-                      (1 (progn (compose-region (match-beginning 1) (match-end 1) "⚑")
-                                nil)))
-                     ("^\\*+ \\(DOING\\) "
-                      (1 (progn (compose-region (match-beginning 1) (match-end 1) "⚐")
-                                nil)))
-                     ("^\\*+ \\(CANCELED\\) "
-                      (1 (progn (compose-region (match-beginning 1) (match-end 1) "✘")
-                                nil)))
-                     ("^\\*+ \\(DONE\\) "
-                      (1 (progn (compose-region (match-beginning 1) (match-end 1) "✔")
-                                nil)))))
-        (define-key org-mode-map (kbd "M-C-n") 'org-end-of-item-list)
-        (define-key org-mode-map (kbd "M-C-p") 'org-beginning-of-item)
-        (define-key org-mode-map (kbd "M-C-u") 'outline-up-heading)
-        (define-key org-mode-map (kbd "M-C-w") 'org-table-copy-region)
-        (define-key org-mode-map (kbd "M-C-y") 'org-table-paste-rectangle)
-        (global-set-key (kbd "C-c l") #'org-store-link)
-        (global-set-key (kbd "C-c a") #'org-agenda)
-        (global-set-key (kbd "C-c c") #'org-capture)
-        (add-hook 'org-mode-hook
-                  (lambda ()
-                    (variable-pitch-mode 1)
-                    visual-line-mode))
-        )
+  :hook (org-mode . visual-line-mode)
+  :init (setq
+         org-use-speed-commands t
+         org-return-follows-link t
+         org-hide-emphasis-markers t     ; don't display the emphasis markers
+         org-outline-path-complete-in-steps nil
+         org-startup-indented t
+         org-startup-folded 'content
+         org-fontify-done-headline t     ;change the face of a headline if it's marked DONE
+         org-src-fontity-native t        ;Pretty code blocks
+         org-pretty-entities t           ;show entities as UTF-8 characters
+         org-hide-leading-stars t        ;hide the stars
+         org-src-tab-acts-natively t     ;Make TAB acts as if it were issued from the buffer of the languages's major mode
+         truncate-lines nil
+         org-confirm-babel-evaluate nil) ;don't notify -> "Do you want to execute"
+  :config (setq
+           org-directory (file-truename "~/Google Driver/All Notes")
+           org-todo-keywords
+           '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELED(c)")))
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               (append org-babel-load-languages
+                                       '((emacs-lisp . t)
+                                         (python . t)
+                                         (shell . t)
+                                         (C . t)
+                                         (js . t)
+                                         (go . t))))
+  :custom
+  (setq org-log-done 'time)
+  (setq org-agenda-files (list "~/Google Driver/All Notes/Agenda/work.org"
+                               "~/Google Driver/All Notes/Agenda/study.org"
+                               "~/Google Driver/All Notes/Agenda/life.org"))
+  :bind
+  (global-set-key (kbd "C-c l") #'org-store-link)
+  (global-set-key (kbd "C-c a") #'org-agenda)
+  (global-set-key (kbd "C-c c") #'org-capture)
+  )
 
 ;; really need this package to set the org-bullets by yourself
 (use-package org-bullets
@@ -83,16 +71,7 @@
 (use-package ox-reveal)
 (use-package ox-gfm)
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (python . t)
-   (shell . t)
-   (C . t)
-   ;; (CPP . t)
-   ;; (dot . t)
-   ;; (plantuml . t)
-   (go . t)))
+
 
 ;; maintain TOC(table of contents) automatically
 ;; put :TOC: tag to a heading, run M-x toc-org-insert-toc
@@ -135,6 +114,21 @@
   (interactive)
   (find-file (get-journal-file-yesterday)))
 (global-set-key (kbd "C-c f y") 'journal-file-yesterday)
+
+
+;; org-roam
+;; org-roam is Version 2 now, So we use org-roam-ui for graphic,
+;; not org-roam-server which only support org-roam Version 1
+
+
+;; org-roam-ui
+(use-package org-roam-ui
+  :after org-roam
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
 
 
 

@@ -34,6 +34,8 @@
   (scroll-bar-mode -1)
   (menu-bar-mode -1))
 
+(global-so-long-mode)                   ;Handle long files
+(global-hl-line-mode t)
 (set-fringe-mode 10)
 
 (setq inhibit-startup-screen t)
@@ -108,7 +110,6 @@
 
 ;; (font-family-list)
 
-(global-hl-line-mode t)
 
 ;; Save backup files in a dedicated directory
 (use-package desktop

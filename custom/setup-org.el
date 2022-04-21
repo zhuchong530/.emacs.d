@@ -37,10 +37,9 @@
   (setq org-agenda-files (list "~/Google Driver/All Notes/Agenda/work.org"
                                "~/Google Driver/All Notes/Agenda/study.org"
                                "~/Google Driver/All Notes/Agenda/life.org"))
-  :bind
-  (global-set-key (kbd "C-c l") #'org-store-link)
-  (global-set-key (kbd "C-c a") #'org-agenda)
-  (global-set-key (kbd "C-c c") #'org-capture)
+  :bind(("C-c l" . org-store-link)
+        ("C-c a" . org-agenda)
+        ("C-c c" . org-capture))
   )
 
 ;; really need this package to set the org-bullets by yourself
@@ -121,9 +120,9 @@
 ;; not org-roam-server which only support org-roam Version 1
 (use-package org-roam
   :custom
-  (setq org-roam-directory "~/Google Driver/All Notes/")
-  (setq org-roam-db-gc-threshold most-positive-fixnum)
-  (setq org-roam-completion-everywhere t)
+  (org-roam-directory "~/Google Driver/All Notes/")
+  (org-roam-db-gc-threshold most-positive-fixnum)
+  (org-roam-completion-everywhere t)
   (add-hook 'after-init-hook 'org-roam-mode)
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)

@@ -18,7 +18,7 @@
          org-pretty-entities t           ;show entities as UTF-8 characters
          org-hide-leading-stars t        ;hide the stars
          org-src-tab-acts-natively t     ;Make TAB acts as if it were issued from the buffer of the languages's major mode
-         truncate-lines nil
+         truncate-lines t
          org-confirm-babel-evaluate nil) ;don't notify -> "Do you want to execute"
   :config (setq
            org-directory (file-truename "~/Google Driver/All Notes")

@@ -4,7 +4,7 @@
 
 ;; Increase the amount of data which Emacs reads from the process.
 ;; the default is 4 kilobytes make it 32 Megabyte
-(setq read-process-output-max (* 1024 1024 32)) ; 128MB
+(setq read-process-output-max (* 1024 1024 32)) ; 32MB
 
 (setq file-name-handler-alist nil)
 

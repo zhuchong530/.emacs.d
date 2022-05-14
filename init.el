@@ -3,7 +3,7 @@
 ;;; My GNU Emacs configuration
 ;;; code:
 
-;; emacs version must >= 25
+;; emacs version must >= 26
 (when (version< emacs-version "26")
   (error "Requires at least GNU Emacs 26, but you're running %s" emacs-version))
 
@@ -11,7 +11,6 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (setq package-archives '(("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                         ;; ("org" . "https://orgmode.org/elpa/")
                          ;; ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
                          ("gnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 (package-initialize)

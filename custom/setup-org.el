@@ -30,6 +30,7 @@
                                          (python . t)
                                          (shell . t)
                                          (C . t)
+                                         (ditaa . t)
                                          (js . t)
                                          (go . t))))
   :custom
@@ -83,37 +84,6 @@
 
 ;; TODO
 (use-package org-download)
-
-;; Journaling
-(use-package org-journal
-  :init
-  (setq org-journal-dir "~/Google Driver/All Notes/journal/")
-  (setq org-journal-date-format "#+TITLE: Journal Entry- %e %b %Y (%A)")
-  (setq org-journal-time-format ""))
-
-;; A function to easily load today's journal entry
-(defun get-journal-file-today ()
-  "Return filename for today's journal entry."
-  (let ((dialy-name (format-time-string "%Y%m%d")))
-    (expand-file-name (concat org-journal-dir daily-name))))
-(defun journal-file-today ()
-  "Create and load a journal file based on today's date"
-  (interactive)
-  (find-file (get-journal-file-today)))
-(global-set-key (kbd "C-c f j") 'journal-file-today)
-
-
-(defun get-journal-file-yesterday ()
-  "Return filename for yesterday's journal entry."
-  (let* ((yesterday (time-subtract (current-time) (days-to-time 1)))
-         (daily-name (format-time-string "%Y%m%d" yesterday)))
-    (expand-file-name (concat org-journal-dir dialy-name))))
-(defun journal-file-yesterday ()
-  "Creates and load a file based on yesterday's date."
-  (interactive)
-  (find-file (get-journal-file-yesterday)))
-(global-set-key (kbd "C-c f y") 'journal-file-yesterday)
-
 
 ;; org-roam
 ;; org-roam is Version 2 now, So we use org-roam-ui for graphic,

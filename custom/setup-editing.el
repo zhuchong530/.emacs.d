@@ -29,7 +29,7 @@
 (use-package volatile-highlights
   :commands (volatile-highlights-mode)
   :init
-  (add-hook 'after-init-hook '(lambda() (volatile-highlights-mode t)))
+  (add-hook 'after-init-hook 'volatile-highlights-mode)
   :config
   (set-face-attribute 'vhl/default-face nil
                       :underline "light slate gray"))
@@ -94,7 +94,7 @@
 (use-package anzu
   :commands (global-anzu-mode)
   :init
-  (add-hook 'after-init-hook '(lambda() (global-anzu-mode +1)))
+  (add-hook 'after-init-hook 'global-anzu-mode)
   :bind (("M-%" . anzu-query-replace)
          ("C-M-%" . anzu-query-replace))
   )

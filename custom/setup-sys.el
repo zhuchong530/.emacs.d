@@ -59,8 +59,12 @@
 
 (toggle-frame-maximized)
 
+(setq-default show-paren-style 'expression
+              show-paren-delay 0
+              show-paren-highlight-openparen t
+              show-paren-when-point-inside-paren nil
+              show-paren-when-point-in-periphery t)
 (show-paren-mode t)
-(setq-default show-paren-style 'expression)
 
 
 ;; (fset 'yes-or-no-p 'y-or-n-p)       ;using y-or-n instead yes-or-no
@@ -113,7 +117,6 @@
 
 ;; (font-family-list)
 
-
 ;; Save backup files in a dedicated directory
 (use-package desktop
   :config
@@ -131,8 +134,6 @@
 (use-package autorevert
   :diminish
   :hook (after-init . global-auto-revert-mode))
-
-
 
 (add-hook 'sh-mode-hook (lambda ()
                           (setq tab-width 4)))

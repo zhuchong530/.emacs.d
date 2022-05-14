@@ -57,8 +57,8 @@
 ;; (load-theme 'tomorrow-night-paradise t)    ;dark theme, black background
 
 (use-package doom-themes
-  :init (load-theme 'doom-dracula t)
   :config
+  (load-theme 'doom-dracula t)
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
   (doom-themes-visual-bell-config)
@@ -66,7 +66,8 @@
 
 ;; doom-modeline
 (use-package doom-modeline
-  :custom
+  :hook (after-init . doom-modeline-mode)
+  :config
   (setq doom-modeline-height 25)
   (setq doom-modeline-bar-width 3)
   (setq doom-modeline-project-detection 'projectile)
@@ -75,8 +76,7 @@
   (setq doom-modeline-major-mode-icon t)
   (setq doom-modeline-buffer-modification-icon t)
   ;; 不显示换行和编码(节省空间)
-  (setq doom-modeline-buffer-encoding t)
-  :config (doom-modeline-mode))
+  (setq doom-modeline-buffer-encoding t))
 
 ;; package centaur-tabs
 (use-package centaur-tabs

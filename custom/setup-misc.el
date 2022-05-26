@@ -154,6 +154,13 @@
            '(marginalia-annotators-heavy marginalia-annotators-light nil))
   :init (marginalia-mode))
 
+;; Orderless
+;; Controls the sorting of the minibuffer completions
+(use-package orderless
+  :custom ((completion--styles '(orderless))
+           (completion-category-defaults nil)
+           (completion--category-override '((file (style . (partial-completion)))))))
+
 (use-package nyan-mode
   :custom
   (nyan-cat-face-number 3)

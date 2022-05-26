@@ -2,16 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-
-;; socks设置
-;; (setq url-gateway-method 'socks)
-;; (setq socks-server '("Default server" "127.0.0.1" 7891 5))
-
-;; (setq url-proxy-services
-;;       '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-;;         ("http" . "127.0.0.1:7890")
-;;         ("https" . "127.0.0.1:7890")))
-
 ;;linum-mode
 (use-package linum
   :config

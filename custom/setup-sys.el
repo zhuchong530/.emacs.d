@@ -29,10 +29,9 @@
 (setenv "LC_ALL" "en_US.UTF-8")
 (setenv "LC_CTYPE" "en_US.UTF-8")
 
-(when (window-system)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  (menu-bar-mode -1))
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
 
 (global-so-long-mode)                   ;Handle long files
 (global-hl-line-mode t)
@@ -107,15 +106,13 @@
 ;; (set-frame-font "Fira Code-12"))
 (set-face-attribute
  'default nil
- ;; :family "YaHei Consolas Hybrid"
+ :family "YaHei Consolas Hybrid"
  ;; :family "JetBrains Mono"
  ;; :family "MesloLGL Nerd Font Mono"
  ;; :family "Monaco"
- :family "Fira Code"
- :height 130
+ ;; :family "Fira Code"
+ :height 120
  :weight 'normal)
-
-;; (font-family-list)
 
 ;; Save backup files in a dedicated directory
 (use-package desktop
@@ -128,17 +125,21 @@
 
 ;; history
 (use-package saveplace
-  :hook (after-init . save-place-mode))
+  :config (save-place-mode 1))
+
+(use-package savehist
+  :config (savehist-mode))
 
 ;; Automatically reload files was modified by external program
 (use-package autorevert
   :diminish
-  :hook (after-init . global-auto-revert-mode))
+  :hook (after-init . global-auto-revert-mode)
+  )
 
 (add-hook 'sh-mode-hook (lambda ()
                           (setq tab-width 4)))
 
-(delete-selection-mode)
+(delete-selection-mode 1)
 ;; show whitespace in diff-mode
 (add-hook 'diff-mode-hook (lambda ()
                             (setq-local whitespace-style

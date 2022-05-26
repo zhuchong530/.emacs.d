@@ -9,7 +9,6 @@
 
 ;package manager
 (require 'package)
-(setq package-enable-at-startup nil)
 (setq package-archives '(("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
                          ;; ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
                          ("gnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))

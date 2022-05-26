@@ -14,11 +14,6 @@
             helm-mode 1))
   :bind (("M-x" . helm-M-x)
          ("C-c h c" . helm-occur)
-         ("<f1> SPC" . helm-all-mark-rings) ; I modified the keybinding
-         ("M-y" . helm-show-kill-ring)
-         ("C-c h x" . helm-register)    ; C-x r SPC and C-x r j
-         ("C-c h g" . helm-google-suggest)
-         ("C-c h M-:" . helm-eval-expression-with-eldoc)
          ("C-x C-f" . helm-find-files)
          ("C-x b" . helm-mini)      ; *<major-mode> or /<dir> or !/<dir-not-desired> or @<regexp>
          :map helm-map

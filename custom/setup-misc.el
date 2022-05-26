@@ -161,6 +161,10 @@
            (completion-category-defaults nil)
            (completion--category-override '((file (style . (partial-completion)))))))
 
+
+(use-package vertico
+  :config (vertico-mode))
+
 (use-package nyan-mode
   :custom
   (nyan-cat-face-number 3)

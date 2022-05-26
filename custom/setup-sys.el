@@ -116,13 +116,12 @@
 
 ;; Save backup files in a dedicated directory
 (use-package desktop
-  :config
-  (add-to-list 'desktop-globals-to-save 'register-alist)
-  (setq desktop-lazy-verbose nil
-        desktop-modes-not-to-save '(tags-table-mode emacs-lisp-mode)
-        desktop-restore-eager 15)
-  (desktop-save-mode 1))
-
+  :hook ((after-init . desktop-read)
+         (after-init . desktop-save-mode))
+  :custom ((desktop-base-file-name ".desktop")
+           (desktop-base-lock-name ".desktop.lock")
+           (desktop-restore-eager 8)
+           (desktop-restore-frames nil)))
 ;; history
 (use-package saveplace
   :config (save-place-mode 1))

@@ -146,7 +146,13 @@
   (global-set-key (kbd "C-h C") #'helpful-command)
   )
 
-(use-package posframe)
+
+;; Marginalia
+;; Enhances the minibuffer completions with additional informations
+(use-package marginalia
+  :custom (marginalia-annotators
+           '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init (marginalia-mode))
 
 (use-package nyan-mode
   :custom

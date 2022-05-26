@@ -122,6 +122,7 @@
            (desktop-base-lock-name ".desktop.lock")
            (desktop-restore-eager 8)
            (desktop-restore-frames nil)))
+
 ;; history
 (use-package saveplace
   :config (save-place-mode 1))

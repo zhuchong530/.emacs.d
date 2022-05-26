@@ -93,13 +93,6 @@
           (Template . ,(all-the-icons-material "format_align_center" :height 0.9 :v-adjust -0.2)))))
   )
 
-(use-package company-posframe
-  :diminish
-  :after company
-  :config (company-posframe-mode 1)
-  :hook (company-mode . company-posframe-mode)
-  )
-
 ;; ;; comapny-tabnine
 ;; ;; OpenAI completion backend
 ;; (use-package company-tabnine

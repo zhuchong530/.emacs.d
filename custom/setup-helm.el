@@ -77,18 +77,6 @@
   ;; :bind ("C-c a g" . helm-do-ag-project-root)
   )
 
-(use-package helm-posframe
-  :after helm
-  :config (helm-posframe-enable)
-  (setq helm-posframe-poshandler
-        #'posframe-poshandler-frame-center)
-  (setq helm-posframe-width 200)
-  ;; (setq helm-posframe-height 300)
-  (setq helm-posframe-parameters
-        '((left-fringe . 10)
-          (right-fringe . 10)))
-  )
-
 ;; Package helm-gtags
 ;; GNU GLOBAL helm interface
 (use-package helm-gtags

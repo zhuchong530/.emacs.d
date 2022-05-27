@@ -89,16 +89,6 @@
   :bind ("M-;" . comment-dwim-2)
   )
 
-;; PACKAGE: anzu
-;; Show number of matches in mode-line while searching
-(use-package anzu
-  :commands (global-anzu-mode)
-  :init
-  (add-hook 'after-init-hook 'global-anzu-mode)
-  :bind (("M-%" . anzu-query-replace)
-         ("C-M-%" . anzu-query-replace))
-  )
-
 ;; PACKAGE: iedit
 ;; Edit multiple regions in the same way simultaneously.
 (use-package iedit

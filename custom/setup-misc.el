@@ -164,8 +164,12 @@
 
 
 (use-package vertico
-  :init (vertico-mode 1)
-  :custom (vertico-cycle t))
+  :config (vertico-mode)
+  :custom
+  (vertico-cycle t)
+  (vertico-resize t)
+  (vertico-count 13)
+    )
 
 
 (use-package nyan-mode

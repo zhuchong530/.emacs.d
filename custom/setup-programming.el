@@ -80,13 +80,6 @@
         projectile-completion-system 'helm)
   (projectile-mode +1))
 
-;; Package: helm-projectile
-;; Helm integration for Projectile
-(use-package helm-projectile
-  :requires (helm projectile)
-  :config
-  (helm-projectile-on))
-
 ;; Package: yasnippet
 ;; Yet another snippet extension for Emacs
 (use-package yasnippet

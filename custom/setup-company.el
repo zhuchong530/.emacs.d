@@ -9,7 +9,7 @@
               ("M-p" . corfu-previous)
               ("TAB" . corfu-insert))
   :custom (corfu-cycle t)
-  :config (corfu-global-mode))
+  :config (global-corfu-mode))
 
 ;; ;; comapny-tabnine
 ;; ;; OpenAI completion backend

@@ -3,14 +3,30 @@
 ;;; code:
 
 
-(use-package vertico
-  :config (vertico-mode)
-  :custom
-  (vertico-cycle t)
-  (vertico-resize t)
-  (vertico-count 13)
-  )
 
+;; Orderless
+;; Controls the sorting of the minibuffer completions
+(use-package orderless
+  :custom ((completion--styles '(orderless))
+           (completion-category-defaults nil)
+           (completion--category-override '((file (style . (partial-completion)))))))
+
+(use-package selectrum
+  :bind (("C-M-r" . selectrum-repeat)
+         :map selectrum-minibuffer-map
+         ("C-r" . selectrum-select-from-history)
+         ("C-n" . selectrum-next-candidate)
+         ("C-p" . selectrum-previous-candidate)
+         :map minibuffer-local-map
+         ("M-h" . backward-kill-word))
+  :custom
+  (selectrum-fix-minibuffer-height t)
+  (selectrum-num-candidates-displayed 9)
+  (selectrum-refine-candidates-function #'orderless-filter)
+  (selectrum-highlight-candidates-function #'orderless-highlight-matches)
+  :custom-face
+  (selectrum-current-candidate ((t (:background "#3a3f5a"))))
+  :init (selectrum-mode 1))
 
 (use-package consult
   :bind (("C-c h" . consult-history)
@@ -44,7 +60,7 @@
          ("M-s r" . consult-ripgrep)
          ("M-s l" . consult-line)
          ("M-s L" . consult-line-multi)
-         ("M-s m" . consult-multi-occur)
+         ("M-s m" . consult-multi-occurg)
          ("M-s k" . consult-keep-lines)
          ("M-s u" . consult-focus-lines)
          ;; Isearch integration
@@ -89,17 +105,10 @@
 ;; Marginalia
 ;; Enhances the minibuffer completions with additional informations
 (use-package marginalia
-  :after vertico
   :custom (marginalia-annotators
            '(marginalia-annotators-heavy marginalia-annotators-light nil))
   :init (marginalia-mode))
 
-;; Orderless
-;; Controls the sorting of the minibuffer completions
-(use-package orderless
-  :custom ((completion--styles '(orderless))
-           (completion-category-defaults nil)
-           (completion--category-override '((file (style . (partial-completion)))))))
 
 
 (provide 'setup-narrow)

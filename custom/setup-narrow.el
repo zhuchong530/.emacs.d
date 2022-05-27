@@ -48,5 +48,5 @@
   )
 
 
-(provide 'setup-narrow)
+(provide 'setup-helm)
 ;;; setup-helm.el ends here

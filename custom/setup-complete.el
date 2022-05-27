@@ -27,5 +27,5 @@
 ;;         ad-do-it))))
 
 
-(provide 'setup-complete)
+(provide 'setup-company)
 ;;; setup-company.el ends here

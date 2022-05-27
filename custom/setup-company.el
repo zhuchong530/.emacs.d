@@ -4,6 +4,10 @@
 
 
 (use-package corfu
+  :bind (:map corfu-map
+              ("M-n" . corfu-nex)
+              ("M-p" . corfu-previous)
+              ("TAB" . corfu-insert))
   :custom (corfu-cycle t)
   :config (corfu-global-mode))
 

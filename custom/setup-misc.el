@@ -57,16 +57,16 @@
 ;; doom-modeline
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)
-  :config
-  (setq doom-modeline-height 25)
-  (setq doom-modeline-bar-width 3)
-  (setq doom-modeline-project-detection 'projectile)
-  (setq doom-modeline-buffer-file-name-style 'auto)
-  (setq doom-modeline-icon (display-graphic-p))
-  (setq doom-modeline-major-mode-icon t)
-  (setq doom-modeline-buffer-modification-icon t)
+  :custom
+  (doom-modeline-height 25)
+  (doom-modeline-bar-width 3)
+  (doom-modeline-project-detection 'projectile)
+  (doom-modeline-buffer-file-name-style 'auto)
+  (doom-modeline-icon (display-graphic-p))
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-buffer-modification-icon t)
   ;; 不显示换行和编码(节省空间)
-  (setq doom-modeline-buffer-encoding t))
+  (doom-modeline-buffer-encoding t))
 
 ;; package centaur-tabs
 (use-package centaur-tabs
@@ -150,6 +150,7 @@
 ;; Marginalia
 ;; Enhances the minibuffer completions with additional informations
 (use-package marginalia
+  :after vertico
   :custom (marginalia-annotators
            '(marginalia-annotators-heavy marginalia-annotators-light nil))
   :init (marginalia-mode))
@@ -163,7 +164,9 @@
 
 
 (use-package vertico
-  :config (vertico-mode))
+  :init (vertico-mode 1)
+  :custom (vertico-cycle t))
+
 
 (use-package nyan-mode
   :custom

@@ -4,28 +4,50 @@
 
 
 (use-package corfu
+  :after orderless
   :bind (:map corfu-map
               ("M-n" . corfu-nex)
               ("M-p" . corfu-previous)
               ("TAB" . corfu-insert))
-  :custom (corfu-cycle t)
+  :custom
+  ;; (corfu-cycle t)
+  (corfu-auto t)
+  (corfu-max-width 110)
+  (corfu-auto-delay 0.0)
+  (corfu-auto-prefix 1)
+  (corfu-preview-current nil)
+  (corfu-echo-documentation t)
   :config (global-corfu-mode))
 
-;; ;; comapny-tabnine
-;; ;; OpenAI completion backend
-;; (use-package company-tabnine
-;;   :ensure t
-;;   )
-;; ;; The free version of TabNine is good enough,
-;; ;; and below code is recommended that TabNine not always
-;; ;; prompt me to purchase a paid version in a large project.
-;; (defadvice company-echo-show (around disable-tabnine-upgrade-message activate)
-;;   (let ((company-message-func (ad-get-arg 0)))
-;;     (when (and company-message-func
-;;                (stringp (funcall company-message-func)))
-;;       (unless (string-match "The free version of TabNine only indexes up to" (funcall company-message-func))
-;;         ad-do-it))))
+(use-package corfu-doc
+  :hook (corfu-mode-hook . corfu-doc-mode)
+  )
 
 
-(provide 'setup-company)
+(use-package cape
+  :bind (("C-c p p" . completion-at-point) ;capf
+         ("C-c p t" . completion-tag)      ;etags
+         ("C-c p d" . cape-dabbrev)        ;or dabbrev-completion
+         ("C-c p h" . cape-history)
+         ("C-c p f" . cape-file)
+         ("C-c p k" . cape-keyword)
+         ("C-c p s" . cape-symbol)
+         ("C-c p a" . cape-abbrev)
+         ("C-c p i" . cape-ispell)
+         ("C-c p l" . cape-line)
+         ("C-c p w" . cape-dict)
+         ;; ("C-c p \\" . cape-tex)
+         ;; ("C-c p _" . cape-tex)
+         ;; ("C-c p ^" . cape-tex)
+         ;; ("C-c p &" . cape-sgml)
+         ;; ("C-c p r" . cape-rfc1345)
+         )
+  :init
+  ;; Add completion-at-point-function, used by completion-at-point
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  )
+
+
+(provide 'setup-complete)
 ;;; setup-company.el ends here

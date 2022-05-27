@@ -3,50 +3,104 @@
 ;;; code:
 
 
-(use-package ivy
-  :diminish
-  :bind (("C-s" . swiper)
-         :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)
-         ("C-f" . ivy-alt-done)
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previouse-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-map))
-  :init (ivy-mode 1)
-  :config
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-wrap t)
-  (setq ivy-count-format "(%d/%d) ")
-  (setq enable-recursive-minibuffers t)
-  ;; Use different regex strategies per completion command
-  (push '(completion-at-point . ivy--regex-fuzzy) ivy-re-builders-alist)
-  (push '(swiper . ivy--regex-ignore-order) ivy-re-builders-alist)
-  (push '(counsel-M-x . ivy--regex-ignore-order) ivy-re-builders-alist)
-  ;; Set minibuffer height for different commands
-  (setf (alist-get 'counsel-projectile-ag ivy-height-alist) 15)
-  (setf (alist-get 'counsel-projectile-rg ivy-height-alist) 15)
-  (setf (alist-get 'counsel-switch-buffer ivy-height-alist) 7))
-
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-         ("C-x b" . counsel-ibuffer)
-         ("C-x C-f" . counsel-find-file)
-         ("C-M-l" . counsel-imenu)
-         :map minibuffer-local-map
-         ("C-r" . 'counsel-minibuffer-history))
+(use-package vertico
+  :config (vertico-mode)
   :custom
-  (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-  :config
-  (setq ivy-initial-inputs-alist nil)
+  (vertico-cycle t)
+  (vertico-resize t)
+  (vertico-count 13)
   )
 
 
-(provide 'setup-helm)
+(use-package consult
+  :bind (("C-c h" . consult-history)
+         ("C-c m" . consult-mode-command)
+         ;; ("C-c k" . consult-kmacro)
+         ("C-x M-:" . consult-complex-command) ;orig: repeat-complex-command
+         ("C-x b" . consult-buffer)     ; orig: switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;orig: switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)
+         ("C-x r b" . consult-bookmark)
+         ("C-x p b" . consult-project-buffer)
+         ;; Custome M-# bindings for fast register access
+         ("M-#" . consult-register-load)
+         ("M-'" . consult-register-store) ;orgin: abbrev-prefix-mark
+         ("C-M-#" . consult-yank-pop)
+         ;; M-g bindings (goto-map)
+         ("M-g e" . consult-compile-error)
+         ("M-g f" . consult-flymake)    ; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)  ; Orig: goto-line
+         ("M-g M-g" . consult-goto-line) ; Orig: goto-line
+         ("M-g o" . consult-outline)     ;Alternative: consult-org-heading
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
+         ("M-g i" . consult-imenu)
+         ("M-g I" . consult-imenu-multi)
+         ;; M-s bindings (search-map)
+         ("M-s d" . consult-find)
+         ("M-s D" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s m" . consult-multi-occur)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-s e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history) ; orig: isearch-edit-string
+         ("M-s e" . consult-isearch-history) ; orig: isearch-edit-string
+         ("M-s l" . consult-line)            ; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)      ; needed by consult-line to detect isearch
+         ;; Minibuffer history
+         :map minibuffer-local-map
+         ("M-s" . consult-history)      ; orig: next-matching-history-element
+         ("M-r" . consult-history))      ; orig: previous-matching-history-element
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  :init
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for consult-register, consult-register-load, consult-register-store
+  ;; and the Emacs built-ins
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+  ;; Use consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+  :config
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the consult-customize macro
+  (consult-customize
+   consult-theme
+   :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-recent-file
+   consult--source-project-recent-file
+   :preview-key (kbd "M-."))
+  (setq consult-narrow-key "<")
+  )
+
+
+
+;; Marginalia
+;; Enhances the minibuffer completions with additional informations
+(use-package marginalia
+  :after vertico
+  :custom (marginalia-annotators
+           '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init (marginalia-mode))
+
+;; Orderless
+;; Controls the sorting of the minibuffer completions
+(use-package orderless
+  :custom ((completion--styles '(orderless))
+           (completion-category-defaults nil)
+           (completion--category-override '((file (style . (partial-completion)))))))
+
+
+(provide 'setup-narrow)
 ;;; setup-helm.el ends here

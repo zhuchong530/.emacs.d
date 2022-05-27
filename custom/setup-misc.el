@@ -147,30 +147,6 @@
   )
 
 
-;; Marginalia
-;; Enhances the minibuffer completions with additional informations
-(use-package marginalia
-  :after vertico
-  :custom (marginalia-annotators
-           '(marginalia-annotators-heavy marginalia-annotators-light nil))
-  :init (marginalia-mode))
-
-;; Orderless
-;; Controls the sorting of the minibuffer completions
-(use-package orderless
-  :custom ((completion--styles '(orderless))
-           (completion-category-defaults nil)
-           (completion--category-override '((file (style . (partial-completion)))))))
-
-
-(use-package vertico
-  :config (vertico-mode)
-  :custom
-  (vertico-cycle t)
-  (vertico-resize t)
-  (vertico-count 13)
-    )
-
 
 (use-package nyan-mode
   :custom
@@ -182,7 +158,7 @@
   :config
   (setq url-automatic-caching t)
   )
-(global-set-key (kbd "C-c k") 'youdao-dictionary-search-at-point-posframe)
+(global-set-key (kbd "C-c k") 'youdao-dictionary-search-at-point-tooltip)
 
 ;;tramp
 ;;;;;;;;;;;;;;;;;;;;;;;;;tramp setting;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

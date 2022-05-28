@@ -67,21 +67,12 @@
    uniquify-after-kill-buffer-p t
    uniquify-ignore-buffers-re "^\\*"))
 
-;; PACKAGE: smartparens
-;; Automatic insertion, wrapping and paredit-like navigation with user defined pairs.
-(use-package smartparens
-  :config
-  (setq sp-base-key-bindings 'paredit)
-  (setq sp-autoskip-closing-pair 'always)
-  (setq sp-hybrid-kill-entire-symbol nil)
-  (sp-use-paredit-bindings)
-  (show-smartparens-global-mode 1)
-  (smartparens-global-mode 1)
-  (sp-with-modes '(c-mode c++-mode javascript-mode go-mode python-mode)
-    (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
-    (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
-                                              ("* ||\n[i]" "RET"))))
-  )
+;; PACKAGE: awesome-pair
+(use-package awesome-pair
+  :load-path "/home/wangchang/.emacs.d/elpa/awesome-pair/"
+  :hook (prog-mode . awesome-pair-mode))
+
+
 
 ;; PACKAGE: comment-dwim-2
 ;; An all-in-one comment command to rule them all

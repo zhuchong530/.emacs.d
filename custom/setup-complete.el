@@ -6,15 +6,16 @@
 (use-package corfu
   :after orderless
   :bind (:map corfu-map
-              ("M-n" . corfu-nex)
+              ("M-n" . corfu-next)
               ("M-p" . corfu-previous)
               ("TAB" . corfu-insert))
   :custom
   ;; (corfu-cycle t)
+  ;; auto completion
   (corfu-auto t)
+  (corfu-auto-delay 0.25)
+  (corfu-auto-prefix 2)
   (corfu-max-width 110)
-  (corfu-auto-delay 0.0)
-  (corfu-auto-prefix 1)
   (corfu-preview-current nil)
   (corfu-echo-documentation t)
   :config (global-corfu-mode))

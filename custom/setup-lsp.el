@@ -5,30 +5,68 @@
 ;; lsp-mode package
 (use-package lsp-mode
   :bind (:map lsp-mode-map
-              ("C-c C-d" . lsp-describe-thing-at-point))
+              ("C-c f" . lsp-format-region)
+              ("C-c a" . lsp-execute-code-action)
+              ("C-c r" . lsp-rename)
+              ("C-c e" . lsp-describe-thing-at-point)
+              ([remap xref-find-definitions] . lsp-find-definition)
+              ([remap xref-find-references] . lsp-find-references))
+  :custom
+  ;; debug 时开启log，否则影响性能
+  (lsp-log-io nil)
+  ;; 日志记录行数
+  (lsp-log-max 1000)
+  (lsp-keymap-prefix "C-l")
+  (lsp-diagnostics-provider :flycheck)
+  (lsp-diagnostics-flycheck-default-level 'warning)
+  (lsp-completion-provider :none)       ; corfu.el: :none, company: :capf
+  (lsp-enable-symbol-highlighting nil)
+  (lsp-headerline-breadcrumb-enable nil)
+  (lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+  ;; 启用snippet后才支持函数或方法的placeholder提示
+  (lsp-enable-snippet nil)
+  ;; 刷新高亮、lenses和links的间隔
+  (lsp-idle-delay 0.2)
+  (lsp-enable-folding nil)
+  (lsp-enable-links nil)
+  (lsp-enable-indentation nil)
+  ;; flycheck会在modeline显示检查结果，故不需lsp再展示
+  (lsp-modeline-diagnostics-enable nil)
+  ;; 不在modeline上显示code-actions信息
+  (lsp-modeline-code-actions-enable nil)
+  (lsp-modeline-workspace-status-enable nil)
+  (lsp-restart 'auto-restart)
+  ;; 使用projectile/project来自动探测项目根目录
+  (lsp-auto-guess-root t)
+  (lsp-imenu-sort-methods '(position))
   :init
-  (setq lsp-auto-guess-root nil           ;detect project root
-        lsp-diagnostics-provider :flycheck
-        lsp-log-io nil
-        lsp-enable-indentation t
-        lsp-enable-imenu t
-        lsp-keymap-prefix "C-l"
-        lsp-file-watch-threshold 500
-        lsp-prefer-flymake nil)         ;use flycheck
-  (defun lsp-on-save-operation()
-    (when (or (boundp 'lsp-mode)
-              (bound-p 'lsp-deferred))
-      (lsp-organize-imports)
-      (lsp-format-buffer)))
+  ;; 设置lsp使用corfu来进行补全
+  (defun my/lsp-mode-setup-completion()
+    (setf (alist-get 'styles
+                     (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless)))
   :hook(
         ;; To defer LSP server startup(and DidOen notifications) until the buffer is
         ;; visible, use `lsp-deferred` instead of `lsp`
         ;; (prog-mode-hook . lsp-deferred)
-        (python-mode . lsp-deferred)
-        (go-mode . lsp-deferred)
-        (c-mode . lsp-deferred)
-        (c++-mode . lsp-deferred)
-        (lsp-mode . lsp-enable-which-key-integration)))
+        (python-mode . lsp)
+        (go-mode . lsp)
+        (c-mode . lsp)
+        (c++-mode . lsp)
+        (lsp-mode . lsp-enable-which-key-integration))
+  :config
+  (dolist (dir '("[/\\\\][^/\\\\]*\\.\\(json\\|html\\|pyc\\|class\\|log\\|jade\\|md\\)\\'"
+                 "[/\\\\]resources/META-INF\\'"
+                 "[/\\\\]vendor\\'"
+                 "[/\\\\]node_modules\\'"
+                 "[/\\\\]\\.settings\\'"
+                 "[/\\\\]\\.project\\'"
+                 "[/\\\\]\\.travis\\'"
+                 "[/\\\\]bazel-*"
+                 "[/\\\\]\\.cache"
+                 "[/\\\\]\\.clwb$"))
+    (push dir lsp-file-watch-ignored-directories))
+  )
 ;; Package lsp-ui
 ;; Optionally
 (use-package lsp-ui
@@ -64,6 +102,11 @@
               (set-face-background 'lsp-ui-dock-background
                                    (face-background 'tooltip))))
   )
+
+
+(use-package consult-lsp
+  :commands (consult-lsp-symbols consult-lsp-diagnostics consult-lsp-file-symbols)
+  :config (define-key lsp-mode-map [remap xref-find-apropos] #'consult-lsp-symbols))
 
 
 (provide 'setup-lsp)

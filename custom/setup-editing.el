@@ -67,12 +67,16 @@
    uniquify-after-kill-buffer-p t
    uniquify-ignore-buffers-re "^\\*"))
 
-;; PACKAGE: awesome-pair
-(use-package awesome-pair
-  :load-path "/home/wangchang/.emacs.d/elpa/awesome-pair/"
-  :hook (prog-mode . awesome-pair-mode))
-
-
+;; auto close bracket insertion. New in emacs 24
+;; built-in electric-pair
+(electric-pair-mode 1)
+;; make electric-pair-mode work on more brackets
+(setq electric-pair-pairs
+      '(
+        (?\" . ?\")
+        (?\' . ?\')
+        (?\[ . ?\])
+        (?\{ . ?\})))
 
 ;; PACKAGE: comment-dwim-2
 ;; An all-in-one comment command to rule them all

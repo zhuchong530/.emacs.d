@@ -53,6 +53,7 @@
         (go-mode . lsp)
         (c-mode . lsp)
         (c++-mode . lsp)
+        (rust-mode . lsp)
         (lsp-mode . lsp-enable-which-key-integration))
   :config
   (dolist (dir '("[/\\\\][^/\\\\]*\\.\\(json\\|html\\|pyc\\|class\\|log\\|jade\\|md\\)\\'"

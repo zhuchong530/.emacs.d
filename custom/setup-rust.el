@@ -3,18 +3,26 @@
 ;;; Code:
 
 
+(use-package rust-mode)
+
+
 (use-package rustic
   :ensure t
   :after lsp-mode
-  :init (setq rustic-lsp-server 'rust-analysis
-              rustic-format-on-save t)
   :config
-  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook)
+  (setq rustic-format-on-save t)
   )
+
+(defun rustic-mode-auto-save-hook ()
+  "Enable auto-saving in rustic-mode buffers."
+  (when buffer-file-name
+    (setq-local compilation-ask-about-save nil)))
+(add-hook 'rust-mode-hook 'rustic-mode-auto-save-hook)
 
 (use-package cargo
   :ensure t
-  :config (add-hook 'rust-mode-hook 'cargo-minor-mode)
+  :hook
+  (rust-mode . cargo-minor-mode)
   )
 
 (use-package flycheck-rust

@@ -38,3 +38,4 @@ org-roam.db
 bookmarks
 history
 .desktop.lock
+/eln-cache/

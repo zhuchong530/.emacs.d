@@ -41,7 +41,7 @@
 ;; Package -flycheck
 ;; On-the-fly syntax checking
 (use-package flycheck
-  :hook (lsp-mode . flycheck-mode)
+  ;; :hook (lsp-mode . flycheck-mode)
   :diminish (flycheck-mode . "f")
   :init (setq-default flycheck-check-syntax-automatically '(save-mode-enabled))
   :bind
@@ -79,23 +79,6 @@
         projectile-indexing-method 'alien
         projectile-completion-system 'helm)
   (projectile-mode +1))
-
-;; Package: yasnippet
-;; Yet another snippet extension for Emacs
-(use-package yasnippet
-  :after prog-mode
-  :demand t
-  :commands yas-minor-mode
-  :bind (:map yas-keymap
-              ("C-i" . yas-next-field-or-maybe-expand))
-  :hook ((prog-mode org-mode vterm-mode) . yas-minor-mode)
-  :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-  (yas-global-mode 1))
-
-;; Pakcage yasnippet-snippets
-(use-package yasnippet-snippets
-  :after yasnippet)
 
 ;;nasm-mode
 (use-package nasm-mode

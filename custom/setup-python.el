@@ -20,15 +20,15 @@
 (setenv "WORKON_HOME" "/home/wangchang/Programme/pythonCode")
 
 ;;Package lsp-python-ms
-(use-package lsp-python-ms
-  :ensure t
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-python-ms)
-                         (lsp)))
-  ;; :init (setq lsp-python-ms-executable "~/.emacs.d/pylsms/Microsoft.Python.LanguageServer")
-  ;; :init (setq lsp-python-ms-executable "/usr/bin/mspyls")
-  :init (setq lsp-python-ms-auto-install-server t)
-  )
+;; (use-package lsp-python-ms
+;;   :ensure t
+;;   :hook (python-mode . (lambda ()
+;;                          (require 'lsp-python-ms)
+;;                          (lsp)))
+;;   ;; :init (setq lsp-python-ms-executable "~/.emacs.d/pylsms/Microsoft.Python.LanguageServer")
+;;   ;; :init (setq lsp-python-ms-executable "/usr/bin/mspyls")
+;;   :init (setq lsp-python-ms-auto-install-server t)
+;;   )
 
 (provide 'setup-python)
 ;;; setup-python.el ends here

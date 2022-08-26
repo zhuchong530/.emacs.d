@@ -8,7 +8,7 @@
 
 (use-package rustic
   :ensure t
-  :after lsp-mode
+  ;; :after lsp-mode
   :config
   (setq rustic-format-on-save t)
   )

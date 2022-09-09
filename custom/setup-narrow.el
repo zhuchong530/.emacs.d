@@ -7,9 +7,12 @@
 ;; Orderless
 ;; Controls the sorting of the minibuffer completions
 (use-package orderless
-  :custom ((completion--styles '(orderless))
-           (completion-category-defaults nil)
-           (completion--category-override '((file (style . (partial-completion)))))))
+  :custom
+  (completion-styles '(orderless))
+  (completion-category-defaults nil)
+  (completion-category-overrides
+   '((file (styles basic-remote ; For `tramp' hostname completion with `vertico'
+                   orderless)))))
 
 (use-package selectrum
   :bind (("C-M-r" . selectrum-repeat)
@@ -105,9 +108,18 @@
 ;; Marginalia
 ;; Enhances the minibuffer completions with additional informations
 (use-package marginalia
-  :custom (marginalia-annotators
-           '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :custom
+  (marginalia-annotators
+   '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  (marginalia-align 'left)
   :init (marginalia-mode))
+
+;; all-the-icons-completion
+(use-package all-the-icons-completion
+  :after (marginalia all-the-icons)
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :init
+  (all-the-icons-completion-mode))
 
 
 

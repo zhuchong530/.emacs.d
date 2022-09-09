@@ -5,20 +5,15 @@
 ;; Package: yasnippet
 ;; Yet another snippet extension for Emacs
 (use-package yasnippet
-  :after lsp-bridge
-  :demand t
-  :commands yas-minor-mode
-  :bind (:map yas-keymap
-              ("C-i" . yas-next-field-or-maybe-expand))
-  :hook ((prog-mode org-mode) . yas-minor-mode)
+  ;; :after lsp-bridge
+  ;; :demand t
+  ;; :commands yas-minor-mode
+  ;; :bind (:map yas-keymap
+  ;;             ("C-i" . yas-next-field-or-maybe-expand))
+  ;; :hook ((prog-mode org-mode) . yas-minor-mode)
   :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  ;; (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-global-mode 1))
-
-;; Pakcage yasnippet-snippets
-(use-package yasnippet-snippets
-  :after yasnippet)
-
 
 ;; posframe - needed by lsp-bridge
 (use-package posframe)
@@ -29,8 +24,8 @@
   :load-path "~/.emacs.d/elpa/lsp-bridge/"
   :bind
   (:map lsp-bridge-mode-map
-        ("M-." . lsp-bridge-jump)
-        ("M-," . lsp-bridge-jump-back)
+        ("M-." . lsp-bridge-find-def)
+        ("M-," . lsp-bridge-return-from-def)
         ("M-?" . lsp-bridge-find-references)
         ("M-i" . lsp-bridge-lookup-documentation)
         ("M-n" . lsp-bridge-popup-documentation-scroll-up)

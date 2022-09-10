@@ -20,10 +20,6 @@
   (corfu-echo-documentation t)
   :config (global-corfu-mode))
 
-(use-package corfu-doc
-  :hook (corfu-mode-hook . corfu-doc-mode)
-  )
-
 ;; Package: yasnippet
 ;; Yet another snippet extension for Emacs
 (use-package yasnippet
@@ -31,7 +27,9 @@
               ("C-i" . yas-next-field-or-maybe-expand))
   :hook ((prog-mode org-mode) . yas-minor-mode)
   :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets")))
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-global-mode 1)
+  )
 
 
 ;; posframe - needed by lsp-bridge
@@ -58,7 +56,6 @@
   )
 
 (global-lsp-bridge-mode)
-(yas-global-mode 1)
 
 (message "loaded lsp-bridge")
 

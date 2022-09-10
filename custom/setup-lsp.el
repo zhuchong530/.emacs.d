@@ -5,23 +5,19 @@
 ;; Package: yasnippet
 ;; Yet another snippet extension for Emacs
 (use-package yasnippet
-  ;; :after lsp-bridge
-  ;; :demand t
-  ;; :commands yas-minor-mode
-  ;; :bind (:map yas-keymap
-  ;;             ("C-i" . yas-next-field-or-maybe-expand))
-  ;; :hook ((prog-mode org-mode) . yas-minor-mode)
+  :bind (:map yas-keymap
+              ("C-i" . yas-next-field-or-maybe-expand))
+  :hook ((prog-mode org-mode) . yas-minor-mode)
   :config
-  ;; (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-  (yas-global-mode 1))
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets")))
+
 
 ;; posframe - needed by lsp-bridge
 (use-package posframe)
-
 ;; lsp-bridge
 (use-package lsp-bridge
   :after (markdown-mode)
-  :load-path "~/.emacs.d/elpa/lsp-bridge/"
+  :load-path "~/.emacs.d/elpa/lsp-bridge"
   :bind
   (:map lsp-bridge-mode-map
         ("M-." . lsp-bridge-find-def)
@@ -37,9 +33,13 @@
   (setq lsp-bridge-enable-auto-format-code t)
   (setq lsp-bridge-enable-log nil)
   (setq lsp-bridge-enable-signature-help t)
-  (global-lsp-bridge-mode)
+  (setq lsp-bridge-completion-provider 'corfu)
   )
 
+(global-lsp-bridge-mode)
+(yas-global-mode 1)
+
+(message "loaded lsp-bridge")
 
 (provide 'setup-lsp)
 ;;; setup-lsp.el ends here

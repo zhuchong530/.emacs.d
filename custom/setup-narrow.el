@@ -3,7 +3,6 @@
 ;;; code:
 
 
-
 ;; Orderless
 ;; Controls the sorting of the minibuffer completions
 (use-package orderless

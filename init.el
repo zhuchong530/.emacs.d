@@ -57,7 +57,7 @@
  '(org-agenda-files
    '("~/Google Driver/All Notes/Agenda/study.org" "~/Google Driver/All Notes/Agenda/work.org" "~/Google Driver/All Notes/Agenda/life.org"))
  '(package-selected-packages
-   '(all-the-icons-completion posframe selectrum cape consult corfu orderless marginalia org-roam org-roam-ui nyan-mode gcmh all-the-icons-dired rainbow-fart centaur-tabs flycheck-rust cargo rustic youdao-dictionary ace-window indent-guide all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode bug-hunter undo-tree doom-modeline zeal-at-point cmake-ide cmake-mode diminish web-mode flycheck-go projejctile ws-butler which-key volatile-highlights use-package switch-window rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode iedit highlight-symbol golden-ratio function-args exec-path-from-shell duplicate-thing comment-dwim-2 color-theme clean-aindent-mode ace-jump-mode)))
+   '(realgud realgud-lldb all-the-icons-completion posframe selectrum cape consult corfu orderless marginalia org-roam org-roam-ui nyan-mode gcmh all-the-icons-dired rainbow-fart centaur-tabs flycheck-rust cargo rustic youdao-dictionary ace-window indent-guide all-the-icons company-tabnine go-eldoc rainbow-delimiters go-mode bug-hunter undo-tree doom-modeline zeal-at-point cmake-ide cmake-mode diminish web-mode flycheck-go projejctile ws-butler which-key volatile-highlights use-package switch-window rainbow-mode python-mode powerline nasm-mode multi-web-mode magit js2-mode iedit highlight-symbol golden-ratio function-args exec-path-from-shell duplicate-thing comment-dwim-2 color-theme clean-aindent-mode ace-jump-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -111,7 +111,7 @@
  ;; :family "MesloLGL Nerd Font Mono"
  ;; :family "Monaco"
  ;; :family "Fira Code"
- :height 140
+ :height 120
  :weight 'normal)
 
 ;; Save backup files in a dedicated directory

@@ -22,10 +22,11 @@
          :map minibuffer-local-map
          ("M-h" . backward-kill-word))
   :custom
-  (selectrum-fix-minibuffer-height t)
-  (selectrum-num-candidates-displayed 9)
-  (selectrum-refine-candidates-function #'orderless-filter)
-  (selectrum-highlight-candidates-function #'orderless-highlight-matches)
+  (setq selectrum-fix-minibuffer-height t)
+  (setq selectrum-num-candidates-displayed 15)
+  (setq selectrum-refine-candidates-function #'orderless-filter)
+  (setq orderless-skip-highlighting (lambda () selectrum-is-active))
+  (setq selectrum-highlight-candidates-function #'orderless-highlight-matches)
   :custom-face
   (selectrum-current-candidate ((t (:background "#3a3f5a"))))
   :init (selectrum-mode 1))

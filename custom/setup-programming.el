@@ -41,7 +41,7 @@
 ;; Package -flycheck
 ;; On-the-fly syntax checking
 (use-package flycheck
-  ;; :hook (lsp-mode . flycheck-mode)
+  :hook (prog-mode . flycheck-mode)
   :diminish (flycheck-mode . "f")
   :init (setq-default flycheck-check-syntax-automatically '(save-mode-enabled))
   :bind

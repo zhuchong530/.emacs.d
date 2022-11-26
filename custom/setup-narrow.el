@@ -13,23 +13,19 @@
    '((file (styles basic-remote ; For `tramp' hostname completion with `vertico'
                    orderless)))))
 
-(use-package selectrum
-  :bind (("C-M-r" . selectrum-repeat)
-         :map selectrum-minibuffer-map
-         ("C-r" . selectrum-select-from-history)
-         ("C-n" . selectrum-next-candidate)
-         ("C-p" . selectrum-previous-candidate)
-         :map minibuffer-local-map
-         ("M-h" . backward-kill-word))
-  :custom
-  (setq selectrum-fix-minibuffer-height t)
-  (setq selectrum-num-candidates-displayed 15)
-  (setq selectrum-refine-candidates-function #'orderless-filter)
-  (setq orderless-skip-highlighting (lambda () selectrum-is-active))
-  (setq selectrum-highlight-candidates-function #'orderless-highlight-matches)
-  :custom-face
-  (selectrum-current-candidate ((t (:background "#3a3f5a"))))
-  :init (selectrum-mode 1))
+(use-package vertico
+  :init (vertico-mode)
+  ;; Different scroll margin
+  ;; (setq vertico-scroll-margin 0)
+  ;; Show more candidates
+  (setq vertico-count 20)
+
+  ;; Grow and shrink the Vertico minibuffer
+  (setq vertico-resize t)
+
+  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'
+  ;; (setq vertico-cycle t)
+  )
 
 (use-package consult
   :bind (("C-c h" . consult-history)
@@ -102,8 +98,6 @@
    :preview-key (kbd "M-."))
   (setq consult-narrow-key "<")
   )
-
-
 
 ;; Marginalia
 ;; Enhances the minibuffer completions with additional informations

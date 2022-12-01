@@ -2,19 +2,21 @@
 ;;; Commentary:
 ;;; Code:
 
-;;linum-mode
-(use-package linum
-  :config
-  (setq linum-format "%5d")
-  (global-linum-mode 1)
-  )
+;; line numbers, after Emacs 26
+(global-display-line-numbers-mode)
+
 
 ;; highlight-symbol
 (use-package highlight-symbol
   :bind(("C-<f3>" . highlight-symbol)
         ("<f3>" . highlight-symbol-next)
         ("S-<f3>" . highlight-symbol-prev)
-        ("M-<f3>" . highlight-symbol-query-replace)))
+        ("M-<f3>" . highlight-symbol-query-replace))
+  :config
+  (add-hook 'highlight-symbol-mode-hook
+            (function
+             (lambda () (highlight-symbol-nav-mode +1))))
+  )
 
 ;;package ace-jump-mode
 (use-package ace-jump-mode

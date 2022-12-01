@@ -97,9 +97,11 @@
 ;; not org-roam-server which only support org-roam Version 1
 (use-package org-roam
   :custom
-  (org-roam-directory "~/Google Driver/All Notes/")
+  (org-roam-directory "~/Google Driver/brain-notes")
+  (org-roam-db-location (expand-file "org-roam.db" "~/Google Driver/brain-notes"))
   (org-roam-db-gc-threshold most-positive-fixnum)
   (org-roam-completion-everywhere t)
+  (org-roam-db-autosync-mode)
   (add-hook 'after-init-hook 'org-roam-mode)
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)

@@ -34,8 +34,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 检查Emacs版本，要求Emacs >= 26
 
-#+begin_src emacs-lisp
-  ;; emacs version must >= 26
+#+begin_src emacs-lisp  
   (when (version< emacs-version "26")
     (error "Requires at least GNU Emacs 26, but you're running %s" emacs-version))
 #+end_src
@@ -72,32 +71,18 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 这个包实际是宏(macro)，可以隔离包配置。 具体参见这里： [[id:66760557-2681-41d4-8e02-ea68fe02e805][use-package]]
 
 #+begin_src emacs-lisp
-  ;; bootstrap 'use-package'
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package)
     (package-install 'diminish)
     (package-install 'bind-key))
 
-  ;; load use-package, used for loading packages everywhere else
   (eval-when-compile
     (require 'use-package))
   (require 'diminish)
   (require 'bind-key)
   (setq use-package-verbose t)
   (setq use-package-always-ensure t)
-#+end_src
-
-** exec-path-from-shell
-
-[[https://github.com/purcell/exec-path-from-shell][官网]]
-
-这个包确保Emacs中的环境变量和用户shell中的一致
-
-#+begin_src emacs-lisp
-  ;; Package exec-path-from-shell
-  (use-package exec-path-from-shell
-    :config (exec-path-from-shell-initialize))
 #+end_src
 
 ** Garbage Collector Magic Hack
@@ -107,30 +92,117 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 强化GC回收
 
 #+begin_src emacs-lisp
-  ;; Garbage Collector Magic Hack
   (use-package gcmh
     :init
-    (setq gcmh-idel-delay 5)
-    (setq gcmh-high-cons-hreshold (* 64 1024 1024)) ;64MB
-    (gcmh-mode 1)
-    (gcmh-set-high-threshold))
+    (setq gcmh-idle-delay 5)
+    (setq gcmh-high-cons-threshold (* 64 1024 1024)) ;64MB
+    (gcmh-mode 1))
+#+end_src
+
+** exec-path-from-shell
+
+[[https://github.com/purcell/exec-path-from-shell][官网]]
+
+这个包确保Emacs中的环境变量和用户shell中的一致
+
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :config (exec-path-from-shell-initialize))
 #+end_src
 
 ** Emacs内建功能
 
 具体信息可以查询[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html][官网文档]]
 
+*** 各种bar
+
+工具栏，滚动栏，菜单栏 全部不要！
+
+#+begin_src emacs-lisp
+  (when (window-system)
+    (tool-bar-mode -1)
+    (scroll-bar-mode -1)
+    (menu-bar-mode -1))
+#+end_src
+
+*** 关掉启动信息啥的
+
+#+begin_src emacs-lisp
+  ;; No need to see GNU agitprop
+  (setq inhibit-startup-screen t)
+  ;; No need to remind me what a scratch buffer is
+  (setq inhibit-startup-message nil)
+  (setq inhibit-startup-echo-area-message t)
+#+end_src
+
+*** 关掉ring-bell
+
+#+begin_src emacs-lisp
+  (setq ring-bell-function 'ignore)
+#+end_src
+
+*** symlink处理
+
+#+begin_src emacs-lisp
+  (setq find-file-visit-truename t)
+  (setq vc-follow-symlinks t)
+#+end_src
+
+*** 缩进用空格而不是tab
+
+#+begin_src emacs-lisp
+  ;; Never mix tabs and spaces. Never use tabs, period.
+  ;; We need the setq-default here because this becomes
+  ;; a buffer-local variable when set.
+  (setq-default indent-tabs-mode nil)
+#+end_src
+
+*** 超长文件处理
+
+#+begin_src emacs-lisp
+  (global-so-long-mode)                   ;Handle long files
+#+end_src
+
+*** 高亮当前行
+
+这里设置为全局
+
+#+begin_src emacs-lisp
+  (global-hl-line-mode t)
+#+end_src
+
+*** 自动折行
+
+#+begin_src emacs-lisp
+  (global-visual-line-mode t)
+#+end_src
+
+*** Delete region when yank on top of it
+
+#+begin_src emacs-lisp
+  (delete-selection-mode t)
+#+end_src
+
+*** 不生成备份文件
+
+#+begin_src emacs-lisp
+  (setq make-backup-files nil)
+#+end_src
+
+*** 关闭自动保存
+
+#+begin_src emacs-lisp
+  (setq auto-save-default nil)
+#+end_src
+
+*** 其他选项配置
+
+先这样吧，回头慢慢搞
+
 #+begin_src emacs-lisp
   (setq
-   ;; No need to see GNU agitprop
-   inhibit-startup-screen t
-   ;; No need to remind me what a scratch buffer is
-   inhibit-scratch-message nil
-   inhibit-startup-echo-area-message t
    ;; Double-spaces after periods is morally wrong
    sentence-end-double-space nil
-   ;; Never ding at me, ever.
-   ring-bell-function 'ignore
    ;; Save existing clipboard text into the kill ring before replacing it.
    save-interprogram-paste-before-kill t
    ;; Prompts should go in the minibuffer, not in a GUI
@@ -140,14 +212,10 @@ Instead of imagining that our main task is to instruct a computer what to do, le
    ;; if NIL, kill whole line and move the next line up
    kill-whole-line t
    ;; accept 'y' or 'n' instead of yes/no
-   use-short-answer t
+   use-short-answers t
    default-directory "~/Programme/"
    ;; prefer newer elisp files
    load-prefer-newer t
-   ;; never make backup files
-   make-backup-files nil
-   ;; turn-off auto-save
-   auto-save-default nil
    ;; disable lock files, losing benefits of simultaneous editing
    create-lockfiles nil
    global-mark-ring-max 5000         ; increase mark ring to contains 5000 entries
@@ -170,24 +238,90 @@ Instead of imagining that our main task is to instruct a computer what to do, le
    ;; highlight syntax
    global-font-lock-mode t
    )
-
-  ;; Never mix tabs and spaces. Never use tabs, period.
-  ;; We need the setq-default here because this becomes
-  ;; a buffer-local variable when set.
-  (setq-default indent-tabs-mode nil)
-
   ;; default to 4 visible spaces to display a tab
   (setq-default tab-width 4)
-
-  (when (window-system)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  (menu-bar-mode -1))
-
-  (global-so-long-mode)                   ;Handle long files
-  (global-hl-line-mode t)
-  (global-visual-line-mode t)
   (set-fringe-mode 10)
+#+end_src
+
+*** modeline上显示内容
+
+即使没有安装插件，(或者运行 ~emacs -Q~ )，也需要这样的设置，
+
+#+begin_src emacs-lisp
+  ;; Feature mode
+  (setq column-number-mode t
+        display-battery-mode t
+        display-time-day-and-date t
+        size-indication-mode -1)
+#+end_src
+
+*** 保存Emacs会话
+
+#+begin_src emacs-lisp
+  ;; Save backup files in a dedicated directory
+  (use-package desktop
+    :hook ((after-init . desktop-read)
+           (after-init . desktop-save-mode))
+    :custom ((desktop-base-file-name ".desktop")
+             (desktop-base-lock-name ".desktop.lock")
+             (desktop-restore-eager 8)
+             (desktop-restore-frames nil)))
+#+end_src
+
+*** 保存编辑位置
+
+打开文件，回到上次编辑位置
+
+#+begin_src
+  ;; history
+  (use-package saveplace
+    :config (save-place-mode 1))
+#+end_src
+
+*** 保存minibuff历史
+
+#+begin_src emacs-lisp
+  (use-package savehist
+    :config (savehist-mode))
+#+end_src
+
+*** 外部程序修改文件后，自动加载文件
+
+#+begin_src emacs-lisp
+  ;; Automatically reload files was modified by external program
+  (use-package autorevert
+    :diminish
+    :hook (after-init . global-auto-revert-mode)
+    )
+#+end_src
+
+*** 括号匹配
+
+#+begin_src emacs-lisp
+  (setq-default show-paren-style 'expression
+                show-paren-delay 0
+                show-paren-highlight-openparen t
+                show-paren-when-point-inside-paren nil
+                show-paren-when-point-in-periphery t)
+  (show-paren-mode t)
+#+end_src
+
+*** line number
+
+#+begin_src emacs-lisp
+  ;; line numbers, after Emacs 26
+  (global-display-line-numbers-mode)
+#+end_src
+
+*** whitespace
+
+显示空白字符
+
+#+begin_src emacs-lisp
+  ;; activate whitespace-mode to view all whitespace characters
+  (global-set-key (kbd "C-c w") 'whitespace-mode)
+  ;; show unncessary whitespace that can mess up your diff
+  (add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
 #+end_src
 
 * UI
@@ -207,79 +341,45 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** doom-themes
 
+我用 ~doom-themes~, 具体见[[https://github.com/doomemacs/themes][官网]]
 
 #+begin_src emacs-lisp
-
   (use-package doom-themes
     :config
-    (load-theme 'doom-dracula t)
     (setq doom-themes-enable-bold t
           doom-themes-enable-italic t)
+    (load-theme 'doom-dracula t)
+    ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
+    ;; Corrects (and improves) org-mode's native fontification.
     (doom-themes-org-config))
 #+end_src
 
 ** doom-modeline
 
-#+begin_src emacs-lisp
+美化modeline， 具体见[[https://github.com/seagle0128/doom-modeline][官网]]
 
-  ;; doom-modeline
+#+begin_src emacs-lisp
   (use-package doom-modeline
     :hook (after-init . doom-modeline-mode)
     :custom
-    (doom-modeline-height 25)
-    (doom-modeline-bar-width 3)
-    (doom-modeline-project-detection 'projectile)
-    (doom-modeline-buffer-file-name-style 'auto)
-    (doom-modeline-icon (display-graphic-p))
-    (doom-modeline-major-mode-icon t)
-    (doom-modeline-buffer-modification-icon t)
+    (setq doom-modeline-height 25)
+    (setq doom-modeline-bar-width 4)
+    (setq doom-modeline-project-detection 'projectile)
+    (setq doom-modeline-buffer-file-name-style 'auto)
+    (setq doom-modeline-icon (display-graphic-p))
+    (setq doom-modeline-major-mode-icon t)
+    (setq doom-modeline-buffer-modification-icon t)
     ;; 不显示换行和编码(节省空间)
-    (doom-modeline-buffer-encoding t))
-#+end_src
-
-** modeline上显示内容
-
-#+begin_src emacs-lisp
-
-  ;; Feature mode
-  (display-battery-mode t)
-  (column-number-mode t)
-  (size-indication-mode -1)
-  (display-time-mode 1)
-  (setq display-time-24hr-format t)
-  (setq display-time-default-load-average nil)
-  (setq display-time-format "%m/%d[%u] %H:%M%p")
-
-#+end_src
-
-** 最大化
-
-#+begin_src emacs-lisp
-  (toggle-frame-maximized)
-#+end_src
-
-
-** 括号匹配
-
-
-#+begin_src emacs-lisp
-  (setq-default show-paren-style 'expression
-                show-paren-delay 0
-                show-paren-highlight-openparen t
-                show-paren-when-point-inside-paren nil
-                show-paren-when-point-in-periphery t)
-  (show-paren-mode t)
+    (setq doom-modeline-buffer-encoding t))
 #+end_src
 
 ** 字体
 
-#+begin_src emacs-lisp
+在系统shell里通过 ~fc-list~ 命令，找到对应family的名字
 
-  ;;set the font
-  ;; (set-frame-font "YaHei Consolas Hybrid-11")
-  ;; (if (member "Fira Code" (font-family-list))
-  ;; (set-frame-font "Fira Code-12"))
+#+begin_src emacs-lisp
+  ;; (set-frame-font "Fira Code-12")
   (set-face-attribute
    'default nil
    :family "YaHei Consolas Hybrid"
@@ -289,59 +389,39 @@ Instead of imagining that our main task is to instruct a computer what to do, le
    ;; :family "Fira Code"
    :height 120
    :weight 'normal)
-
 #+end_src
 
-** 保存
+** 图标
+
+*** all-the-icons
+
 
 #+begin_src emacs-lisp
-
-  ;; Save backup files in a dedicated directory
-  (use-package desktop
-    :hook ((after-init . desktop-read)
-           (after-init . desktop-save-mode))
-    :custom ((desktop-base-file-name ".desktop")
-             (desktop-base-lock-name ".desktop.lock")
-             (desktop-restore-eager 8)
-             (desktop-restore-frames nil)))
-
-  ;; history
-  (use-package saveplace
-    :config (save-place-mode 1))
-
-  (use-package savehist
-    :config (savehist-mode))
-
-  ;; Automatically reload files was modified by external program
-  (use-package autorevert
-    :diminish
-    :hook (after-init . global-auto-revert-mode)
+  (use-package all-the-icons
+    :if (display-graphic-p)
     )
+#+end_src
 
-  (add-hook 'sh-mode-hook (lambda ()
-                            (setq tab-width 4)))
+*** all-the-icons-dired
 
-  (delete-selection-mode 1)
-  ;; show whitespace in diff-mode
-  (add-hook 'diff-mode-hook (lambda ()
-                              (setq-local whitespace-style
-                                          '(face
-                                            tabs
-                                            tab-mark
-                                            spaces
-                                            space-mark
-                                            trailing
-                                            indentation::space
-                                            indentation::tab
-                                            newline
-                                            newline-mark))
-                              (whitespace-mode 1)))
+#+begin_src emacs-lisp
+(use-package all-the-icons-dired
+:after all-the-icons
+:hook (dired-mode . all-the-icons-dired-mode)
+)
+#+end_src
 
+** 最大化
+
+#+begin_src emacs-lisp
+  (toggle-frame-maximized)
 #+end_src
 
 * 编辑器增强
 
 ** which-key
+
+这个包是一个 =minor mode= ，可以根据当前按键，提示可能的键绑定。具体见[[https://github.com/justbur/emacs-which-key][官网]]
 
 #+begin_src emacs-lisp
 
@@ -354,8 +434,11 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** ace-window
 
-#+begin_src emacs-lisp
+用于窗口切换，当有多个窗口时，每个窗口会显示一个数字，通过数字就可以跳到该窗口。具体见： [[https://github.com/abo-abo/ace-window][官网]]
 
+Emacs本身自带 ~other-window~ 函数，绑定到 ~C-x o~ 上，所以这里我将 ~ace-window~ 绑定到 ~C-c o~
+
+#+begin_src emacs-lisp
   ;; package ace-window
   (use-package ace-window
     :config
@@ -368,15 +451,26 @@ Instead of imagining that our main task is to instruct a computer what to do, le
        ((t (:inherit ace-jump-face-foreground :foreground "red" :height 5.0)))))
     )
 #+end_src
-** volatile-highlights
+
+** ace-jump-mode
+
+[[https://github.com/winterTTr/ace-jump-mode][官网]]
+
+Emacs的 =minor mode= ，用来移动光标到任意位置（你指定的）
 
 #+begin_src emacs-lisp
 
-  ;; Package: volatile-highlights
-  ;; Minor mode for visual feedback on some operations.
-  ;; An example is that if you paste (yank) a block of text,
-  ;; it will be highlighted until you press the next key.
-  ;; This is just a small tweak, but gives a nice bit of visual feedback.
+  ;;package ace-jump-mode
+  (use-package ace-jump-mode
+    :bind ("C-c <SPC>" . ace-jump-mode)
+    )
+#+end_src
+
+** volatile-highlights
+
+这是Emacs的一个 =minor mode= 用于可视化反馈。 比如当你粘贴一段文本的时候，这段文本会被高亮直到你有进一步的操作，具体见:[[https://github.com/k-talo/volatile-highlights.el][官网]]
+
+#+begin_src emacs-lisp
   (use-package volatile-highlights
     :commands (volatile-highlights-mode)
     :init
@@ -386,36 +480,50 @@ Instead of imagining that our main task is to instruct a computer what to do, le
                         :underline "light slate gray"))
 #+end_src
 
-** clean-aindent-mode
+** clean-aindent-mode - DISABLED
+
+[[https://github.com/pmarinov/clean-aindent-mode][官网]]
+
+这个包不太用，先disable了
 
 #+begin_src emacs-lisp
-
   ;; Package: clean-aindent-mode
   ;; Simple indent and unindent, trims indent white-space
   (use-package clean-aindent-mode
+    :disabled
     :commands (clean-aindent-mode)
     :init
     (add-hook 'prog-mode-hook 'clean-aindent-mode)
     )
 #+end_src
 
-** ws-butler
+** ws-butler - DISABLED
+
+[[https://github.com/lewang/ws-butler][官网]]
+
+这个包不太用，先disable了
 
 #+begin_src emacs-lisp
 
   ;; PACKAGE: ws-butler
   ;; Unobtrusively remove trailing whitespace.
   (use-package ws-butler
+    :disabled
     :hook (prog-mode . ws-butler-mode))
 #+end_src
 
-** undo-tree
+** undo-tree - DISABLED
+
+[[https://www.dr-qubit.org/undo-tree.html][官网]]
+
+这个包不太用，先disable了
 
 #+begin_src emacs-lisp
 
   ;; Package: undo-tree
   ;; Treat undo history as a tree
   (use-package undo-tree
+    :disabled
     :init (progn
             (global-undo-tree-mode)
             (setq undo-tree-visualizer-timestamps t)
@@ -426,23 +534,28 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** uniquify
 
-#+begin_src emacs-lisp
+build-in功能
 
-  ;; uniquify
-  (use-package uniquify
-    :ensure nil
-    :config
+当Emacs打开具有相同名字的多个文件，增加前缀以示区别。具体见: [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.html][这里]]
+
+#+begin_src emacs-lisp
+  ;; (use-package uniquify
+    ;; :config
     (setq
      uniquify-buffer-name-style 'forward
      uniquify-separator ":"
      uniquify-after-kill-buffer-p t
-     uniquify-ignore-buffers-re "^\\*"))
+     uniquify-ignore-buffers-re "^\\*")
+  ;; )
 #+end_src
 
 ** 括号配对
 
-#+begin_src emacs-lisp
+built-in功能，Emacs 24引入
 
+自动闭合括号等，具体见： [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Matching.html][这里]]
+
+#+begin_src emacs-lisp
   ;; auto close bracket insertion. New in emacs 24
   ;; built-in electric-pair
   (electric-pair-mode 1)
@@ -454,15 +567,15 @@ Instead of imagining that our main task is to instruct a computer what to do, le
           (?\[ . ?\])
           (?\` . ?\`)
           (?\{ . ?\})))
-
 #+end_src
 
 ** comment-dwim-2
 
-#+begin_src emacs-lisp
+[[https://github.com/remyferre/comment-dwim-2][官网]]
 
-  ;; PACKAGE: comment-dwim-2
-  ;; An all-in-one comment command to rule them all
+~comment-dwim-2~ 用来替代Emacs内建的命令 ~comment-dwim~ ，用于注释，但是包含很多额外的特性。
+
+#+begin_src emacs-lisp
   (use-package comment-dwim-2
     :bind ("M-;" . comment-dwim-2)
     )
@@ -470,216 +583,33 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** iedit
 
-#+begin_src emacs-lisp
+[[https://github.com/victorhge/iedit][官网]]
 
-  ;; PACKAGE: iedit
-  ;; Edit multiple regions in the same way simultaneously.
+主要用于多点编辑
+
+#+begin_src emacs-lisp
   (use-package iedit
     :init (setq iedit-toggle-key-default nil)
     :bind ("C-;" . iedit-mode)
     )
 #+end_src
 
-** indent-edit
+** highlight-indent-guides
+
+之前用 ~indent-guide~ 但是这个包不更新了，换成 ~highlight-indent-guides~ 试试。见：[[https://github.com/DarthFennec/highlight-indent-guides][官网]]
+
+这个包用于显示一个缩进标尺
 
 #+begin_src emacs-lisp
-
-  ;; package indent-guide
-  (use-package indent-guide
-    :hook (after-init-hook . indent-guide-global-mode))
-#+end_src
-
-* 自定义功能
-
-#+begin_src emacs-lisp
-
-  ;; Customized functions
-  (defun prelude-move-beginning-of-line (arg)
-    "Move point back to indentation of beginning of line.
-
-  Move point to the first non-whitespace character on this line.
-  If point is already there, move to the beginning of the line.
-  Effectively toggle between the first non-whitespace character and
-  the beginning of the line.
-
-  If ARG is not nil or 1, move forward ARG - 1 lines first. If
-  point reaches the beginning or end of the buffer, stop there."
-    (interactive "^p")
-    (setq arg (or arg 1))
-
-    ;; Move lines first
-    (when (/= arg 1)
-      (let ((line-move-visual nil))
-        (forward-line (1- arg))))
-
-    (let ((orig-point (point)))
-      (back-to-indentation)
-      (when (= orig-point (point))
-        (move-beginning-of-line 1))))
-
-  (global-set-key (kbd "C-a") 'prelude-move-beginning-of-line)
-
-  (defadvice kill-ring-save (before slick-copy activate compile)
-    "When called interactively with no active region, copy a single
-  line instead."
-    (interactive
-     (if mark-active (list (region-beginning) (region-end))
-       (message "Copied line")
-       (list (line-beginning-position)
-             (line-beginning-position 2)))))
-
-  (defadvice kill-region (before slick-cut activate compile)
-    "When called interactively with no active region, kill a single
-    line instead."
-    (interactive
-     (if mark-active (list (region-beginning) (region-end))
-       (list (line-beginning-position)
-             (line-beginning-position 2)))))
-
-  ;; kill a line, including whitespace characters until next non-whiepsace character
-  ;; of next line
-  (defadvice kill-line (before check-position activate)
-    (if (member major-mode
-                '(emacs-lisp-mode scheme-mode lisp-mode
-                                  c-mode c++-mode objc-mode
-                                  latex-mode plain-tex-mode))
-        (if (and (eolp) (not (bolp)))
-            (progn (forward-char 1)
-                   (just-one-space 0)
-                   (backward-char 1)))))
-
-  ;; taken from prelude-editor.el
-  ;; automatically indenting yanked text if in programming-modes
-  (defvar yank-indent-modes
-    '(LaTeX-mode TeX-mode)
-    "Modes in which to indent regions that are yanked (or yank-popped).
-  Only modes that don't derive from `prog-mode' should be listed here.")
-
-  (defvar yank-indent-blacklisted-modes
-    '(python-mode slim-mode haml-mode)
-    "Modes for which auto-indenting is suppressed.")
-
-  (defvar yank-advised-indent-threshold 1000
-    "Threshold (# chars) over which indentation does not automatically occur.")
-
-  (defun yank-advised-indent-function (beg end)
-    "Do indentation, as long as the region isn't too large."
-    (if (<= (- end beg) yank-advised-indent-threshold)
-        (indent-region beg end nil)))
-
-  (defadvice yank (after yank-indent activate)
-    "If current mode is one of 'yank-indent-modes,
-  indent yanked text (with prefix arg don't indent)."
-    (if (and (not (ad-get-arg 0))
-             (not (member major-mode yank-indent-blacklisted-modes))
-             (or (derived-mode-p 'prog-mode)
-                 (member major-mode yank-indent-modes)))
-        (let ((transient-mark-mode nil))
-          (yank-advised-indent-function (region-beginning) (region-end)))))
-
-  (defadvice yank-pop (after yank-pop-indent activate)
-    "If current mode is one of `yank-indent-modes',
-  indent yanked text (with prefix arg don't indent)."
-    (when (and (not (ad-get-arg 0))
-               (not (member major-mode yank-indent-blacklisted-modes))
-               (or (derived-mode-p 'prog-mode)
-                   (member major-mode yank-indent-modes)))
-      (let ((transient-mark-mode nil))
-        (yank-advised-indent-function (region-beginning) (region-end)))))
-
-  ;; prelude-core.el
-  (defun indent-buffer ()
-    "Indent the currently visited buffer."
-    (interactive)
-    (indent-region (point-min) (point-max)))
-
-  ;; prelude-editing.el
-  (defcustom prelude-indent-sensitive-modes
-    '(coffee-mode python-mode slim-mode haml-mode yaml-mode)
-    "Modes for which auto-indenting is suppressed."
-    :type 'list)
-
-  (defun indent-region-or-buffer ()
-    "Indent a region if selected, otherwise the whole buffer."
-    (interactive)
-    (unless (member major-mode prelude-indent-sensitive-modes)
-      (save-excursion
-        (if (region-active-p)
-            (progn
-              (indent-region (region-beginning) (region-end))
-              (message "Indented selected region."))
-          (progn
-            (indent-buffer)
-            (message "Indented buffer.")))
-        (whitespace-cleanup))))
-
-  (global-set-key (kbd "C-c i") 'indent-region-or-buffer)
-
-  ;; add duplicate line function from Prelude
-  ;; taken from prelude-core.el
-  (defun prelude-get-positions-of-line-or-region ()
-    "Return positions (beg . end) of the current line
-  or region."
-    (let (beg end)
-      (if (and mark-active (> (point) (mark)))
-          (exchange-point-and-mark))
-      (setq beg (line-beginning-position))
-      (if mark-active
-          (exchange-point-and-mark))
-      (setq end (line-end-position))
-      (cons beg end)))
-
-  ;; smart openline
-  (defun prelude-smart-open-line (arg)
-    "Insert an empty line after the current line.
-  Position the cursor at its beginning, according to the current mode.
-  With a prefix ARG open line above the current line."
-    (interactive "P")
-    (if arg
-        (prelude-smart-open-line-above)
-      (progn
-        (move-end-of-line nil)
-        (newline-and-indent))))
-
-  (defun prelude-smart-open-line-above ()
-    "Insert an empty line above the current line.
-  Position the cursor at it's beginning, according to the current mode."
-    (interactive)
-    (move-beginning-of-line nil)
-    (newline-and-indent)
-    (forward-line -1)
-    (indent-according-to-mode))
-
-  (global-set-key (kbd "M-o") 'prelude-smart-open-line)
-  ;; (global-set-key (kbd "M-o") 'open-line)
-
-
-  (defun set-proxy()
-    (interactive)
-    (customize-set-variable 'url-proxy-services
-                            '(("http" . "127.0.0.1:7890")
-                              ("https" . "127.0.0.1:7890"))))
-  (defun unset-proxy()
-    (interactive)
-    (customize-set-variable 'url-proxy-services nil))
-#+end_src
-
-
-* 杂项
-
-** line number
-
-#+begin_src emacs-lisp
-
-  ;; line numbers, after Emacs 26
-  (global-display-line-numbers-mode)
+  (use-package highlight-indent-guides
+    :hook (prog-mode-hook . highlight-indent-guides-mode))
 #+end_src
 
 ** highlight-symbol
 
-#+begin_src emacs-lisp
+自动or手动高亮符号， 具体见: [[https://github.com/nschum/highlight-symbol.el][官网]]
 
-  ;; highlight-symbol
+#+begin_src emacs-lisp
   (use-package highlight-symbol
     :bind(("C-<f3>" . highlight-symbol)
           ("<f3>" . highlight-symbol-next)
@@ -692,17 +622,11 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     )
 #+end_src
 
-** ace-jump-mode
-
-#+begin_src emacs-lisp
-
-  ;;package ace-jump-mode
-  (use-package ace-jump-mode
-    :bind ("C-c <SPC>" . ace-jump-mode)
-    )
-#+end_src
-
 ** golden-ratio
+
+[[https://github.com/roman/golden-ratio.el][官网]]
+
+当有多个窗口(window)的时候，有些窗口大小不太适合编辑。这个包可以自动缩放当前的窗口到合适大小
 
 #+begin_src emacs-lisp
 
@@ -726,8 +650,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
                                                )))
 #+end_src
 
-
 ** centaur-tabs
+
+增加标签页功能，Emacs有自己的 =tab-bar-mode= ，但是这个感觉好用且好看一些，先用这个吧。具体见： [[https://github.com/roman/golden-ratio.el][官网]]
 
 #+begin_src emacs-lisp
   (use-package centaur-tabs
@@ -735,36 +660,22 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     :hook (emacs-startup . centaur-tabs-mode)
     :config
     (centaur-tabs-mode t)
-    (centaur-tabs-headline-match)
-    (centaur-tabs-group-by-projectile-project)
     :init
     (setq centaur-tabs-set-bar t
           centaur-tabs-height 32
           centaur-tabs-set-icons t
           centaur-tabs-set-modified-marker t
           centaur-tabs-modified-marker " ● "
-          centaur-tabs-style "rounded")
+          centaur-tabs-style "bar")
     :bind
     ("C-9" . centaur-tabs-backward)
     ("C-0" . centaur-tabs-forward)
     )
 #+end_src
 
-** all-the-icons
-
-#+begin_src emacs-lisp
-
-  (use-package all-the-icons
-    :if (display-graphic-p)
-    )
-
-  (use-package all-the-icons-dired
-    :after all-the-icons
-    :hook (dired-mode . all-the-icons-dired-mode)
-    )
-#+end_src
-
 ** rainbow-mode
+
+直接将颜色显示出来，具体见： [[https://github.com/emacsmirror/rainbow-mode][官网]]
 
 #+begin_src emacs-lisp
 
@@ -776,9 +687,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** rainbow-delimiters
 
+使用不同颜色，显示不同级别的匹配括号。具体见： [[https://github.com/Fanael/rainbow-delimiters][官网]]
+
 #+begin_src emacs-lisp
-
-
   (use-package rainbow-delimiters
     :init (progn (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
     :config
@@ -803,26 +714,13 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     )
 #+end_src
 
-** zeal-at-point
-
-#+begin_src emacs-lisp
-
-  (use-package zeal-at-point
-    :defer 10
-    :bind ("C-c d" . 'zeal-at-point)
-    :config
-    (add-to-list 'zeal-at-point-mode-alist '(python-mode . "python3"))
-    (add-to-list 'zeal-at-point-mode-alist '(c-mode . "C"))
-    (add-to-list 'zeal-at-point-mode-alist '(c++-mode . "C++"))
-    (add-to-list 'zeal-at-point-mode-alist '(cc-mode . ("C" "C++")))
-    (add-to-list 'zeal-at-point-mode-alist '(go-mode . "Go"))
-    )
-#+end_src
+* 杂项
 
 ** helpful
 
-#+begin_src emacs-lisp
+增强Emacs内建帮助系统，具体见： [[https://github.com/Wilfred/helpful][官网]]
 
+#+begin_src emacs-lisp
   (use-package helpful
     :config
     (global-set-key (kbd "C-h f") #'helpful-callable)
@@ -836,8 +734,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** nyan-mode
 
-#+begin_src emacs-lisp
+当前位置在buffer中的位置，使用一个彩虹猫展示。一切为了好看。 具体见： [[https://github.com/TeMPOraL/nyan-mode][官网]]
 
+#+begin_src emacs-lisp
   (use-package nyan-mode
     :custom
     (nyan-cat-face-number 3)
@@ -846,6 +745,8 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+end_src
 
 ** youdao-dictionary
+
+有道词典查询接口。具体见：[[https://github.com/xuchunyang/youdao-dictionary.el][官网]]
 
 #+begin_src emacs-lisp
 
@@ -858,8 +759,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** tramp
 
-#+begin_src emacs-lisp
+远程编辑，先这样吧
 
+#+begin_src emacs-lisp
   ;;tramp
   ;;;;;;;;;;;;;;;;;;;;;;;;;tramp setting;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;Enable you to edit the file which on the REMOTE machines;;;;;
@@ -877,10 +779,11 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** markdown-mode
 
+编辑markdown文件，具体见: [[https://jblevins.org/projects/markdown-mode/][官网]]
+
+先这样吧，用 =org-mode= 比较多。
+
 #+begin_src emacs-lisp
-
-
-  ;; Package markdown-mode
   (use-package markdown-mode
     :commands (markdown-mode gfm-mode)
     :mode (("README\\.md\\'" . gfm-mode)
@@ -889,9 +792,11 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     :init (setq markdown-command "multimarkdown"))
 #+end_src
 
-* 补全系统
+* 通用补全
 
 ** orderless
+
+提供模糊补全功能。具体见: [[https://github.com/oantolin/orderless][官网]]
 
 #+begin_src emacs-lisp
 
@@ -907,6 +812,8 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+end_src
 
 ** vertico
+
+重用Emacs内建功能，提供补全功能。具体见: [[https://github.com/minad/vertico][官网]]
 
 #+begin_src emacs-lisp
 
@@ -926,6 +833,12 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+end_src
 
 ** consult
+
+[[https://github.com/minad/consult][官网]]
+
+这个包基于Emacs补全函数 ~completing-read~ 函数，可以从候选列表中快速选择一个item。
+
+下面的配置基本来自官方建议
 
 #+begin_src emacs-lisp
 
@@ -1004,23 +917,25 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** Marginalia
 
-#+begin_src
+给minibuffer添加额外信息。见: [[https://github.com/minad/marginalia][官网]]
 
-;; Marginalia
-;; Enhances the minibuffer completions with additional informations
-(use-package marginalia
-  :custom
-  (marginalia-annotators
-   '(marginalia-annotators-heavy marginalia-annotators-light nil))
-  (marginalia-align 'left)
-  :init (marginalia-mode))
+#+begin_src emacs-lisp
+
+  ;; Marginalia
+  ;; Enhances the minibuffer completions with additional informations
+  (use-package marginalia
+    :custom
+    (marginalia-annotators
+     '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    (marginalia-align 'left)
+    :init (marginalia-mode))
 #+end_src
 
 ** all-the-icons-completion
 
-#+begin_src emacs-lisp
+给补全系统里的candidates加上icon，见: [[https://github.com/iyefrat/all-the-icons-completion][官网]]
 
-  ;; all-the-icons-completion
+#+begin_src emacs-lisp
   (use-package all-the-icons-completion
     :after (marginalia all-the-icons)
     :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
@@ -1028,11 +943,12 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     (all-the-icons-completion-mode))
 #+end_src
 
+* 编程
 
+** 补全系统
+*** corfu
 
-* Programming
-
-** corfu
+补全功能，之前用 =company-mode= ，但是太重量了。所以换成corfu，具体见： [[https://github.com/minad/corfu][官网]]
 
 #+begin_src emacs-lisp
 
@@ -1054,12 +970,11 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     :config (global-corfu-mode))
 #+end_src
 
-** yasnippet
+*** yasnippet
+
+模版补全，lsp-bridge也需要这个包。[[https://github.com/joaotavora/yasnippet][官网]]
 
 #+begin_src emacs-lisp
-
-  ;; Package: yasnippet
-  ;; Yet another snippet extension for Emacs
   (use-package yasnippet
     :bind (:map yas-keymap
                 ("C-i" . yas-next-field-or-maybe-expand))
@@ -1070,89 +985,90 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     )
 #+end_src
 
-** posframe
+*** posframe
+
+弹出一个posframe(只是一个子frame)。lsp-bridge需要这个包 。[[https://github.com/tumashu/posframe][官网]]
 
 #+begin_src emacs-lisp
-
-
-  ;; posframe - needed by lsp-bridge
   (use-package posframe)
 #+end_src
 
-** lsp-bridge
+*** lsp-bridge
+
+LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bridge，加速补全。
+
+具体见: [[https://github.com/manateelazycat/lsp-bridge][官网]]
 
 #+begin_src emacs-lisp
-
   ;; lsp-bridge
-  (use-package lsp-bridge
-    :load-path "~/.emacs.d/elpa/lsp-bridge"
-    :bind
-    (:map lsp-bridge-mode-map
-          ("M-." . lsp-bridge-find-def)
-          ("M-," . lsp-bridge-return-from-def)
-          ("M-?" . lsp-bridge-find-references)
-          ("M-i" . lsp-bridge-lookup-documentation)
-          ("M-n" . lsp-bridge-popup-documentation-scroll-up)
-          ("M-p" . lsp-bridge-popup-documentation-scroll-down)
-          ("s-C-n" . lsp-bridge-jump-to-next-diagnostic)
-          ("s-C-p" . lsp-bridge-jump-to-prev-diagnostic))
-    :config
-    (setq lsp-bridge-auto-format-code-idle 5)
-    (setq lsp-bridge-enable-auto-format-code t)
-    (setq lsp-bridge-enable-log nil)
-    (setq lsp-bridge-enable-signature-help t)
-    ;; (setq lsp-bridge-completion-provider 'corfu)
-    (global-lsp-bridge-mode)
-    )
-
-  ;; (add-to-list 'load-path "~/.emacs.d/elpa/lsp-bridge")
-  ;; (require 'lsp-bridge)
-  ;; (global-lsp-bridge-mode)
-
-#+end_src
-
-** cape
-
-#+begin_src emacs-lisp
-
-  ;; (use-package cape
-  ;;   :bind (("C-c p p" . completion-at-point) ;capf
-  ;;          ("C-c p t" . completion-tag)      ;etags
-  ;;          ("C-c p d" . cape-dabbrev)        ;or dabbrev-completion
-  ;;          ("C-c p h" . cape-history)
-  ;;          ("C-c p f" . cape-file)
-  ;;          ("C-c p k" . cape-keyword)
-  ;;          ("C-c p s" . cape-symbol)
-  ;;          ("C-c p a" . cape-abbrev)
-  ;;          ("C-c p i" . cape-ispell)
-  ;;          ("C-c p l" . cape-line)
-  ;;          ("C-c p w" . cape-dict)
-  ;;          ;; ("C-c p \\" . cape-tex)
-  ;;          ;; ("C-c p _" . cape-tex)
-  ;;          ;; ("C-c p ^" . cape-tex)
-  ;;          ;; ("C-c p &" . cape-sgml)
-  ;;          ;; ("C-c p r" . cape-rfc1345)
-  ;;          )
-  ;;   :init
-  ;;   ;; Add completion-at-point-function, used by completion-at-point
-  ;;   (add-to-list 'completion-at-point-functions #'cape-file)
-  ;;   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  ;; (use-package lsp-bridge
+  ;;   :load-path "~/.emacs.d/elpa/lsp-bridge"
+  ;;   :bind
+  ;;   (:map lsp-bridge-mode-map
+  ;;         ("M-." . lsp-bridge-find-def)
+  ;;         ("M-," . lsp-bridge-return-from-def)
+  ;;         ("M-?" . lsp-bridge-find-references)
+  ;;         ("M-i" . lsp-bridge-lookup-documentation)
+  ;;         ("M-n" . lsp-bridge-popup-documentation-scroll-up)
+  ;;         ("M-p" . lsp-bridge-popup-documentation-scroll-down)
+  ;;         ("s-C-n" . lsp-bridge-jump-to-next-diagnostic)
+  ;;         ("s-C-p" . lsp-bridge-jump-to-prev-diagnostic))
+  ;;   :config
+  ;;   (setq lsp-bridge-auto-format-code-idle 5)
+  ;;   (setq lsp-bridge-enable-auto-format-code t)
+  ;;   (setq lsp-bridge-enable-log nil)
+  ;;   (setq lsp-bridge-enable-signature-help t)
+  ;;   ;; (setq lsp-bridge-completion-provider 'corfu)
+  ;;   (global-lsp-bridge-mode)
   ;;   )
+
+  (add-to-list 'load-path "~/.emacs.d/elpa/lsp-bridge")
+  (require 'lsp-bridge)
+  (global-lsp-bridge-mode)
 #+end_src
 
-* programming languages
+** 文档帮助
 
-** C/C++
+*** zeal-at-point
+
+Emacs和zealdoc接口，直接在zeal中查询文档，当然系统商首先要安装zealdoc这个软件，具体见：[[https://github.com/jinzhu/zeal-at-point][官网]]
 
 #+begin_src emacs-lisp
+  (use-package zeal-at-point
+    :defer 10
+    :bind ("C-c d" . 'zeal-at-point)
+    :config
+    (add-to-list 'zeal-at-point-mode-alist '(python-mode . "python3"))
+    (add-to-list 'zeal-at-point-mode-alist '(c-mode . "C"))
+    (add-to-list 'zeal-at-point-mode-alist '(c++-mode . "C++"))
+    (add-to-list 'zeal-at-point-mode-alist '(cc-mode . ("C" "C++")))
+    (add-to-list 'zeal-at-point-mode-alist '(go-mode . "Go"))
+    )
+#+end_src
 
+*** eldoc
+
+是一个 =minor mode= ，在echo area里显示函数参数
+
+#+begin_src emacs-lisp
+  (use-package eldoc
+    :diminish eldoc-mode
+    :config (add-hook 'prog-mode-hook 'eldoc-mode))
+#+end_src
+
+
+** programming languages
+
+
+*** C/C++
+
+#+begin_src emacs-lisp
   (use-package cc-mode
     :mode (("\\.hpp\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
            ("\\.c\\'" . c-mode)
            ("\\.h\\'" . c-mode)
            ("\\.m\\'" . c-mode)
            ("\\.mm\\'" . c-mode))
-
     :config
     ;; Available C style:
     ;; “gnu”: The default style for GNU projects
@@ -1171,6 +1087,10 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     )
 #+end_src
 
+**** function-args - DISABLED
+
+暂时先disable， [[https://github.com/abo-abo/function-args][官网]]
+
 #+begin_src emacs-lisp
 
   ;; Package function-args
@@ -1181,153 +1101,19 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     )
 #+end_src
 
-** eldoc
+*** assembler
+
+汇编语言模式。 [[https://github.com/skeeto/nasm-mode][官网]]
 
 #+begin_src emacs-lisp
-
-  ;; Package eldoc
-  (use-package eldoc
-    :diminish eldoc-mode
-    :config (add-hook 'prog-mode-hook 'eldoc-mode))
-#+end_src
-
-** flycheck
-
-#+begin_src emacs-lisp
-
-  ;; Package -flycheck
-  ;; On-the-fly syntax checking
-  (use-package flycheck
-    :hook (prog-mode . flycheck-mode)
-    :diminish (flycheck-mode . "f")
-    :init (setq-default flycheck-check-syntax-automatically '(save-mode-enabled))
-    :bind
-    (("C-c e n" . flycheck-next-error)
-     ("C-c e p" . flycheck-previour-error)
-     ("C-c e l" . flycheck-list-errors))
-    :config
-    (aset flycheck-error-list-format 5 '("Message" 0 t))
-    )
-#+end_src
-
-** whitespace
-
-#+begin_src emacs-lisp
-
-  ;; activate whitespace-mode to view all whitespace characters
-  (global-set-key (kbd "C-c w") 'whitespace-mode)
-
-  ;; show unncessary whitespace that can mess up your diff
-  (add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
-
-#+end_src
-
-** misc
-
-#+begin_src emacs-lisp
-
-  ;; use space to indent by default
-  (setq-default indent-tabs-mode nil)
-  ;; Compilation
-  (global-set-key (kbd "<f5>") (lambda ()
-                                 (interactive)
-                                 (setq-local compilation-read-command nil)
-                                 (call-interactively 'compile)))
-#+end_src
-
-** projectile
-
-#+begin_src emacs-lisp
-
-
-  ;; Package: projejctile
-  ;; Manage and navigate projects in Emacs easily
-  (use-package projectile
-    :requires (helm)
-    :bind (:map projectile-mode-map
-                ("C-c p" . 'projectile-command-map))
-    :config
-    (setq projectile-enable-caching t
-          projectile-indexing-method 'alien
-          projectile-completion-system 'helm)
-    (projectile-mode +1))
-#+end_src
-
-** assembler
-
-#+begin_src emacs-lisp
-
-  ;;nasm-mode
   (use-package nasm-mode
     :mode "\\.\\(nasm\\|s\\|asm\\)$"
     )
 #+end_src
 
-** git
+*** python
 
-#+begin_src emacs-lisp
-
-  ;;magit package
-  (use-package magit
-    :commands magit-get-top-dir
-    :bind (("C-x g s" . magit-status)
-           ("C-x g f" . magit-log-buffer-file)
-           ("C-x g x" . magit-checkout)
-           ("C-x g c" . magit-commit)
-           ("C-x g p" . magit-push)
-           ("C-x g u" . magit-pull)
-           ("C-x g e" . magit-ediff-resolve)
-           ("C-x g r" . magit-rebase-interactive))
-    :config (magit-auto-revert-mode)
-    )
-#+end_src
-
-** git-gutter
-
-#+begin_src emacs-lisp
-
-  (use-package git-gutter+
-    :config
-    (progn
-      (global-git-gutter+-mode)))
-#+end_src
-
-** cmake-mode
-
-#+begin_src emacs-lisp
-
-  ;; Package cmake-mode
-  ;; major-mode for editing CMake sources
-  (use-package cmake-mode
-    :mode ("CMakeLists.txt" "\\.cmake\\'")
-    )
-#+end_src
-
-** gud
-
-#+begin_src emacs-lisp
-
-  (use-package gud
-    :commands gud-gdb
-    :bind (("<f9>" . gud-cont)
-           ("<f10>" . gud-next)
-           ("<f11>" . gud-step)
-           ("S-<f11>" . gud-finish))
-    :init
-    (defun show-debugger ()
-      (interactive)
-      (let ((gud-buf
-             (catch 'found
-               (dolist (buf (buffer-list))
-                 (if (string-match "\\*gud-" (buffer-name buf))
-                     (throw 'found buf))))))
-        if (gud-buf
-            (switch-to-buffer-other-window gud-buf)
-            (call-interactively 'gud-gdb))))
-    )
-#+end_src
-
-** python
+设置python-mode
 
 #+begin_src emacs-lisp
 
@@ -1342,6 +1128,10 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     )
 #+end_src
 
+**** python虚拟环境
+
+[[https://github.com/jorgenschaefer/pyvenv][官网]]
+
 #+begin_src emacs-lisp
 
   ;; python3.3 build-in virtualenv environments
@@ -1353,47 +1143,35 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (setenv "WORKON_HOME" "/home/wangchang/Programme/pythonCode")
 #+end_src
 
-#+begin_src emacs-lisp
+*** go
 
-  ;;Package lsp-python-ms
-  ;; (use-package lsp-python-ms
-  ;;   :ensure t
-  ;;   :hook (python-mode . (lambda ()
-  ;;                          (require 'lsp-python-ms)
-  ;;                          (lsp)))
-  ;;   ;; :init (setq lsp-python-ms-executable "~/.emacs.d/pylsms/Microsoft.Python.LanguageServer")
-  ;;   ;; :init (setq lsp-python-ms-executable "/usr/bin/mspyls")
-  ;;   :init (setq lsp-python-ms-auto-install-server t)
-  ;;   )
-
-#+end_src
-
-** go
+设置go-mode
 
 #+begin_src emacs-lisp
-
   (use-package go-mode
     :mode (("\\.go\\'" . go-mode))
     ;; :init (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
     )
 #+end_src
 
-#+begin_src emacs-lisp
+**** go-eldoc
 
+给go语言提供eldoc功能。 [[https://github.com/emacsorphanage/go-eldoc][官网]]
+
+#+begin_src emacs-lisp
   (use-package go-eldoc
     :ensure t
     :defer
     :init
-    (add-hook 'go-mode-hook 'go-eldoc-setup)
-    )
+    (add-hook 'go-mode-hook 'go-eldoc-setup))
   (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
 #+end_src
 
-** web
+*** web
+
+web开发配置。不太写前端，先这样凑活用着吧
 
 #+begin_src emacs-lisp
-
-  ;; Package web-mode
   (use-package web-mode
     :ensure t
     :config
@@ -1423,16 +1201,16 @@ Instead of imagining that our main task is to instruct a computer what to do, le
       "Hooks for Web mode."
       (setq web-mode-markup-indent-offset 2)
       )
-    (add-hook 'web-mode-hook  'my-web-mode-hook)
-
-    )
+    (add-hook 'web-mode-hook  'my-web-mode-hook))
 #+end_src
 
-** javascript
+*** javascript
+
+增强JavaScript编辑模式。 [[https://github.com/mooz/js2-mode][官网]]
+
+不太写js，先这样
 
 #+begin_src emacs-lisp
-
-  ;;js2-mode --- improved mode on editting .js
   (use-package js2-mode
     :ensure t
     :mode "\\.js\\'"
@@ -1459,35 +1237,132 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     )
 #+end_src
 
-** rust
+*** rust
+
+rust语言
 
 #+begin_src emacs-lisp
-
   (use-package rust-mode)
+#+end_src
 
+** 错误自动检查
 
-  ;; (use-package rustic
-  ;;   :ensure t
-  ;;   :config
-  ;;   (setq rustic-format-on-save t)
-  ;;   )
+*** flycheck
 
-  ;; (defun rustic-mode-auto-save-hook ()
-  ;;   "Enable auto-saving in rustic-mode buffers."
-  ;;   (when buffer-file-name
-  ;;     (setq-local compilation-ask-about-save nil)))
-  ;; (add-hook 'rust-mode-hook 'rustic-mode-auto-save-hook)
+自动检查语法, [[https://www.flycheck.org/][官网]]
 
-  ;; (use-package cargo
-  ;;   :ensure t
-  ;;   :hook
-  ;;   (rust-mode . cargo-minor-mode)
-  ;;   )
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :init (global-flycheck-mode)
+    :bind
+    (("C-c e n" . flycheck-next-error)
+     ("C-c e p" . flycheck-previour-error)
+     ("C-c e l" . flycheck-list-errors))
+    )
+#+end_src
 
+*** flycheck-rust
+
+[[https://github.com/flycheck/flycheck-rust][官网]]
+
+#+begin_src emacs-lisp
   (use-package flycheck-rust
     :ensure t
     :config (add-hook 'rust-mode-hook #'flycheck-rust-setup)
     )
+#+end_src
+
+** 项目管理
+
+*** projectile
+
+管理项目相关特性。具体见： [[https://github.com/bbatsov/projectile][官网]]
+
+#+begin_src emacs-lisp
+  ;; Manage and navigate projects in Emacs easily
+  (use-package projectile
+    :requires (helm)
+    :bind (:map projectile-mode-map
+                ("C-c p" . 'projectile-command-map))
+    :config
+    (setq projectile-enable-caching t
+          projectile-indexing-method 'alien
+          projectile-completion-system 'helm)
+    (projectile-mode +1))
+#+end_src
+
+** 版本控制相关
+
+*** magit
+
+[[https://magit.vc/][官网]]
+
+Emacs的git客户端
+
+#+begin_src emacs-lisp
+  (use-package magit
+    :commands magit-get-top-dir
+    :bind (("C-x g s" . magit-status)
+           ("C-x g f" . magit-log-buffer-file)
+           ("C-x g x" . magit-checkout)
+           ("C-x g c" . magit-commit)
+           ("C-x g p" . magit-push)
+           ("C-x g u" . magit-pull)
+           ("C-x g e" . magit-ediff-resolve)
+           ("C-x g r" . magit-rebase-interactive))
+    :config (magit-auto-revert-mode)
+    )
+#+end_src
+
+*** git-gutter
+
+[[https://github.com/emacsorphanage/git-gutter][官网]]
+
+Emacs中实时显示修改
+
+#+begin_src emacs-lisp
+
+  (use-package git-gutter+
+    :config
+    (progn
+      (global-git-gutter+-mode)))
+#+end_src
+
+** 其他配置
+
+*** cmake-mode
+
+#+begin_src emacs-lisp
+  (use-package cmake-mode
+    :mode ("CMakeLists.txt" "\\.cmake\\'")
+    )
+#+end_src
+
+** 调试
+
+*** gud
+
+先用这个吧。以后换成dap吧
+
+#+begin_src emacs-lisp
+  ;; (use-package gud
+  ;;   :commands gud-gdb
+  ;;   :bind (("<f9>" . gud-cont)
+  ;;          ("<f10>" . gud-next)
+  ;;          ("<f11>" . gud-step)
+  ;;          ("S-<f11>" . gud-finish))
+  ;;   :init
+  ;;   (defun show-debugger ()
+  ;;     (interactive)
+  ;;     (let ((gud-buf
+  ;;            (catch 'found
+  ;;              (dolist (buf (buffer-list))
+  ;;                (if (string-match "\\*gud-" (buffer-name buf))
+  ;;                    (throw 'found buf))))))
+  ;;       if (gud-buf
+  ;;           (switch-to-buffer-other-window gud-buf)
+  ;;           (call-interactively 'gud-gdb))))
+  ;;   )
 #+end_src
 
 * Org-mode
@@ -1541,7 +1416,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 ** org-bullets
 
 #+begin_src emacs-lisp
-
   ;; really need this package to set the org-bullets by yourself
   (use-package org-bullets
     :init (add-hook 'org-mode-hook 'org-bullets-mode)
@@ -1563,11 +1437,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     (setq org-ellipsis "▼"))
 #+end_src
 
-
 ** org-tempo
 
 #+begin_src emacs-lisp
-
   ;; for '<s/e/c... TAB'  completion
   ;; or "C-c C-,"
   (require 'org-tempo)
@@ -1582,7 +1454,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 ** ob-go
 
 #+begin_src emacs-lisp
-
   (use-package ob-go)
 #+end_src
 
@@ -1601,7 +1472,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 ** toc-org
 
 #+begin_src emacs-lisp
-
   ;; maintain TOC(table of contents) automatically
   ;; put :TOC: tag to a heading, run M-x toc-org-insert-toc
   (use-package toc-org
@@ -1611,7 +1481,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 ** org-mime
 
 #+begin_src emacs-lisp
-
   ;; WYSIWYG, html mime composition using org-mode
   (use-package org-mime)
 #+end_src
@@ -1619,7 +1488,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 ** org-download
 
 #+begin_src emacs-lisp
-
   ;; TODO
   (use-package org-download)
 #+end_src
@@ -1627,14 +1495,13 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 ** org-roam
 
 #+begin_src emacs-lisp
-
   ;; org-roam
   ;; org-roam is Version 2 now, So we use org-roam-ui for graphic,
   ;; not org-roam-server which only support org-roam Version 1
   (use-package org-roam
     :custom
     (org-roam-directory "~/Google Driver/brain-notes")
-    (org-roam-db-location (expand-file "org-roam.db" "~/Google Driver/brain-notes"))
+    (org-roam-db-location "~/Google Driver/brain-notes/org-roam.db")
     (org-roam-db-gc-threshold most-positive-fixnum)
     (org-roam-completion-everywhere t)
     (org-roam-db-autosync-mode)
@@ -1645,6 +1512,8 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     :config (org-roam-setup)
     )
 #+end_src
+
+** org-roam-ui
 
 #+begin_src emacs-lisp
   ;; org-roam-ui

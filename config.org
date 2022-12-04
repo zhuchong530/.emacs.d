@@ -30,11 +30,29 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 * general settings
 
+** 注释
+
+为了符合Emacs规范，文件最前面必须是以下内容
+
+#+begin_src emacs-lisp
+  ;;; config.el --- Cathy.Chang's Emacs configuration -*- lexical-binding: t -*-
+
+  ;; Copyright (C) 2008-2022 Cathy Chang
+
+  ;; Author: Cathy.Chang <xxxxxxx@gmail.com>
+  ;; Keywords: internal
+
+  ;;; Commentary:
+  ;; A emacs config file generated from config.org automaticaly
+
+  ;;; Code:
+#+end_src
+
 ** 版本检查
 
 检查Emacs版本，要求Emacs >= 26
 
-#+begin_src emacs-lisp  
+#+begin_src emacs-lisp
   (when (version< emacs-version "26")
     (error "Requires at least GNU Emacs 26, but you're running %s" emacs-version))
 #+end_src
@@ -53,7 +71,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (setenv "LC_CTYPE" "en_US.UTF-8")
 #+end_src
 
-** 包管理器
+** 配置包管理的源
 
 #+begin_src emacs-lisp
   (require 'package)
@@ -238,6 +256,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
    ;; highlight syntax
    global-font-lock-mode t
    )
+  (defalias 'yes-or-no-p 'y-or-n-p)
   ;; default to 4 visible spaces to display a tab
   (setq-default tab-width 4)
   (set-fringe-mode 10)
@@ -250,7 +269,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+begin_src emacs-lisp
   ;; Feature mode
   (setq column-number-mode t
-        display-battery-mode t
         display-time-day-and-date t
         size-indication-mode -1)
 #+end_src
@@ -370,7 +388,10 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     (setq doom-modeline-icon (display-graphic-p))
     (setq doom-modeline-major-mode-icon t)
     (setq doom-modeline-buffer-modification-icon t)
-    ;; 不显示换行和编码(节省空间)
+    (setq doom-modeline-hud t)
+    (setq doom-modeline-time-icon t)
+    (setq doom-modeline-buffer-modification-icon t)
+    (setq doom-modeline-env-version t)
     (setq doom-modeline-buffer-encoding t))
 #+end_src
 
@@ -395,7 +416,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 *** all-the-icons
 
-
 #+begin_src emacs-lisp
   (use-package all-the-icons
     :if (display-graphic-p)
@@ -418,6 +438,21 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+end_src
 
 * 编辑器增强
+
+** 基础
+
+[[https://github.com/bbatsov/crux][官网]]，这包提供一些常用函数扩展，从Emacs Prelude里面来
+
+#+begin_src emacs-lisp
+  (use-package crux
+  :bind (("C-a" . crux-move-beginning-of-line)))
+#+end_src
+
+保存时移除每一行最后的空白字符
+
+#+begin_src emacs-lisp
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+end_src
 
 ** which-key
 
@@ -477,53 +512,17 @@ Emacs的 =minor mode= ，用来移动光标到任意位置（你指定的）
     (add-hook 'after-init-hook 'volatile-highlights-mode)
     :config
     (set-face-attribute 'vhl/default-face nil
-                        :underline "light slate gray"))
+                        :underline "slate gray"))
 #+end_src
 
-** clean-aindent-mode - DISABLED
-
-[[https://github.com/pmarinov/clean-aindent-mode][官网]]
-
-这个包不太用，先disable了
-
-#+begin_src emacs-lisp
-  ;; Package: clean-aindent-mode
-  ;; Simple indent and unindent, trims indent white-space
-  (use-package clean-aindent-mode
-    :disabled
-    :commands (clean-aindent-mode)
-    :init
-    (add-hook 'prog-mode-hook 'clean-aindent-mode)
-    )
-#+end_src
-
-** ws-butler - DISABLED
-
-[[https://github.com/lewang/ws-butler][官网]]
-
-这个包不太用，先disable了
-
-#+begin_src emacs-lisp
-
-  ;; PACKAGE: ws-butler
-  ;; Unobtrusively remove trailing whitespace.
-  (use-package ws-butler
-    :disabled
-    :hook (prog-mode . ws-butler-mode))
-#+end_src
-
-** undo-tree - DISABLED
+** undo-tree
 
 [[https://www.dr-qubit.org/undo-tree.html][官网]]
 
-这个包不太用，先disable了
+将undo历史可视化成一个tree，方便navigation
 
 #+begin_src emacs-lisp
-
-  ;; Package: undo-tree
-  ;; Treat undo history as a tree
   (use-package undo-tree
-    :disabled
     :init (progn
             (global-undo-tree-mode)
             (setq undo-tree-visualizer-timestamps t)
@@ -823,10 +822,8 @@ built-in功能，Emacs 24引入
     ;; (setq vertico-scroll-margin 0)
     ;; Show more candidates
     (setq vertico-count 20)
-
     ;; Grow and shrink the Vertico minibuffer
     (setq vertico-resize t)
-
     ;; Optionally enable cycling for `vertico-next' and `vertico-previous'
     ;; (setq vertico-cycle t)
     )
@@ -1242,7 +1239,11 @@ web开发配置。不太写前端，先这样凑活用着吧
 rust语言
 
 #+begin_src emacs-lisp
-  (use-package rust-mode)
+  (use-package rust-mode
+    :defer t
+    :custom
+    (rust-format-on-save t)
+    )
 #+end_src
 
 ** 错误自动检查
@@ -1523,5 +1524,13 @@ Emacs中实时显示修改
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
+          org-roam-ui-open-on-start nil))
+#+end_src
+
+
+* 结尾
+
+#+begin_src emacs-lisp
+  (provide 'config.el)
+  ;;; init.el ends here
 #+end_src

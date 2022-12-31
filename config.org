@@ -17,16 +17,16 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 在 =init.el= 文件中,使用 ~org-babel-load-file~ 引入org文件, 例如：
 
 #+begin_quote
-(org-babel-load-file "~/.emacs.d/emacs-config.org")
+(org-babel-load-file "~/.emacs.d/config.org")
 #+end_quote
 
 上面这条语句实际是通过 ~org-babel-tangle~ 将文件中的配置代码导出到文件 =~/.emacs.d/emacs-config.el= 。然后使用 ~load-file~ 加载结果文件，效果如同：
 
 #+begin_quote
-(load-file "~/.emacs.d/emacs-config.org")
+(load-file "~/.emacs.d/config.org")
 #+end_quote
 
-但是，它会检查 =emacs-config.org= 和 =emacs-config.el= 文件的时间戳， 如果 =emacs-config.org= 文件有变化，会自动重新生成 =emacs-config.el= 文件
+但是，它会检查 =config.org= 和 =config.el= 文件的时间戳， 如果 =config.org= 文件有变化，会自动重新生成 =config.el= 文件
 
 * general settings
 
@@ -43,7 +43,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   ;; Keywords: internal
 
   ;;; Commentary:
-  ;; A emacs config file generated from config.org automaticaly
+  ;; A Emacs config file generated from config.org automaticaly
 
   ;;; Code:
 #+end_src
@@ -278,22 +278,22 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+begin_src emacs-lisp
   ;; Save backup files in a dedicated directory
   (use-package desktop
-    :hook ((after-init . desktop-read)
-           (after-init . desktop-save-mode))
-    :custom ((desktop-base-file-name ".desktop")
-             (desktop-base-lock-name ".desktop.lock")
-             (desktop-restore-eager 8)
-             (desktop-restore-frames nil)))
+    :config (desktop-save-mode)
+    :custom
+    (desktop-restore-eager 1)
+    (desktop-lazy-idle-delay 1)
+    (desktop-lazy-verbose nil)
+    )
 #+end_src
 
 *** 保存编辑位置
 
 打开文件，回到上次编辑位置
 
-#+begin_src
+#+begin_src emacs-lisp
   ;; history
   (use-package saveplace
-    :config (save-place-mode 1))
+    :config (save-place-mode))
 #+end_src
 
 *** 保存minibuff历史
@@ -1490,7 +1490,16 @@ Emacs中实时显示修改
 
 #+begin_src emacs-lisp
   ;; TODO
-  (use-package org-download)
+  (use-package org-download
+    :after org
+    :custom
+    (org-download-method 'directory)
+    (org-download-timestamp "%Y%m%d-%H%M%S_")
+    (setq-default org-download-heading-lvl nil)
+    (setq-default org-download-image-dir "./images")
+    :config
+    (require 'org-download)
+    )
 #+end_src
 
 ** org-roam

@@ -355,7 +355,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     (setq doom-themes-enable-bold t       ; if nil,  bold is universally disabled
           doom-themes-enable-italic t)    ; if nil, italics is universally disabled
     (load-theme 'doom-dracula t)
-    (load-theme 'doomacario-light t)      ; a ligh theme
+    ;; (load-theme 'doom-acario-light t)      ; a ligh theme
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
     ;; Corrects (and improves) org-mode's native fontification.

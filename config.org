@@ -344,18 +344,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 * UI
 
-** theme - Obsoleted
-
-*废弃的了。* 直接使用 ~doom-themes~
-
-#+begin_src emacs-lisp
-
-  ;; load-theme
-  ;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-  ;; (load-theme 'dracula t)                ;dark theme, purple background
-  ;; (load-theme 'doom-dark+ t)
-  ;; (load-theme 'tomorrow-night-paradise t)    ;dark theme, black background
-#+end_src
 
 ** doom-themes
 

@@ -392,12 +392,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   ;; (set-frame-font "Fira Code-12")
   (set-face-attribute
    'default nil
-   :family "YaHei Consolas Hybrid"
-   ;; :family "JetBrains Mono"
-   ;; :family "MesloLGL Nerd Font Mono"
-   ;; :family "Monaco"
-   ;; :family "Fira Code"
-   :height 120
+   ;; :family "YaHei Consolas Hybrid"
+   :family "Fira Code"
+   :height 130
    :weight 'normal)
 #+end_src
 
@@ -930,7 +927,6 @@ built-in功能，Emacs 24引入
 补全功能，之前用 =company-mode= ，但是太重量了。所以换成corfu，具体见： [[https://github.com/minad/corfu][官网]]
 
 #+begin_src emacs-lisp
-
   (use-package corfu
     :after (orderless lsp-bridge)
     :bind (:map corfu-map
@@ -1063,20 +1059,6 @@ Emacs和zealdoc接口，直接在zeal中查询文档，当然系统商首先要�
     (setq c-set-style "gnu") ;; set style to "k&r"
     (setq c-basic-offset 4)
     (setq tab-width 4) ; or any other preferred value
-    )
-#+end_src
-
-**** function-args - DISABLED
-
-暂时先disable， [[https://github.com/abo-abo/function-args][官网]]
-
-#+begin_src emacs-lisp
-
-  ;; Package function-args
-  ;; C++ completion for GNU Emacs
-  (use-package function-args
-    :disabled
-    :config (fa-config-default)
     )
 #+end_src
 
@@ -1436,6 +1418,8 @@ Emacs中实时显示修改
 
 ** ob-go
 
+[[https://github.com/pope/ob-go][官网]] 这个包使org-babel支持执行go代码
+
 #+begin_src emacs-lisp
   (use-package ob-go)
 #+end_src
@@ -1453,6 +1437,8 @@ Emacs中实时显示修改
 #+end_src
 
 ** toc-org
+
+[[https://github.com/snosov1/toc-org][官网]]
 
 #+begin_src emacs-lisp
   ;; maintain TOC(table of contents) automatically
@@ -1501,7 +1487,7 @@ Emacs中实时显示修改
     :bind (("C-c n l" . org-roam-buffer-toggle)
            ("C-c n f" . org-roam-node-find)
            ("C-c n i" . org-roam-node-insert))
-    :config (org-roam-setup)
+    :config (org-roam-db-autosync-enable)
     )
 #+end_src
 
@@ -1522,6 +1508,6 @@ Emacs中实时显示修改
 * 结尾
 
 #+begin_src emacs-lisp
-  (provide 'config.el)
-  ;;; init.el ends here
+  (provide 'config)
+  ;;; config.el ends here
 #+end_src

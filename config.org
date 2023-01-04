@@ -531,7 +531,7 @@ build-in功能
      uniquify-separator ":"
      uniquify-after-kill-buffer-p t
      uniquify-ignore-buffers-re "^\\*")
-  ;; )
+    ;; )
 #+end_src
 
 ** 括号配对
@@ -927,22 +927,23 @@ built-in功能，Emacs 24引入
 补全功能，之前用 =company-mode= ，但是太重量了。所以换成corfu，具体见： [[https://github.com/minad/corfu][官网]]
 
 #+begin_src emacs-lisp
-  (use-package corfu
-    :after (orderless lsp-bridge)
-    :bind (:map corfu-map
-                ("M-n" . corfu-next)
-                ("M-p" . corfu-previous)
-                ("TAB" . corfu-insert))
-    :custom
-    ;; (corfu-cycle t)
-    ;; auto completion
-    (corfu-auto t)
-    (corfu-auto-delay 0.25)
-    (corfu-auto-prefix 2)
-    (corfu-max-width 110)
-    (corfu-preview-current nil)
-    (corfu-echo-documentation t)
-    :config (global-corfu-mode))
+  ;; (use-package corfu
+  ;;   :disabled t
+  ;;   :after (orderless lsp-bridge)
+  ;;   :bind (:map corfu-map
+  ;;               ("M-n" . corfu-next)
+  ;;               ("M-p" . corfu-previous)
+  ;;               ("TAB" . corfu-insert))
+  ;;   :custom
+  ;;   ;; (corfu-cycle t)
+  ;;   ;; auto completion
+  ;;   (corfu-auto t)
+  ;;   (corfu-auto-delay 0.25)
+  ;;   (corfu-auto-prefix 2)
+  ;;   (corfu-max-width 110)
+  ;;   (corfu-preview-current nil)
+  ;;   (corfu-echo-documentation t)
+  ;;   :config (global-corfu-mode))
 #+end_src
 
 *** yasnippet
@@ -975,9 +976,9 @@ LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bri
 具体见: [[https://github.com/manateelazycat/lsp-bridge][官网]]
 
 #+begin_src emacs-lisp
-  ;; lsp-bridge
   (use-package lsp-bridge
     :load-path "~/.emacs.d/elpa/lsp-bridge"
+    :hook (after-init . global-lsp-bridge-mode)
     :bind
     (:map lsp-bridge-mode-map
           ("M-." . lsp-bridge-find-def)
@@ -993,8 +994,6 @@ LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bri
     (setq lsp-bridge-enable-auto-format-code t)
     (setq lsp-bridge-enable-log nil)
     (setq lsp-bridge-enable-signature-help t)
-    ;; (setq lsp-bridge-completion-provider 'corfu)
-    (global-lsp-bridge-mode)
     )
 
   ;; (add-to-list 'load-path "~/.emacs.d/elpa/lsp-bridge")

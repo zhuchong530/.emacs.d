@@ -23,7 +23,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 上面这条语句实际是通过 ~org-babel-tangle~ 将文件中的配置代码导出到文件 =~/.emacs.d/emacs-config.el= 。然后使用 ~load-file~ 加载结果文件，效果如同：
 
 #+begin_quote
-(load-file "~/.emacs.d/config.org")
+(load-file "~/.emacs.d/config.el")
 #+end_quote
 
 但是，它会检查 =config.org= 和 =config.el= 文件的时间戳， 如果 =config.org= 文件有变化，会自动重新生成 =config.el= 文件
@@ -1203,6 +1203,7 @@ rust语言
 
 #+begin_src emacs-lisp
   (use-package rust-mode
+    :mode "\\.rs\\'"
     :defer t
     :custom
     (rust-format-on-save t)
@@ -1443,7 +1444,9 @@ Emacs中实时显示修改
   ;; maintain TOC(table of contents) automatically
   ;; put :TOC: tag to a heading, run M-x toc-org-insert-toc
   (use-package toc-org
-    :after org)
+    :after org
+    :hook (org-mode . toc-org-mode)
+    )
 #+end_src
 
 ** org-mime
@@ -1482,7 +1485,7 @@ Emacs中实时显示修改
     (org-roam-db-gc-threshold most-positive-fixnum)
     (org-roam-completion-everywhere t)
     (org-roam-db-autosync-mode)
-    (add-hook 'after-init-hook 'org-roam-mode)
+    ;; (add-hook 'after-init-hook 'org-roam-mode)
     :bind (("C-c n l" . org-roam-buffer-toggle)
            ("C-c n f" . org-roam-node-find)
            ("C-c n i" . org-roam-node-insert))

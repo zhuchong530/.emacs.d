@@ -1,6 +1,8 @@
-;; early-init.el --- Early Init File
-;; Speed up the Emacs startup time, Some parts are stolen from doom-emacs
-
+;;; package -- Summary
+;;; Commentary:
+;;; early-init.el --- Early Init File
+;;; Speed up the Emacs startup time, Some parts are stolen from doom-emacs
+;;; Code:
 ;; Make startup faster by reducing the frequency of garbage
 ;; collection. The default is 800 kilobytes
 (setq gc-cons-threshold most-positive-fixnum
@@ -38,7 +40,7 @@
 ;; Prevent unwanted runtime builds in gcemacs (native-comp); packages are
 ;; compiled ahead-of-time when they are installed and site files are compiled
 ;; when gccemacs is installed
-(setq comp-deferred-compilation nil)
+;; (setq comp-deferred-compilation nil)
 
 
 ;; add the module path
@@ -53,4 +55,6 @@
 ;;   (when (file-exists-p private-conf)
 ;;     (load-file private-conf)))
 
-;; early-init.el ends here
+(provide 'early-init)
+
+;;; early-init.el ends here

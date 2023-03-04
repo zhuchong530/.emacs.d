@@ -469,8 +469,7 @@ Emacs本身自带 ~other-window~ 函数，绑定到 ~C-x o~ 上，所以这里�
     ;; 调大窗口选择字符
     (custom-set-faces
      '(aw-leading-char-face
-       ((t (:inherit ace-jump-face-foreground :foreground "red" :height 5.0)))))
-    )
+       ((t (:inherit ace-jump-face-foreground :foreground "red" :height 7.0))))))
 #+end_src
 
 ** ace-jump-mode

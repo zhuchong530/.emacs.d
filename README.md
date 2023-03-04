@@ -1,1 +1,2 @@
-my emacs config base on: https://github.com/tuhdo/emacs-c-ide-demo
+my emacs config base on a lot of config from github.
+It use literate programming to manage the config file.

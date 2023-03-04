@@ -472,20 +472,6 @@ Emacs本身自带 ~other-window~ 函数，绑定到 ~C-x o~ 上，所以这里�
        ((t (:inherit ace-jump-face-foreground :foreground "red" :height 7.0))))))
 #+end_src
 
-** ace-jump-mode
-
-[[https://github.com/winterTTr/ace-jump-mode][官网]]
-
-Emacs的 =minor mode= ，用来移动光标到任意位置（你指定的）
-
-#+begin_src emacs-lisp
-
-  ;;package ace-jump-mode
-  (use-package ace-jump-mode
-    :bind ("C-c <SPC>" . ace-jump-mode)
-    )
-#+end_src
-
 ** volatile-highlights
 
 这是Emacs的一个 =minor mode= 用于可视化反馈。 比如当你粘贴一段文本的时候，这段文本会被高亮直到你有进一步的操作，具体见:[[https://github.com/k-talo/volatile-highlights.el][官网]]

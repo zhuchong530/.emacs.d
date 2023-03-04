@@ -529,14 +529,6 @@ built-in功能，Emacs 24引入
   ;; auto close bracket insertion. New in emacs 24
   ;; built-in electric-pair
   (electric-pair-mode 1)
-  ;; make electric-pair-mode work on more brackets
-  (setq electric-pair-pairs
-        '(
-          (?\" . ?\")
-          (?\' . ?\')
-          (?\[ . ?\])
-          (?\` . ?\`)
-          (?\{ . ?\})))
 #+end_src
 
 ** comment-dwim-2

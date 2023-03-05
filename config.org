@@ -1507,6 +1507,10 @@ Emacs中实时显示修改
   (require 'eaf-terminal)
   (require 'eaf-org-previewer)
   (require 'eaf-file-manager)
+
+  (setq eaf-proxy-type "socks5")
+  (setq eaf-proxy-host "127.0.0.1")
+  (setq eaf-proxy-port "7892")
 #+end_src
 
 * 结尾

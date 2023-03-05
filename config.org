@@ -276,7 +276,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 *** 保存Emacs会话
 
 #+begin_src emacs-lisp
-  ;; Save backup files in a dedicated directory
+  ;; ;; Save backup files in a dedicated directory
   (use-package desktop
     :config (desktop-save-mode)
     :custom
@@ -343,7 +343,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+end_src
 
 * UI
-
 
 ** doom-themes
 
@@ -800,7 +799,6 @@ built-in功能，Emacs 24引入
 下面的配置基本来自官方建议
 
 #+begin_src emacs-lisp
-
   (use-package consult
     :bind (("C-c h" . consult-history)
            ("C-c m" . consult-mode-command)
@@ -863,7 +861,8 @@ built-in功能，Emacs 24引入
      consult-bookmark consult-recent-file consult-xref
      consult--source-bookmark consult--source-recent-file
      consult--source-project-recent-file
-     :preview-key (kbd "M-."))
+     ;; :preview-key (kbd "M-."))
+     :preview-key '(:debounce 0.4 any))
     (setq consult-narrow-key "<")
     )
 #+end_src
@@ -954,7 +953,7 @@ LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bri
 
 #+begin_src emacs-lisp
   (use-package lsp-bridge
-    :load-path "~/.emacs.d/elpa/lsp-bridge"
+    :load-path "~/.emacs.d/site-lisp/lsp-bridge"
     :hook (after-init . global-lsp-bridge-mode)
     :bind
     (:map lsp-bridge-mode-map
@@ -1014,28 +1013,29 @@ Emacs和zealdoc接口，直接在zeal中查询文档，当然系统商首先要�
 *** C/C++
 
 #+begin_src emacs-lisp
-  (use-package cc-mode
-    :mode (("\\.hpp\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
-           ("\\.c\\'" . c-mode)
-           ("\\.h\\'" . c-mode)
-           ("\\.m\\'" . c-mode)
-           ("\\.mm\\'" . c-mode))
-    :config
-    ;; Available C style:
-    ;; “gnu”: The default style for GNU projects
-    ;; “k&r”: What Kernighan and Ritchie, the authors of C used in their book
-    ;; “bsd”: What BSD developers use, aka “Allman style” after Eric Allman.
-    ;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
-    ;; “stroustrup”: What Stroustrup, the author of C++ used in his book
-    ;; “ellemtel”: Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,” Erik Nyquist and Mats Henricson, Ellemtel
-    ;; “linux”: What the Linux developers use for kernel development
-    ;; “python”: What Python developers use for extension modules
-    ;; “java”: The default style for java-mode (see below)
-    ;; “user”: When you want to define your own style
-    (setq c-set-style "gnu") ;; set style to "k&r"
-    (setq c-basic-offset 4)
-    (setq tab-width 4) ; or any other preferred value
-    )
+    (use-package cc-mode
+      :mode (("\\.hpp\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
+             ("\\.c\\'" . c-mode)
+             ("\\.h\\'" . c-mode)
+             ("\\.m\\'" . c-mode)
+             ("\\.mm\\'" . c-mode))
+      :config
+      ;; Available C style:
+      ;; “gnu”: The default style for GNU projects
+      ;; “k&r”: What Kernighan and Ritchie, the authors of C used in their book
+      ;; “bsd”: What BSD developers use, aka “Allman style” after Eric Allman.
+      ;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
+      ;; “stroustrup”: What Stroustrup, the author of C++ used in his book
+      ;; “ellemtel”: Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,” Erik Nyquist and Mats Henricson, Ellemtel
+      ;; “linux”: What the Linux developers use for kernel development
+      ;; “python”: What Python developers use for extension modules
+      ;; “java”: The default style for java-mode (see below)
+      ;; “user”: When you want to define your own style
+      (setq c-default-style '((awk-mode . "awk")
+                                    (other . "linux"))) ;; set style to "k&r"
+      (setq c-basic-offset 4)
+      (setq tab-width 4) ; or any other preferred value
+      )
 #+end_src
 
 *** assembler
@@ -1325,7 +1325,7 @@ Emacs中实时显示修改
            org-startup-indented t
            org-startup-folded 'content
            org-fontify-done-headline t     ;change the face of a headline if it's marked DONE
-           org-src-fontity-native t        ;Pretty code blocks
+           org-src-fontity-natively t        ;Pretty code blocks
            org-pretty-entities t           ;show entities as UTF-8 characters
            org-hide-leading-stars t        ;hide the stars
            org-src-tab-acts-natively t     ;Make TAB acts as if it were issued from the buffer of the languages's major mode
@@ -1483,6 +1483,31 @@ Emacs中实时显示修改
           org-roam-ui-open-on-start nil))
 #+end_src
 
+* EAF
+
+[[https://github.com/emacs-eaf/emacs-application-framework/blob/master/README.zh-CN.md][README]]
+
+#+begin_src emacs-lisp
+  (use-package eaf
+    :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
+    :custom
+    ;; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+    (eaf-browser-continue-where-oeft-off t)
+    (eaf-browser-enable-adblocker t)
+    (browse-url-browser-function 'eaf-open-browser)
+    :config
+    (defalias 'browse-web #'eaf-open-browser)
+    ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+    ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+    ;; (eaf-bind-key nil "M-q" eaf-browser-keybinding) ;; unbind, see more in the Wiki
+    )
+  (require 'eaf-browser)
+  (require 'eaf-pdf-viewer)
+  (require 'eaf-image-viewer)
+  (require 'eaf-terminal)
+  (require 'eaf-org-previewer)
+  (require 'eaf-file-manager)
+#+end_src
 
 * 结尾
 

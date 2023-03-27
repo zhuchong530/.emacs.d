@@ -966,8 +966,6 @@ LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bri
           ("s-C-n" . lsp-bridge-jump-to-next-diagnostic)
           ("s-C-p" . lsp-bridge-jump-to-prev-diagnostic))
     :config
-    (setq lsp-bridge-auto-format-code-idle 5)
-    (setq lsp-bridge-enable-auto-format-code t)
     (setq lsp-bridge-enable-log nil)
     (setq lsp-bridge-enable-signature-help t)
     )

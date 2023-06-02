@@ -1481,35 +1481,6 @@ Emacs中实时显示修改
           org-roam-ui-open-on-start nil))
 #+end_src
 
-* EAF
-
-[[https://github.com/emacs-eaf/emacs-application-framework/blob/master/README.zh-CN.md][README]]
-
-#+begin_src emacs-lisp
-  (use-package eaf
-    :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
-    :custom
-    ;; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-    (eaf-browser-continue-where-oeft-off t)
-    (eaf-browser-enable-adblocker t)
-    (browse-url-browser-function 'eaf-open-browser)
-    :config
-    (defalias 'browse-web #'eaf-open-browser)
-    ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-    ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-    ;; (eaf-bind-key nil "M-q" eaf-browser-keybinding) ;; unbind, see more in the Wiki
-    )
-  (require 'eaf-browser)
-  (require 'eaf-pdf-viewer)
-  (require 'eaf-image-viewer)
-  (require 'eaf-terminal)
-  (require 'eaf-org-previewer)
-  (require 'eaf-file-manager)
-
-  (setq eaf-proxy-type "socks5")
-  (setq eaf-proxy-host "127.0.0.1")
-  (setq eaf-proxy-port "7892")
-#+end_src
 
 * 结尾
 

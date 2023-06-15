@@ -1447,41 +1447,6 @@ Emacs中实时显示修改
     )
 #+end_src
 
-** org-roam
-
-#+begin_src emacs-lisp
-  ;; org-roam
-  ;; org-roam is Version 2 now, So we use org-roam-ui for graphic,
-  ;; not org-roam-server which only support org-roam Version 1
-  (use-package org-roam
-    :custom
-    (org-roam-directory "~/Google Driver/brain-notes")
-    (org-roam-db-location "~/Google Driver/brain-notes/org-roam.db")
-    (org-roam-db-gc-threshold most-positive-fixnum)
-    (org-roam-completion-everywhere t)
-    (org-roam-db-autosync-mode)
-    ;; (add-hook 'after-init-hook 'org-roam-mode)
-    :bind (("C-c n l" . org-roam-buffer-toggle)
-           ("C-c n f" . org-roam-node-find)
-           ("C-c n i" . org-roam-node-insert))
-    :config (org-roam-db-autosync-enable)
-    )
-#+end_src
-
-** org-roam-ui
-
-#+begin_src emacs-lisp
-  ;; org-roam-ui
-  (use-package org-roam-ui
-    :after org-roam
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start nil))
-#+end_src
-
-
 * 结尾
 
 #+begin_src emacs-lisp

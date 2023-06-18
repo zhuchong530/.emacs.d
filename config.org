@@ -392,9 +392,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (set-face-attribute
    'default nil
    ;; :family "YaHei Consolas Hybrid"
-   :family "Fira Code"
-   :height 130
-   :weight 'normal)
+   :family "Monaco"
+   :height 160
+   :weight 'Regular)
 #+end_src
 
 ** 图标
@@ -1445,70 +1445,6 @@ Emacs中实时显示修改
     :config
     (require 'org-download)
     )
-#+end_src
-
-** org-roam
-
-#+begin_src emacs-lisp
-  ;; org-roam
-  ;; org-roam is Version 2 now, So we use org-roam-ui for graphic,
-  ;; not org-roam-server which only support org-roam Version 1
-  (use-package org-roam
-    :custom
-    (org-roam-directory "~/Google Driver/brain-notes")
-    (org-roam-db-location "~/Google Driver/brain-notes/org-roam.db")
-    (org-roam-db-gc-threshold most-positive-fixnum)
-    (org-roam-completion-everywhere t)
-    (org-roam-db-autosync-mode)
-    ;; (add-hook 'after-init-hook 'org-roam-mode)
-    :bind (("C-c n l" . org-roam-buffer-toggle)
-           ("C-c n f" . org-roam-node-find)
-           ("C-c n i" . org-roam-node-insert))
-    :config (org-roam-db-autosync-enable)
-    )
-#+end_src
-
-** org-roam-ui
-
-#+begin_src emacs-lisp
-  ;; org-roam-ui
-  (use-package org-roam-ui
-    :after org-roam
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start nil))
-#+end_src
-
-* EAF
-
-[[https://github.com/emacs-eaf/emacs-application-framework/blob/master/README.zh-CN.md][README]]
-
-#+begin_src emacs-lisp
-  (use-package eaf
-    :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
-    :custom
-    ;; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-    (eaf-browser-continue-where-oeft-off t)
-    (eaf-browser-enable-adblocker t)
-    (browse-url-browser-function 'eaf-open-browser)
-    :config
-    (defalias 'browse-web #'eaf-open-browser)
-    ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-    ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-    ;; (eaf-bind-key nil "M-q" eaf-browser-keybinding) ;; unbind, see more in the Wiki
-    )
-  (require 'eaf-browser)
-  (require 'eaf-pdf-viewer)
-  (require 'eaf-image-viewer)
-  (require 'eaf-terminal)
-  (require 'eaf-org-previewer)
-  (require 'eaf-file-manager)
-
-  (setq eaf-proxy-type "socks5")
-  (setq eaf-proxy-host "127.0.0.1")
-  (setq eaf-proxy-port "7892")
 #+end_src
 
 * 结尾

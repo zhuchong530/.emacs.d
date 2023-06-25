@@ -20,7 +20,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 (org-babel-load-file "~/.emacs.d/config.org")
 #+end_quote
 
-上面这条语句实际是通过 ~org-babel-tangle~ 将文件中的配置代码导出到文件 =~/.emacs.d/emacs-config.el= 。然后使用 ~load-file~ 加载结果文件，效果如同：
+上面这条语句实际是通过 ~org-babel-tangle~ 将文件中的配置代码导出到文件 =~/.emacs.d/config.el= 。然后使用 ~load-file~ 加载结果文件，效果如同：
 
 #+begin_quote
 (load-file "~/.emacs.d/config.el")
@@ -313,7 +313,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     )
 #+end_src
 
-*** 括号匹配
+*** 括号效果
 
 #+begin_src emacs-lisp
   (setq-default show-paren-style 'expression
@@ -375,7 +375,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     (setq doom-modeline-buffer-file-name-style 'auto)
     (setq doom-modeline-icon (display-graphic-p))
     (setq doom-modeline-major-mode-icon t)
-    (setq doom-modeline-buffer-modification-icon t)
     (setq doom-modeline-hud t)
     (setq doom-modeline-time-icon t)
     (setq doom-modeline-buffer-modification-icon t)
@@ -410,10 +409,10 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 *** all-the-icons-dired
 
 #+begin_src emacs-lisp
-(use-package all-the-icons-dired
-:after all-the-icons
-:hook (dired-mode . all-the-icons-dired-mode)
-)
+  (use-package all-the-icons-dired
+    :after all-the-icons
+    :hook (dired-mode . all-the-icons-dired-mode)
+    )
 #+end_src
 
 ** 最大化
@@ -482,7 +481,7 @@ Emacs本身自带 ~other-window~ 函数，绑定到 ~C-x o~ 上，所以这里�
     (add-hook 'after-init-hook 'volatile-highlights-mode)
     :config
     (set-face-attribute 'vhl/default-face nil
-                        :underline "slate gray"))
+                        :underline "yellow"))
 #+end_src
 
 ** undo-tree
@@ -508,14 +507,11 @@ build-in功能
 当Emacs打开具有相同名字的多个文件，增加前缀以示区别。具体见: [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.html][这里]]
 
 #+begin_src emacs-lisp
-  ;; (use-package uniquify
-    ;; :config
     (setq
      uniquify-buffer-name-style 'forward
      uniquify-separator ":"
      uniquify-after-kill-buffer-p t
      uniquify-ignore-buffers-re "^\\*")
-    ;; )
 #+end_src
 
 ** 括号配对
@@ -638,7 +634,6 @@ built-in功能，Emacs 24引入
 直接将颜色显示出来，具体见： [[https://github.com/emacsmirror/rainbow-mode][官网]]
 
 #+begin_src emacs-lisp
-
   ;; rainbow mode for display the color
   (use-package rainbow-mode
     :diminish
@@ -673,6 +668,22 @@ built-in功能，Emacs 24引入
     (set-face-bold 'rainbow-delimiters-depth-9-face "t")
     )
 #+end_src
+
+** Olivetti
+
+[[https://github.com/rnkn/olivetti][官网]]
+
+Olivetti是一个将文本居中的包
+
+#+begin_src emacs-lisp
+  (use-package olivetti
+    :defer t
+    :config
+    (setq-default olivetti-body-width (+ fill-column 3))
+    (remove-hook 'olivetti-mode-on-hook 'visual-line-mode)
+    )
+#+end_src
+
 
 * 杂项
 
@@ -722,11 +733,9 @@ built-in功能，Emacs 24引入
 远程编辑，先这样吧
 
 #+begin_src emacs-lisp
-  ;;tramp
-  ;;;;;;;;;;;;;;;;;;;;;;;;;tramp setting;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;;;;;;;;;;Enable you to edit the file which on the REMOTE machines;;;;;
-  ;;;  tramp support many protocols:like ftp,ssh,etc.
-  ;;;USAGE:
+  ;;; Enable you to edit the file which on the REMOTE machines;;;;;
+  ;;; tramp support many protocols:like ftp,ssh,etc.
+  ;;; USAGE:
   ;;   /host:filepath
   ;;   /user@host:filepath
   ;;   /user@host#port:filepath
@@ -764,7 +773,7 @@ built-in功能，Emacs 24引入
   ;; Controls the sorting of the minibuffer completions
   (use-package orderless
     :custom
-    (completion-styles '(orderless basic))
+    (completion-styles '(orderless basic partial-completion))
     ;; (completion-category-defaults nil)
     (completion-category-overrides
      '((file (styles basic basic-remote ; For `tramp' hostname completion with `vertico'
@@ -782,12 +791,23 @@ built-in功能，Emacs 24引入
     ;; Different scroll margin
     ;; (setq vertico-scroll-margin 0)
     ;; Show more candidates
-    (setq vertico-count 20)
+    (setq vertico-count 25)
     ;; Grow and shrink the Vertico minibuffer
     (setq vertico-resize t)
     ;; Optionally enable cycling for `vertico-next' and `vertico-previous'
     ;; (setq vertico-cycle t)
     )
+#+end_src
+
+** vertico-posfram
+
+#+begin_src emacs-lisp
+  (use-package vertico-posframe
+    :after vertico
+    :config
+    (vertico-posframe-mode 1)
+    (setq vertico-posframe-width 100
+          vertico-posframe-height vertico-count))
 #+end_src
 
 ** consult
@@ -876,6 +896,7 @@ built-in功能，Emacs 24引入
   ;; Marginalia
   ;; Enhances the minibuffer completions with additional informations
   (use-package marginalia
+    :after vertico
     :custom
     (marginalia-annotators
      '(marginalia-annotators-heavy marginalia-annotators-light nil))
@@ -901,6 +922,8 @@ built-in功能，Emacs 24引入
 *** corfu
 
 补全功能，之前用 =company-mode= ，但是太重量了。所以换成corfu，具体见： [[https://github.com/minad/corfu][官网]]
+
+使用lsp-bridge以后，corfu暂时先disable了
 
 #+begin_src emacs-lisp
   ;; (use-package corfu
@@ -1282,7 +1305,7 @@ Emacs中实时显示修改
 
 *** gud
 
-先用这个吧。以后换成dap吧
+现在在用realgud，暂时没有配置，直接用M-x运行就可以
 
 #+begin_src emacs-lisp
   ;; (use-package gud
@@ -1433,18 +1456,34 @@ Emacs中实时显示修改
 
 ** org-download
 
+[[https://github.com/abo-abo/org-download][官网]]
+
 #+begin_src emacs-lisp
-  ;; TODO
   (use-package org-download
     :after org
+    :config
+    (org-download-enable)
     :custom
     (org-download-method 'directory)
-    (org-download-timestamp "%Y%m%d-%H%M%S_")
-    (setq-default org-download-heading-lvl nil)
     (setq-default org-download-image-dir "./images")
-    :config
-    (require 'org-download)
-    )
+    ;; (org-download-timestamp "%Y%m%d-%H%M%S_")
+    (setq-default org-download-heading-lvl nil))
+#+end_src
+
+** org-roam
+
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :custom
+    (org-roam-directory "~/Google Driver/brain-notes")
+    (org-roam-db-location "~/Google Driver/brain-notes/org-roam.db")
+    (org-roam-db-gc-threshold most-positive-fixnum)
+    (org-roam-complete-everywhere t)
+    (org-roam-db-autosync-mode)
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert))
+    :config (org-roam-db-autosync-enable))
 #+end_src
 
 * 结尾

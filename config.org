@@ -421,6 +421,18 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (toggle-frame-maximized)
 #+end_src
 
+** transwin
+
+Make window/frame transparent.
+
+#+begin_src emacs-lisp
+  (use-package transwin
+    :after frame
+    :init (transwin-ask 90)
+    :custom (transwin-toggle)
+    )
+#+end_src
+
 * 编辑器增强
 
 ** 基础

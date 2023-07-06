@@ -1473,10 +1473,8 @@ Emacs中实时显示修改
 #+begin_src emacs-lisp
   (use-package org-download
     :after org
-    :config
-    (org-download-enable)
-    :custom
-    (org-download-method 'directory)
+    :hook ((org-mode dired-mode) . org-download-enable)
+    :init
     (setq-default org-download-image-dir "./images")
     ;; (org-download-timestamp "%Y%m%d-%H%M%S_")
     (setq-default org-download-heading-lvl nil))

@@ -50,11 +50,11 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** 版本检查
 
-检查Emacs版本，要求Emacs >= 26
+检查Emacs版本，要求Emacs >= 28
 
 #+begin_src emacs-lisp
-  (when (version< emacs-version "26")
-    (error "Requires at least GNU Emacs 26, but you're running %s" emacs-version))
+  (when (version< emacs-version "28")
+    (error "Requires at least GNU Emacs 28, but you're running %s" emacs-version))
 #+end_src
 
 ** 编码

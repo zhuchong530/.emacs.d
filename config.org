@@ -715,19 +715,6 @@ built-in功能，Emacs 24引入
     :config (nyan-mode 1))
 #+end_src
 
-** youdao-dictionary
-
-有道词典查询接口。具体见：[[https://github.com/xuchunyang/youdao-dictionary.el][官网]]
-
-#+begin_src emacs-lisp
-
-  (use-package youdao-dictionary
-    :config
-    (setq url-automatic-caching t)
-    )
-  (global-set-key (kbd "C-c k") 'youdao-dictionary-search-at-point-tooltip)
-#+end_src
-
 ** tramp
 
 远程编辑，先这样吧

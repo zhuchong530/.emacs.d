@@ -83,24 +83,26 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** use-package
 
+在29.1里，use-package变成built-in。
+
 [[https://github.com/jwiegley/use-package][官方]]
 [[https://jwiegley.github.io/use-package/][官方文档]]
 
 这个包实际是宏(macro)，可以隔离包配置。 具体参见这里： [[id:66760557-2681-41d4-8e02-ea68fe02e805][use-package]]
 
 #+begin_src emacs-lisp
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package)
-    (package-install 'diminish)
-    (package-install 'bind-key))
+  ;; (unless (package-installed-p 'use-package)
+  ;;   (package-refresh-contents)
+  ;;   (package-install 'use-package)
+  ;;   (package-install 'diminish)
+  ;;   (package-install 'bind-key))
 
-  (eval-when-compile
-    (require 'use-package))
-  (require 'diminish)
-  (require 'bind-key)
-  (setq use-package-verbose t)
-  (setq use-package-always-ensure t)
+  ;; (eval-when-compile
+  ;;   (require 'use-package))
+  ;; (require 'diminish)
+  ;; (require 'bind-key)
+  ;; (setq use-package-verbose t)
+  ;; (setq use-package-always-ensure t)
 #+end_src
 
 ** Garbage Collector Magic Hack
@@ -504,11 +506,13 @@ Emacs本身自带 ~other-window~ 函数，绑定到 ~C-x o~ 上，所以这里�
 
 #+begin_src emacs-lisp
   (use-package undo-tree
-    :init (progn
-            (global-undo-tree-mode)
-            (setq undo-tree-visualizer-timestamps t)
-            (setq undo-tree-auto-save-history nil)
-            (setq undo-tree-visualizer-diff t))
+    :init
+    (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))
+          undo-tree-visualizer-diff nil
+          undo-tree-visualizer-timestamps t
+          undo-tree-enable-undo-in-region t)
+    :config
+    (global-undo-tree-mode 1)
     )
 #+end_src
 
@@ -680,22 +684,6 @@ built-in功能，Emacs 24引入
     (set-face-bold 'rainbow-delimiters-depth-9-face "t")
     )
 #+end_src
-
-** Olivetti
-
-[[https://github.com/rnkn/olivetti][官网]]
-
-Olivetti是一个将文本居中的包
-
-#+begin_src emacs-lisp
-  (use-package olivetti
-    :defer t
-    :config
-    (setq-default olivetti-body-width (+ fill-column 3))
-    (remove-hook 'olivetti-mode-on-hook 'visual-line-mode)
-    )
-#+end_src
-
 
 * 杂项
 

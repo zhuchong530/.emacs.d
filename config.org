@@ -113,9 +113,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 #+begin_src emacs-lisp
   (use-package gcmh
-    :init
+    :config
     (setq gcmh-idle-delay 5)
-    (setq gcmh-high-cons-threshold (* 64 1024 1024)) ;64MB
+    (setq gcmh-high-cons-threshold (* 100 1024 1024)) ;64MB
     (gcmh-mode 1))
 #+end_src
 
@@ -430,7 +430,7 @@ Make window/frame transparent.
 #+begin_src emacs-lisp
   (use-package transwin
     :after frame
-    :init (transwin-ask 90)
+    :config (transwin-ask 90)
     :custom (transwin-toggle)
     )
 #+end_src
@@ -457,7 +457,6 @@ Make window/frame transparent.
 这个包是一个 =minor mode= ，可以根据当前按键，提示可能的键绑定。具体见[[https://github.com/justbur/emacs-which-key][官网]]
 
 #+begin_src emacs-lisp
-
   (use-package which-key                  ;bring up help on key combinations
     :diminish
     :hook (after-init . which-key-mode)
@@ -629,7 +628,6 @@ built-in功能，Emacs 24引入
 
 #+begin_src emacs-lisp
   (use-package centaur-tabs
-    :demand
     :config
     (centaur-tabs-mode t)
     :init
@@ -752,7 +750,16 @@ built-in功能，Emacs 24引入
 
 ** orderless
 
-提供模糊补全功能。具体见: [[https://github.com/oantolin/orderless][官网]]
+ [[https://github.com/oantolin/orderless][orderless]] 提供orderless补全风格，使用空格分隔匹配模式，模式的顺序没有关系，但是AND关系。各模式可以使用如下几种类型：
+
+ - 字面意思(literally): the components is treated as a literal string that must occur in the candidate.
+ - 正则表达式(regexp): the component is treated as a regexp that must match somewhere in the candidate.
+ - 首字母缩写(initialism): each character of the component should appear as the beginning of a word in the candidate, in order. This maps abc to <a.*<b.*c.
+ - flex样式或多个单词前缀: the characters of the component should appear in that order in the candidate, but not necessarily consecutively. This maps abc to a.*b.*c.
+
+默认情况下，启用字面意思和正则表达式匹配。
+
+orderless 的 style dispatchers 机制可以更灵活的定义输入字符串的匹配风格，可以通过变量 orderless-style-dispatchers来定义，默认值为 orderless-affix-dispatch, 它使用一种简单的前缀或后缀的字符(串)来表示各种风格：
 
 #+begin_src emacs-lisp
 
@@ -769,10 +776,9 @@ built-in功能，Emacs 24引入
 
 ** vertico
 
-重用Emacs内建功能，提供补全功能。具体见: [[https://github.com/minad/vertico][官网]]
+[[https://github.com/minad/vertico][vertico]] 基于默认完成提供一个高性能且简约的垂直完成UI系统，经过复用内置设施系统，Vertico实现了与内置Emacs补全的完全兼容命令和完成表。Vertico仅提供完成UI，但旨在高度灵活，可扩展和模块化
 
 #+begin_src emacs-lisp
-
   (use-package vertico
     :init (vertico-mode)
     ;; Different scroll margin
@@ -879,7 +885,6 @@ built-in功能，Emacs 24引入
 给minibuffer添加额外信息。见: [[https://github.com/minad/marginalia][官网]]
 
 #+begin_src emacs-lisp
-
   ;; Marginalia
   ;; Enhances the minibuffer completions with additional informations
   (use-package marginalia
@@ -932,6 +937,38 @@ built-in功能，Emacs 24引入
   ;;   :config (global-corfu-mode))
 #+end_src
 
+*** tree-sitter
+
+#+begin_src emacs-lisp
+  (use-package treesit
+    :init
+    (setq treesit-language-source-alist
+          '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+            (c "https://github.com/tree-sitter/tree-sitter-c")
+            (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+            (cmake "https://github.com/uyha/tree-sitter-cmake")
+            (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+            (go "https://github.com/tree-sitter/tree-sitter-go")
+            (rust "https://github.com/tree-sitter/tree-sitter-rust")
+            (html "https://github.com/tree-sitter/tree-sitter-html")
+            (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+            (json "https://github.com/tree-sitter/tree-sitter-json")
+            (make "https://github.com/alemuller/tree-sitter-make")
+            (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+            (python "https://github.com/tree-sitter/tree-sitter-python")
+            (toml "https://github.com/tree-sitter/tree-sitter-toml")
+            ))
+    (setq major-mode-remap-alist
+          '((bash-mode . bash-ts-mode)
+            (js2-mode . js-ts-mode)
+            (python-mode . python-ts-mode)
+            (go-mode . go-ts-mode)
+            (rust-mode . rust-ts-mode)
+            (c-mode . c-ts-mode)
+            (c++-mode . c++-ts-mode)))
+    )
+#+end_src
+
 *** yasnippet
 
 模版补全，lsp-bridge也需要这个包。[[https://github.com/joaotavora/yasnippet][官网]]
@@ -941,8 +978,9 @@ built-in功能，Emacs 24引入
     :bind (:map yas-keymap
                 ("C-i" . yas-next-field-or-maybe-expand))
     :hook ((prog-mode org-mode) . yas-minor-mode)
+    :init (defvar snippet-directory "~/.emacs.d/snippets")
     :config
-    (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+    (add-to-list 'yas-snippet-dirs snippet-directory)
     (yas-global-mode 1)
     )
 #+end_src
@@ -1014,9 +1052,7 @@ Emacs和zealdoc接口，直接在zeal中查询文档，当然系统商首先要�
     :config (add-hook 'prog-mode-hook 'eldoc-mode))
 #+end_src
 
-
 ** programming languages
-
 
 *** C/C++
 

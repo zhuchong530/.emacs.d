@@ -630,15 +630,15 @@ built-in功能，Emacs 24引入
 #+begin_src emacs-lisp
   (use-package centaur-tabs
     :config
-    (centaur-tabs-mode t)
-    :init
-    (setq centaur-tabs-set-bar t
-          centaur-tabs-set-bar 'left
-          centaur-tabs-height 32
-          centaur-tabs-set-icons t
-          centaur-tabs-set-modified-marker t
-          centaur-tabs-modified-marker " ● "
-          centaur-tabs-style "bar")
+    (setq centaur-tabs-set-bar 'left      ; display an underline over the selected tab
+          centaur-tabs-height 32          ; tab height
+          centaur-tabs-set-icons t        ; display themed icon from all-the-icons
+          centaur-tabs-set-close-button nil ; disable the close button
+          centaur-tabs-set-modified-marker t ; display a marker indicating that a buffer has been modified
+          centaur-tabs-modified-marker " ● " ; change the displayed string for the modified-marker
+          centaur-tabs-style "bar"        ; tab style, 可能的值:"alternate", "bar", "box", "chamfer", "rounded","slant", "wave", "zigzag"
+          )
+      (centaur-tabs-mode t)
     :bind
     ("C-9" . centaur-tabs-backward)
     ("C-0" . centaur-tabs-forward))

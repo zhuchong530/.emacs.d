@@ -393,7 +393,8 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (set-face-attribute
    'default nil
    ;; :family "YaHei Consolas Hybrid"
-   :family "Fira Code"
+   ;; :family "Fira Code"
+   :family "IntelOne Mono"
    :height 130
    :weight 'normal)
 #+end_src
@@ -733,6 +734,7 @@ built-in功能，Emacs 24引入
 
 ** markdown-mode
 
+
 编辑markdown文件，具体见: [[https://jblevins.org/projects/markdown-mode/][官网]]
 
 先这样吧，用 =org-mode= 比较多。
@@ -744,6 +746,18 @@ built-in功能，Emacs 24引入
            ("\\.md\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode))
     :init (setq markdown-command "multimarkdown"))
+#+end_src
+
+** fanyi
+
+#+begin_src emacs-lisp
+(use-package fanyi
+  :custom
+  (fanyi-providers '(fanyi-haici-provider ;海词
+                     fanyi-youdao-thesaurus-provider ;有道
+                     fanyi-longman-provider          ;朗文？
+                     ))
+  )
 #+end_src
 
 * 通用补全
@@ -1027,6 +1041,7 @@ LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bri
 
 *** zeal-at-point
 
+
 Emacs和zealdoc接口，直接在zeal中查询文档，当然系统商首先要安装zealdoc这个软件，具体见：[[https://github.com/jinzhu/zeal-at-point][官网]]
 
 #+begin_src emacs-lisp
@@ -1040,6 +1055,12 @@ Emacs和zealdoc接口，直接在zeal中查询文档，当然系统商首先要�
     (add-to-list 'zeal-at-point-mode-alist '(cc-mode . ("C" "C++")))
     (add-to-list 'zeal-at-point-mode-alist '(go-mode . "Go"))
     )
+#+end_src
+
+*** devdocs
+
+#+begin_src emacs-lisp
+  (use-package devdocs)
 #+end_src
 
 *** eldoc

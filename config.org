@@ -392,9 +392,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   ;; (set-frame-font "Fira Code-12")
   (set-face-attribute
    'default nil
-   ;; :family "YaHei Consolas Hybrid"
+   :family "YaHei Consolas Hybrid"
    ;; :family "Fira Code"
-   :family "IntelOne Mono"
+   ;; :family "IntelOne Mono"
    :height 130
    :weight 'normal)
 #+end_src
@@ -972,14 +972,14 @@ orderless 的 style dispatchers 机制可以更灵活的定义输入字符串的
             (python "https://github.com/tree-sitter/tree-sitter-python")
             (toml "https://github.com/tree-sitter/tree-sitter-toml")
             ))
-    (setq major-mode-remap-alist
-          '((bash-mode . bash-ts-mode)
-            (js2-mode . js-ts-mode)
-            (python-mode . python-ts-mode)
-            (go-mode . go-ts-mode)
-            (rust-mode . rust-ts-mode)
-            (c-mode . c-ts-mode)
-            (c++-mode . c++-ts-mode)))
+    ;; (setq major-mode-remap-alist
+    ;;       '((bash-mode . bash-ts-mode)
+    ;;         (js2-mode . js-ts-mode)
+    ;;         (python-mode . python-ts-mode)
+    ;;         (go-mode . go-ts-mode)
+    ;;         (rust-mode . rust-ts-mode)
+    ;;         (c-mode . c-ts-mode)
+    ;;         (c++-mode . c++-ts-mode)))
     )
 #+end_src
 

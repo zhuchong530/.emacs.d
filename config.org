@@ -102,7 +102,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   ;; (require 'diminish)
   ;; (require 'bind-key)
   ;; (setq use-package-verbose t)
-  ;; (setq use-package-always-ensure t)
+  (setq use-package-always-ensure t)
 #+end_src
 
 ** Garbage Collector Magic Hack
@@ -474,8 +474,8 @@ Emacs本身自带 ~other-window~ 函数，绑定到 ~C-x o~ 上，所以这里�
 #+begin_src emacs-lisp
   ;; package ace-window
   (use-package ace-window
+    :bind ("C-c o" . ace-window)
     :config
-    (global-set-key (kbd "C-c o") 'ace-window)
     ;; 设置为frame后会忽略treemacs frame，否则即使两个窗口时也会提示选择
     (setq aw-scope 'frame)
     ;; 调大窗口选择字符
@@ -490,7 +490,6 @@ Emacs本身自带 ~other-window~ 函数，绑定到 ~C-x o~ 上，所以这里�
 
 #+begin_src emacs-lisp
   (use-package volatile-highlights
-    :commands (volatile-highlights-mode)
     :init
     (add-hook 'after-init-hook 'volatile-highlights-mode)
     :config
@@ -563,7 +562,7 @@ built-in功能，Emacs 24引入
 #+begin_src emacs-lisp
   (use-package iedit
     :init (setq iedit-toggle-key-default nil)
-    :bind ("C-;" . iedit-mode)
+    :bind ("C-:" . iedit-mode)
     )
 #+end_src
 
@@ -575,12 +574,20 @@ built-in功能，Emacs 24引入
 
 #+begin_src emacs-lisp
   (use-package highlight-indent-guides
-    :hook (prog-mode-hook . highlight-indent-guides-mode))
+    :hook (prog-mode-hook . highlight-indent-guides-mode)
+    :config (highlight-indent-guides-mode 'column)
+    )
 #+end_src
 
 ** highlight-symbol
 
 自动or手动高亮符号， 具体见: [[https://github.com/nschum/highlight-symbol.el][官网]]
+
+- =highlight-symbol= to toggle highlighting of the symbol at point throughout the current buffer.
+- =highlight-symbol-mode= to keep the symbol at point highlighted.
+- functions =highlight-symbol-next=, =highlight-symbol-prev=, =highlight-symbol-next-in-defun= and =highlight-symbol-prev-in-defun= allow for cycling through the locations of any symbol at point.
+- =highlight-symbol-nav-mode= to enable key bindings (M-p and M-p) for navigation. When =highlight-symbol-on-navigation-p= is set, highlighting is triggered regardless of =highlight-symbol-idle-delay=.
+- =highlight-symbol-query-replace= can be used to replace the symbol.
 
 #+begin_src emacs-lisp
   (use-package highlight-symbol
@@ -588,10 +595,6 @@ built-in功能，Emacs 24引入
           ("<f3>" . highlight-symbol-next)
           ("S-<f3>" . highlight-symbol-prev)
           ("M-<f3>" . highlight-symbol-query-replace))
-    :config
-    (add-hook 'highlight-symbol-mode-hook
-              (function
-               (lambda () (highlight-symbol-nav-mode +1))))
     )
 #+end_src
 
@@ -601,12 +604,16 @@ built-in功能，Emacs 24引入
 
 当有多个窗口(window)的时候，有些窗口大小不太适合编辑。这个包可以自动缩放当前的窗口到合适大小
 
+If you use a large screen and have very wide frames golden-ratio makes very wide windows. This can be handled automatically by setting =golden-ratio-auto-scale= to true.
+
 #+begin_src emacs-lisp
 
   ;;package golden-ratio
   (use-package golden-ratio
-    :init (golden-ratio-mode 1)
-    :config (setq golden-ratio-exclude-modes '("ediff-mode"
+    :config
+    (golden-ratio-mode 1)
+    (setq golden-ratio-auto-scale t)
+    (setq golden-ratio-exclude-modes '("ediff-mode"
                                                "gud-mode"
                                                "gdb-locals-mode"
                                                "gdb-registers-mode"
@@ -625,12 +632,13 @@ built-in功能，Emacs 24引入
 
 ** centaur-tabs
 
-增加标签页功能，Emacs有自己的 =tab-bar-mode= ，但是这个感觉好用且好看一些，先用这个吧。具体见： [[https://github.com/roman/golden-ratio.el][官网]]
+增加标签页功能，Emacs有自己的 =tab-bar-mode= ，但是这个感觉好用且好看一些，先用这个吧。具体见： [[https://github.com/ema2159/centaur-tabs][官网]]
 
 #+begin_src emacs-lisp
   (use-package centaur-tabs
     :config
-    (setq centaur-tabs-set-bar 'left      ; display an underline over the selected tab
+    (centaur-tabs-mode t)
+    (setq centaur-tabs-set-bar 'over      ; display an underline over the selected tab
           centaur-tabs-height 32          ; tab height
           centaur-tabs-set-icons t        ; display themed icon from all-the-icons
           centaur-tabs-set-close-button nil ; disable the close button
@@ -638,7 +646,6 @@ built-in功能，Emacs 24引入
           centaur-tabs-modified-marker " ● " ; change the displayed string for the modified-marker
           centaur-tabs-style "bar"        ; tab style, 可能的值:"alternate", "bar", "box", "chamfer", "rounded","slant", "wave", "zigzag"
           )
-      (centaur-tabs-mode t)
     :bind
     ("C-9" . centaur-tabs-backward)
     ("C-0" . centaur-tabs-forward))
@@ -684,7 +691,7 @@ built-in功能，Emacs 24引入
     )
 #+end_src
 
-* 杂项
+* q杂项
 
 ** helpful
 
@@ -692,13 +699,11 @@ built-in功能，Emacs 24引入
 
 #+begin_src emacs-lisp
   (use-package helpful
-    :config
-    (global-set-key (kbd "C-h f") #'helpful-callable)
-    (global-set-key (kbd "C-h v") #'helpful-variable)
-    (global-set-key (kbd "C-h k") #'helpful-key)
-    (global-set-key (kbd "C-c C-d") #'helpful-at-point)
-    (global-set-key (kbd "C-h F") #'helpful-function)
-    (global-set-key (kbd "C-h C") #'helpful-command)
+    :bind (([remap describe-function] . helpful-callable)
+           ([remap describe-command] . helpful-command)
+           ([remap describe-variable] . helpful-variable)
+           ([remap describe-key] . helpful-key)
+           ([remap describe-symbol] . helpful-symbol))
     )
 #+end_src
 
@@ -741,7 +746,6 @@ built-in功能，Emacs 24引入
 
 #+begin_src emacs-lisp
   (use-package markdown-mode
-    :commands (markdown-mode gfm-mode)
     :mode (("README\\.md\\'" . gfm-mode)
            ("\\.md\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode))
@@ -776,9 +780,6 @@ built-in功能，Emacs 24引入
 orderless 的 style dispatchers 机制可以更灵活的定义输入字符串的匹配风格，可以通过变量 orderless-style-dispatchers来定义，默认值为 orderless-affix-dispatch, 它使用一种简单的前缀或后缀的字符(串)来表示各种风格：
 
 #+begin_src emacs-lisp
-
-  ;; Orderless
-  ;; Controls the sorting of the minibuffer completions
   (use-package orderless
     :custom
     (completion-styles '(orderless basic partial-completion))
@@ -794,7 +795,8 @@ orderless 的 style dispatchers 机制可以更灵活的定义输入字符串的
 
 #+begin_src emacs-lisp
   (use-package vertico
-    :init (vertico-mode)
+    :config (vertico-mode)
+    :custom
     ;; Different scroll margin
     ;; (setq vertico-scroll-margin 0)
     ;; Show more candidates
@@ -1039,24 +1041,6 @@ LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bri
 
 ** 文档帮助
 
-*** zeal-at-point
-
-
-Emacs和zealdoc接口，直接在zeal中查询文档，当然系统商首先要安装zealdoc这个软件，具体见：[[https://github.com/jinzhu/zeal-at-point][官网]]
-
-#+begin_src emacs-lisp
-  (use-package zeal-at-point
-    :defer 10
-    :bind ("C-c d" . 'zeal-at-point)
-    :config
-    (add-to-list 'zeal-at-point-mode-alist '(python-mode . "python3"))
-    (add-to-list 'zeal-at-point-mode-alist '(c-mode . "C"))
-    (add-to-list 'zeal-at-point-mode-alist '(c++-mode . "C++"))
-    (add-to-list 'zeal-at-point-mode-alist '(cc-mode . ("C" "C++")))
-    (add-to-list 'zeal-at-point-mode-alist '(go-mode . "Go"))
-    )
-#+end_src
-
 *** devdocs
 
 #+begin_src emacs-lisp
@@ -1109,7 +1093,9 @@ Emacs和zealdoc接口，直接在zeal中查询文档，当然系统商首先要�
 
 #+begin_src emacs-lisp
   (use-package nasm-mode
-    :mode "\\.\\(nasm\\|s\\|asm\\)$"
+    :mode (("\\.nasm\\'" . nasm-mode)
+           ("\\.s\\'" . nasm-mode)
+           ("\\.asm\\'" . nasm-mode))
     )
 #+end_src
 
@@ -1122,9 +1108,6 @@ Emacs和zealdoc接口，直接在zeal中查询文档，当然系统商首先要�
   (use-package python
     :defer t
     :mode ("\\.py\\'" . python-mode)
-    ;; :interpreter ("python3" . python-mode)
-    :init
-    (add-hook 'python-mode-hook 'hs-minor-mode)
     :config
     (setq python-shell-interpreter "python3")
     )
@@ -1162,9 +1145,8 @@ Emacs和zealdoc接口，直接在zeal中查询文档，当然系统商首先要�
 
 #+begin_src emacs-lisp
   (use-package go-eldoc
-    :ensure t
-    :defer
-    :init
+    :defer t
+    :config
     (add-hook 'go-mode-hook 'go-eldoc-setup))
   (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
 #+end_src
@@ -1175,7 +1157,6 @@ web开发配置。不太写前端，先这样凑活用着吧
 
 #+begin_src emacs-lisp
   (use-package web-mode
-    :ensure t
     :config
     (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
     (add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
@@ -1214,10 +1195,9 @@ web开发配置。不太写前端，先这样凑活用着吧
 
 #+begin_src emacs-lisp
   (use-package js2-mode
-    :ensure t
-    :mode "\\.js\\'"
+    :mode ("\\.js\\'" . js2-mode)
     :bind (("C-c ! n" . js2-next-error))
-    :init
+    :config
     (progn
       (setq-default js2-basic-offset 4)
       (setq-default js2-strict-trailing-comma-warning t)
@@ -1245,8 +1225,7 @@ rust语言
 
 #+begin_src emacs-lisp
   (use-package rust-mode
-    :mode "\\.rs\\'"
-    :defer t
+    :mode ("\\.rs\\'" . rust-mode)
     :custom
     (rust-format-on-save t)
     )
@@ -1260,7 +1239,7 @@ rust语言
 
 #+begin_src emacs-lisp
   (use-package flycheck
-    :init (global-flycheck-mode)
+    :config (global-flycheck-mode)
     :bind
     (("C-c e n" . flycheck-next-error)
      ("C-c e p" . flycheck-previour-error)
@@ -1274,7 +1253,6 @@ rust语言
 
 #+begin_src emacs-lisp
   (use-package flycheck-rust
-    :ensure t
     :config (add-hook 'rust-mode-hook #'flycheck-rust-setup)
     )
 #+end_src
@@ -1288,7 +1266,6 @@ rust语言
 #+begin_src emacs-lisp
   ;; Manage and navigate projects in Emacs easily
   (use-package projectile
-    :requires (helm)
     :bind (:map projectile-mode-map
                 ("C-c p" . 'projectile-command-map))
     :config
@@ -1308,7 +1285,6 @@ Emacs的git客户端
 
 #+begin_src emacs-lisp
   (use-package magit
-    :commands magit-get-top-dir
     :bind (("C-x g s" . magit-status)
            ("C-x g f" . magit-log-buffer-file)
            ("C-x g x" . magit-checkout)
@@ -1379,7 +1355,6 @@ Emacs中实时显示修改
 #+begin_src emacs-lisp
 
   (use-package org
-    :pin gnu
     :mode ("\\.org\\'" . org-mode)
     :hook (org-mode . visual-line-mode)
     :init (setq
@@ -1423,25 +1398,25 @@ Emacs中实时显示修改
 ** org-bullets
 
 #+begin_src emacs-lisp
-  ;; really need this package to set the org-bullets by yourself
-  (use-package org-bullets
-    :init (add-hook 'org-mode-hook 'org-bullets-mode)
-    :config
-    ;; (setq org-bullets-bullet-list '("☰" "☷" "☯" "☭" "✸" "✿"))
-    ;; hexagrams
-    ;; (setq org-bullets-bullet-list '("✡" "⎈" "✽" "✲" "✱" "✻" "✼" "✽" "✾" "✿" "❀" "❁" "❂" "❃" "❄" "❅" "❆" "❇"))
-    ;; circles
-    ;; (setq org-bullets-bullet-list '("○" "☉" "◎" "◉" "○" "◌" "◎" "●" "◦" "◯" "⚪" "⚫" "⚬" "❍" "￮" "⊙" "⊚" "⊛" "∙" "∘"))
-    ;; special circles
-    ;; (setq org-bullets-bullet-list '("◐" "◑" "◒" "◓" "◴" "◵" "◶" "◷" "⚆" "⚇" "⚈" "⚉" "♁" "⊖" "⊗" "⊘"))
-    ;; crosses
-    ;; (setq org-bullets-bullet-list '("✙" "♱" "♰" "☥" "✞" "✟" "✝" "†" "✠" "✚" "✜" "✛" "✢" "✣" "✤" "✥"))
-    ;; poker sybmols
-    ;; (setq org-bullets-bullet-list '("♠" "♣" "♥" "♦" "♤" "♧" "♡" "♢"))
-    ;; special symbols
-    ;; (setq org-bullets-bullet-list '("☀" "♼" "☼" "☾" "☽" "☣" "§" "¶" "‡" "※" "✕" "△" "◇" "▶" "◀" "◈"))
-    (setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷")) ;
-    (setq org-ellipsis "▼"))
+    ;; really need this package to set the org-bullets by yourself
+    (use-package org-bullets
+      :hook (org-mode-hook . org-bullets-mode)
+      :config
+      ;; (setq org-bullets-bullet-list '("☰" "☷" "☯" "☭" "✸" "✿"))
+      ;; hexagrams
+      ;; (setq org-bullets-bullet-list '("✡" "⎈" "✽" "✲" "✱" "✻" "✼" "✽" "✾" "✿" "❀" "❁" "❂" "❃" "❄" "❅" "❆" "❇"))
+      ;; circles
+      ;; (setq org-bullets-bullet-list '("○" "☉" "◎" "◉" "○" "◌" "◎" "●" "◦" "◯" "⚪" "⚫" "⚬" "❍" "￮" "⊙" "⊚" "⊛" "∙" "∘"))
+      ;; special circles
+      ;; (setq org-bullets-bullet-list '("◐" "◑" "◒" "◓" "◴" "◵" "◶" "◷" "⚆" "⚇" "⚈" "⚉" "♁" "⊖" "⊗" "⊘"))
+      ;; crosses
+      ;; (setq org-bullets-bullet-list '("✙" "♱" "♰" "☥" "✞" "✟" "✝" "†" "✠" "✚" "✜" "✛" "✢" "✣" "✤" "✥"))
+      ;; poker sybmols
+      ;; (setq org-bullets-bullet-list '("♠" "♣" "♥" "♦" "♤" "♧" "♡" "♢"))
+      ;; special symbols
+      ;; (setq org-bullets-bullet-list '("☀" "♼" "☼" "☾" "☽" "☣" "§" "¶" "‡" "※" "✕" "△" "◇" "▶" "◀" "◈"))
+      (setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷")) ;
+      (setq org-ellipsis "▼"))
 #+end_src
 
 ** org-tempo

@@ -392,10 +392,11 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   ;; (set-frame-font "Fira Code-12")
   (set-face-attribute
    'default nil
-   :family "YaHei Consolas Hybrid"
+   ;; :family "YaHei Consolas Hybrid"
    ;; :family "Fira Code"
-   ;; :family "IntelOne Mono"
-   :height 130
+   ;; :family "Menlo"
+   :family "JetBrains Mono"
+   :height 160
    :weight 'normal)
 #+end_src
 
@@ -574,7 +575,7 @@ built-in功能，Emacs 24引入
 
 #+begin_src emacs-lisp
   (use-package highlight-indent-guides
-    :hook (prog-mode-hook . highlight-indent-guides-mode)
+    :hook (prog-mode . highlight-indent-guides-mode)
     :config (highlight-indent-guides-mode 'column)
     )
 #+end_src
@@ -636,8 +637,8 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
 
 #+begin_src emacs-lisp
   (use-package centaur-tabs
+    :after all-the-icons
     :config
-    (centaur-tabs-mode t)
     (setq centaur-tabs-set-bar 'over      ; display an underline over the selected tab
           centaur-tabs-height 32          ; tab height
           centaur-tabs-set-icons t        ; display themed icon from all-the-icons
@@ -646,6 +647,8 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
           centaur-tabs-modified-marker " ● " ; change the displayed string for the modified-marker
           centaur-tabs-style "bar"        ; tab style, 可能的值:"alternate", "bar", "box", "chamfer", "rounded","slant", "wave", "zigzag"
           )
+    (centaur-tabs-mode t)
+    (centaur-tabs-toggle-groups)
     :bind
     ("C-9" . centaur-tabs-backward)
     ("C-0" . centaur-tabs-forward))
@@ -691,7 +694,7 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
     )
 #+end_src
 
-* q杂项
+* 杂项
 
 ** helpful
 
@@ -785,7 +788,7 @@ orderless 的 style dispatchers 机制可以更灵活的定义输入字符串的
     (completion-styles '(orderless basic partial-completion))
     ;; (completion-category-defaults nil)
     (completion-category-overrides
-     '((file (styles basic basic-remote ; For `tramp' hostname completion with `vertico'
+     '((file (styles basic ; For `tramp' hostname completion with `vertico'
                      orderless partial-completion)))))
 #+end_src
 
@@ -1400,7 +1403,7 @@ Emacs中实时显示修改
 #+begin_src emacs-lisp
     ;; really need this package to set the org-bullets by yourself
     (use-package org-bullets
-      :hook (org-mode-hook . org-bullets-mode)
+      :hook (org-mode . org-bullets-mode)
       :config
       ;; (setq org-bullets-bullet-list '("☰" "☷" "☯" "☭" "✸" "✿"))
       ;; hexagrams
@@ -1492,8 +1495,8 @@ Emacs中实时显示修改
 #+begin_src emacs-lisp
   (use-package org-roam
     :custom
-    (org-roam-directory "~/Google Driver/brain-notes")
-    (org-roam-db-location "~/Google Driver/brain-notes/org-roam.db")
+    (org-roam-directory "~/Documents/Google Driver/brain-notes")
+    (org-roam-db-location "~/Documents/Google Driver/brain-notes/org-roam.db")
     (org-roam-db-gc-threshold most-positive-fixnum)
     (org-roam-complete-everywhere t)
     (org-roam-db-autosync-mode)
@@ -1501,6 +1504,33 @@ Emacs中实时显示修改
            ("C-c n f" . org-roam-node-find)
            ("C-c n i" . org-roam-node-insert))
     :config (org-roam-db-autosync-enable))
+#+end_src
+
+* Blog
+
+** ox-hugo
+
+[[https://github.com/kaushalmodi/ox-hugo][ox-hugo]] is an Org exporter backend that exports Org to [[https://gohugo.io/][Hugo]]-compatible Markdown and also generates the front-matter (in TOML or YAML format).
+
+#+begin_src emacs-lisp
+  (use-package ox-hugo
+    :after ox
+    )
+#+end_src
+
+** easy-hugo
+
+#+begin_src emacs-lisp
+  (use-package easy-hugo
+    :init
+    (setq easy-hugo-basedir "~/Sites/Blog/")
+    (setq easy-hugo-postdir "content/posts")
+    (setq easy-hugo-url "https://bloodyhulu.github.io")
+    (setq easy-hugo-root "~/Sites/Blog")
+    (setq easy-hugo-previewtime "300")
+    (setq easy-hugo-default-ext ".org")
+    :config (easy-hugo-enable-menu)
+    )
 #+end_src
 
 * 结尾

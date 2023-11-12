@@ -574,38 +574,6 @@ built-in功能，Emacs 24引入
     )
 #+end_src
 
-** highlight-indent-guides
-
-之前用 ~indent-guide~ 但是这个包不更新了，换成 ~highlight-indent-guides~ 试试。见：[[https://github.com/DarthFennec/highlight-indent-guides][官网]]
-
-这个包用于显示一个缩进标尺
-
-#+begin_src emacs-lisp
-  (use-package highlight-indent-guides
-    :hook (prog-mode . highlight-indent-guides-mode)
-    :config (highlight-indent-guides-mode 'column)
-    )
-#+end_src
-
-** highlight-symbol
-
-自动or手动高亮符号， 具体见: [[https://github.com/nschum/highlight-symbol.el][官网]]
-
-- =highlight-symbol= to toggle highlighting of the symbol at point throughout the current buffer.
-- =highlight-symbol-mode= to keep the symbol at point highlighted.
-- functions =highlight-symbol-next=, =highlight-symbol-prev=, =highlight-symbol-next-in-defun= and =highlight-symbol-prev-in-defun= allow for cycling through the locations of any symbol at point.
-- =highlight-symbol-nav-mode= to enable key bindings (M-p and M-p) for navigation. When =highlight-symbol-on-navigation-p= is set, highlighting is triggered regardless of =highlight-symbol-idle-delay=.
-- =highlight-symbol-query-replace= can be used to replace the symbol.
-
-#+begin_src emacs-lisp
-  (use-package highlight-symbol
-    :bind(("C-<f3>" . highlight-symbol)
-          ("<f3>" . highlight-symbol-next)
-          ("S-<f3>" . highlight-symbol-prev)
-          ("M-<f3>" . highlight-symbol-query-replace))
-    )
-#+end_src
-
 ** golden-ratio
 
 [[https://github.com/roman/golden-ratio.el][官网]]

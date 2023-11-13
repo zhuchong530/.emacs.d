@@ -626,7 +626,6 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
           centaur-tabs-style "bar"        ; tab style, 可能的值:"alternate", "bar", "box", "chamfer", "rounded","slant", "wave", "zigzag"
           )
     (centaur-tabs-mode t)
-    (centaur-tabs-toggle-groups)
     :bind
     ("C-9" . centaur-tabs-backward)
     ("C-0" . centaur-tabs-forward))

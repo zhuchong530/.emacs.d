@@ -51,18 +51,16 @@
   (setq-default native-comp-speed 2
                native-comp-async-query-on-exit t
                native-comp-jit-compilation nil
-               native-comp-async-report-warnings-errors nil))
+               native-comp-async-report-warnings-errors 'silent))
 
 ;; Prevent unwanted runtime builds in gcemacs (native-comp); packages are
 ;; compiled ahead-of-time when they are installed and site files are compiled
 ;; when gccemacs is installed
 ;; (setq comp-deferred-compilation nil)
 
-
-;; add the module path
-;; (add-to-list 'load-path (expand-file-name "custom" user-emacs-directory))
-;; (add-to-list 'load-path "~/.emacs.d/custom")
-;; (add-to-list 'load-path (concat user-emacs-directory "custom"))
+;; 在单独文件保存自定义配置，避免污染~/.emacs文件
+(setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
+(add-hook 'after-init-hook (lambda () (when (file-exists-p custom-file) (load custom-file))))
 
 ;; Load private config files is exist.
 ;; you can override variable in file.

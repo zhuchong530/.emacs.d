@@ -672,6 +672,14 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
     )
 #+end_src
 
+** 缩进
+
+#+begin_src emacs-lisp
+  (use-package aggressive-indent
+  :config
+  (global-aggressive-indent-mode t))
+#+end_src
+
 * 杂项
 
 ** helpful
@@ -857,6 +865,13 @@ makes the string match ignoring diacritics and similar inflections on characters
 
 ** consult
 
+安装ripgrep工具
+
+#+begin_src shell
+brew install ripgrep
+# debian发行版每个版本都有对应的deb包
+#+end_src
+
 [[https://github.com/minad/consult][官网]]
 
 这个包基于Emacs补全函数 ~completing-read~ 函数，可以从候选列表中快速选择一个item。
@@ -890,7 +905,6 @@ makes the string match ignoring diacritics and similar inflections on characters
            ("M-s r" . consult-ripgrep)
            ("M-s l" . consult-line)
            ("M-s L" . consult-line-multi)
-           ("M-s m" . consult-multi-occurg)
            ;; ("M-s k" . consult-keep-lines)
            ;; ("M-s u" . consult-focus-lines)
            ;; Isearch integration

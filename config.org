@@ -149,7 +149,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (when (window-system)
     (tool-bar-mode -1)
     (scroll-bar-mode -1)
-    (menu-bar-mode -1))
+    (menu-bar-mode -1)
+    (setq use-file-dialog nil)
+    (setq use-dialog-box nil))
 #+end_src
 
 *** 关掉启动信息啥的
@@ -232,8 +234,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
    sentence-end-double-space nil
    ;; Save existing clipboard text into the kill ring before replacing it.
    save-interprogram-paste-before-kill t
-   ;; Prompts should go in the minibuffer, not in a GUI
-   use-dialog-box nil
    ;; Fix undo in commands affecting the mark
    mark-even-if-inactive nil
    ;; if NIL, kill whole line and move the next line up
@@ -269,17 +269,11 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   ;; default to 4 visible spaces to display a tab
   (setq-default tab-width 4)
   (set-fringe-mode 10)
-#+end_src
 
-*** modeline上显示内容
+  ;; 平滑滚动
+  (if (boundp 'pixel-scroll-precision-mode)
+      (pixel-scroll-precision-mode t))
 
-即使没有安装插件，(或者运行 ~emacs -Q~ )，也需要这样的设置，
-
-#+begin_src emacs-lisp
-  ;; Feature mode
-  (setq column-number-mode t
-        display-time-day-and-date t
-        size-indication-mode -1)
 #+end_src
 
 *** 保存Emacs会话
@@ -375,6 +369,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 美化modeline， 具体见[[https://github.com/seagle0128/doom-modeline][官网]]
 
 #+begin_src emacs-lisp
+  (use-package nerd-icons)
   (use-package doom-modeline
     :hook (after-init . doom-modeline-mode)
     :custom
@@ -388,7 +383,18 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     (setq doom-modeline-time-icon t)
     (setq doom-modeline-buffer-modification-icon t)
     (setq doom-modeline-env-version t)
-    (setq doom-modeline-buffer-encoding t))
+    (setq doom-modeline-buffer-encoding t)
+    :config
+    (display-battery-mode 1)
+    (column-number-mode t)
+    (size-indication-mode t)
+    (display-time-mode t)
+    (setq display-time-24hr-format t)
+    (setq display-time-default-load-average nil)
+    (setq display-time-load-average-threshold 10)
+    (setq display-time-format "%m%d[%w]%H:%M ")
+    (setq display-time-day-and-date t)
+    (setq indicate-buffer-boundaries (quote left)))
 #+end_src
 
 ** 字体
@@ -403,7 +409,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
    ;; :family "Fira Code"
    ;; :family "Menlo"
    :family "JetBrains Mono"
-   :height 130
+   :height 120
    :weight 'normal)
 #+end_src
 

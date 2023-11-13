@@ -345,6 +345,13 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
 #+end_src
 
+*** 最大化
+
+#+begin_src emacs-lisp
+  (toggle-frame-maximized)
+#+end_src
+
+
 * UI
 
 ** doom-themes
@@ -392,7 +399,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     (setq display-time-24hr-format t)
     (setq display-time-default-load-average nil)
     (setq display-time-load-average-threshold 10)
-    (setq display-time-format "%m%d[%w]%H:%M ")
+    (setq display-time-format "%m/%d[%w]%H:%M ")
     (setq display-time-day-and-date t)
     (setq indicate-buffer-boundaries (quote left)))
 #+end_src
@@ -430,12 +437,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     :after all-the-icons
     :hook (dired-mode . all-the-icons-dired-mode)
     )
-#+end_src
-
-** 最大化
-
-#+begin_src emacs-lisp
-  (toggle-frame-maximized)
 #+end_src
 
 ** transwin
@@ -531,9 +532,7 @@ Emacs本身自带 ~other-window~ 函数，绑定到 ~C-x o~ 上，所以这里�
 
 ** uniquify
 
-build-in功能
-
-当Emacs打开具有相同名字的多个文件，增加前缀以示区别。具体见: [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.html][这里]]
+build-in功能, 当Emacs打开具有相同名字的多个文件，增加前缀以示区别。具体见: [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.html][这里]]
 
 #+begin_src emacs-lisp
     (setq
@@ -545,9 +544,7 @@ build-in功能
 
 ** 括号配对
 
-built-in功能，Emacs 24引入
-
-自动闭合括号等，具体见： [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Matching.html][这里]]
+built-in功能，Emacs 24引入。自动闭合括号等，具体见： [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Matching.html][这里]]
 
 #+begin_src emacs-lisp
   ;; auto close bracket insertion. New in emacs 24
@@ -761,17 +758,78 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
 
 默认情况下，启用字面意思和正则表达式匹配。
 
-orderless 的 style dispatchers 机制可以更灵活的定义输入字符串的匹配风格，可以通过变量 orderless-style-dispatchers来定义，默认值为 orderless-affix-dispatch, 它使用一种简单的前缀或后缀的字符(串)来表示各种风格：
+orderless 的 style dispatchers 机制可以更灵活的定义输入字符串的匹配风格，可以通过变量 =orderless-style-dispatchers= 来定义，默认值为 =orderless-affix-dispatch=, 它使用一种简单的前缀或后缀的字符(串)来表示各种风格：
+
+=!=
+makes the rest of the component match using =orderless-without-literal=, that is, both =!bad and bad!= will match strings that =do not contain the substring bad=.
+
+=~,~=
+uses orderless-initialism.
+
+===
+uses orderless-literal
+
+=~~~=
+uses orderless-flex
+
+=%=
+makes the string match ignoring diacritics and similar inflections on characters (it uses the function =char-fold-to-regexp= to do this).
+
+=!= 只能对 =字面量= 匹配取反(orderless-without-literal), 和其他dispatch字符连用时， ！需要前缀形式， 如 !=.go 将不匹配含有字面量.go的候选者
 
 #+begin_src emacs-lisp
   (use-package orderless
-    :custom
-    (completion-styles '(orderless basic partial-completion))
-    ;; (completion-category-defaults nil)
-    (completion-category-overrides
-     '((file (styles basic ; For `tramp' hostname completion with `vertico'
-                     orderless partial-completion)))))
+    :config
+    ;; https://github.com/minad/consult/wiki#minads-orderless-configuration
+    (defun +orderless--consult-suffix()
+      "Regexp which matches the end of string with Consult tofu support."
+      (if (and (boundp 'consult--tofu-char) (boundp 'consult--tofu-range))
+          (format "[%c-%c]*$"
+                  consult--tofu-char
+                  (+ consult--tofu-char consult--tofu-range -1))
+        "$"))
+
+    ;; Recognizes the following patterns:
+    ;; * .ext (file extension)
+    ;; * regexp$ (regexp matching at end)
+    (defun +orderless-consult-dispatch (word _index _total)
+      (cond
+       ;; Ensure that $ works with Consult commands, which add disambiguation suffixs
+       ((string-suffix-p "$" word)
+        `(orderless-regexp . ,(concat (substring word 0 -1) (+orderless--consult-suffix))))
+       ;; File extensions
+       ((and (or minibuffer-completing-file-name
+                 (derived-mode-p 'eshell-mode))
+             (string-match-p "\\`\\..'" word))
+        `(orderless-regexp . ,(concat "\\." (substring word 1) (+orderless--consult-suffix))))))
+
+    ;; 在 orderless-affix-dispatch 的基础上添加上面支持文件名扩展和正则表达式的 dispatchers
+    (setq orderless-style-dispatchers (list #'+orderless-consult-dispatch
+                                            #'orderless-affix-dispatch))
+
+    ;; 自定义名为 +orderless-with-initialism 的 orderless风格
+    (orderless-define-completion-style +orderless-with-initialism
+      (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
+
+    ;; 使用orderless和emacs原生的basic补全风格，但orderless的优先级更高
+    (setq completion-styles '(orderless basic))
+    (setq completion-category-defaults nil)
+    ;; 进一步设置各category使用的补全风格
+    (setq completion-category-overrides
+          '(;; buffer name 补全
+            (buffer (styles +orderless-with-initialism))
+            ;; file path&name 补全，partial completion提供了wildcard支持
+            (file (styles basic partial-completion))
+            (command (styles +orderless-with-initialism))
+            (variable (styles +orderless-with-initialism))
+            (symbol (styles +orderless-with-initialism))
+            ))
+    ;; 使用space来分割过滤字符，SPACE可以用\转义
+    (setq orderless-component-separator #'orderless-escapable-split-on-space))
 #+end_src
+
+- partial-completion 支持shell wildcards 和部分文件路径， 如/u/s/l for /usr/share/local
+- 已知的 [[https://gitlab.com/protesilaos/dotfiles/-/blob/master/emacs/.emacs.d/prot-emacs-modules/prot-emacs-completion-common.el#L60][completion categories]]
 
 ** vertico
 

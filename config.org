@@ -409,15 +409,18 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 在系统shell里通过 ~fc-list~ 命令，找到对应family的名字
 
 #+begin_src emacs-lisp
-  ;; (set-frame-font "Fira Code-12")
-  (set-face-attribute
-   'default nil
-   ;; :family "YaHei Consolas Hybrid"
-   ;; :family "Fira Code"
-   ;; :family "Menlo"
-   :family "JetBrains Mono"
-   :height 120
-   :weight 'normal)
+    ;; (set-frame-font "Fira Code-12")
+    (set-face-attribute
+     'default nil
+     ;; :family "YaHei Consolas Hybrid"
+     ;; :family "Fira Code"
+     ;; :family "Menlo"
+     ;; :family "JetBrains Mono"
+     :family "Monaspace Krypton"
+     :height 130
+     :weight 'normal)
+
+  (setq-default line-spacing 0.2)
 #+end_src
 
 ** 图标

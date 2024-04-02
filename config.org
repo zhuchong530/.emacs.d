@@ -822,11 +822,13 @@ makes the string match ignoring diacritics and similar inflections on characters
       (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
 
     ;; 使用orderless和emacs原生的basic补全风格，但orderless的优先级更高
-    (setq completion-styles '(orderless basic))
+    (setq completion-styles '(orderless partial-completion basic))
     (setq completion-category-defaults nil)
     ;; 进一步设置各category使用的补全风格
     (setq completion-category-overrides
-          '(;; buffer name 补全
+          '(
+            (eglot (styles orderless))
+            ;; buffer name 补全
             (buffer (styles +orderless-with-initialism))
             ;; file path&name 补全，partial completion提供了wildcard支持
             (file (styles basic partial-completion))
@@ -996,11 +998,26 @@ brew install ripgrep
     (corfu-cycle t)                       ; Enable cycling for `corfu-next/prevous`
     (corfu-auto t)                        ; Enable auto completion
     (corfu-preview-current nil)           ; Disable current candidate preview
-    (corfu-quit-at-boundary nil)          ; Never quit at completion boundary
-    (corfu-quit-no-match nil)             ; Never quit, even if there is no match
+    (corfu-quit-at-boundary 'separator)   ; Automatically quit at word boundary
+    (corfu-quit-no-match 'separator)      ; Automatically quit if there is no match
     (corfu-echo-documentation t)
     :init
     (global-corfu-mode))
+#+end_src
+
+*** cape
+
+#+begin_src emacs-lisp
+  (defun add-cape-completion ()
+    (add-to-list 'completion-at-point-functions #'cape-file))
+
+  (use-package cape
+    :hook (corfu-mode . add-cape-completion))
+
+  (use-package emacs
+    :init
+    (setq completion-cycle-threshold 3)
+    )
 #+end_src
 
 *** treesit
@@ -1024,14 +1041,14 @@ brew install ripgrep
             (python "https://github.com/tree-sitter/tree-sitter-python")
             (toml "https://github.com/tree-sitter/tree-sitter-toml")
             ))
-    ;; (setq major-mode-remap-alist
-    ;;       '((bash-mode . bash-ts-mode)
-    ;;         (js2-mode . js-ts-mode)
-    ;;         (python-mode . python-ts-mode)
-    ;;         (go-mode . go-ts-mode)
-    ;;         (rust-mode . rust-ts-mode)
-    ;;         (c-mode . c-ts-mode)
-    ;;         (c++-mode . c++-ts-mode)))
+    (setq major-mode-remap-alist
+          '((bash-mode . bash-ts-mode)
+            ;;         (js2-mode . js-ts-mode)
+            (python-mode . python-ts-mode)
+            (go-mode . go-ts-mode)
+            (rust-mode . rust-ts-mode)
+            (c-mode . c-ts-mode)
+            (c++-mode . c++-ts-mode)))
     )
 #+end_src
 

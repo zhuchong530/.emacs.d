@@ -1001,6 +1001,107 @@ brew install ripgrep
     (corfu-echo-documentation t)
     :init
     (global-corfu-mode))
+#+end_src
+
+*** treesit
+
+#+begin_src emacs-lisp
+  (use-package treesit
+    :init
+    (setq treesit-language-source-alist
+          '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+            (c "https://github.com/tree-sitter/tree-sitter-c")
+            (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+            (cmake "https://github.com/uyha/tree-sitter-cmake")
+            (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+            (go "https://github.com/tree-sitter/tree-sitter-go")
+            (rust "https://github.com/tree-sitter/tree-sitter-rust")
+            (html "https://github.com/tree-sitter/tree-sitter-html")
+            (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+            (json "https://github.com/tree-sitter/tree-sitter-json")
+            (make "https://github.com/alemuller/tree-sitter-make")
+            (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+            (python "https://github.com/tree-sitter/tree-sitter-python")
+            (toml "https://github.com/tree-sitter/tree-sitter-toml")
+            ))
+    ;; (setq major-mode-remap-alist
+    ;;       '((bash-mode . bash-ts-mode)
+    ;;         (js2-mode . js-ts-mode)
+    ;;         (python-mode . python-ts-mode)
+    ;;         (go-mode . go-ts-mode)
+    ;;         (rust-mode . rust-ts-mode)
+    ;;         (c-mode . c-ts-mode)
+    ;;         (c++-mode . c++-ts-mode)))
+    )
+#+end_src
+
+*** yasnippet
+
+模版补全，lsp-bridge也需要这个包。[[https://github.com/joaotavora/yasnippet][官网]]
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :bind (:map yas-keymap
+                ("C-i" . yas-next-field-or-maybe-expand))
+    :hook ((prog-mode org-mode) . yas-minor-mode)
+    :init (defvar snippet-directory "~/.emacs.d/snippets")
+    :config
+    (add-to-list 'yas-snippet-dirs snippet-directory)
+    (yas-global-mode 1)
+    )
+#+end_src
+
+*** posframe
+
+弹出一个posframe(只是一个子frame)。lsp-bridge需要这个包 。[[https://github.com/tumashu/posframe][官网]]
+
+#+begin_src emacs-lisp
+  (use-package posframe)
+#+end_src
+
+*** lsp-bridge
+
+LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bridge，加速补全。
+
+具体见: [[https://github.com/manateelazycat/lsp-bridge][官网]]
+
+#+begin_src emacs-lisp
+  (use-package lsp-bridge
+    :disabled t
+    :load-path "~/.emacs.d/site-lisp/lsp-bridge"
+    :hook (after-init . global-lsp-bridge-mode)
+    :bind
+    (:map lsp-bridge-mode-map
+          ("M-." . lsp-bridge-find-def)
+          ("M-," . lsp-bridge-find-def-return)
+          ("M-?" . lsp-bridge-find-references)
+          ("M-i" . lsp-bridge-lookup-documentation)
+          ("M-n" . lsp-bridge-popup-documentation-scroll-up)
+          ("M-p" . lsp-bridge-popup-documentation-scroll-down)
+          ("s-C-n" . lsp-bridge-jump-to-next-diagnostic)
+          ("s-C-p" . lsp-bridge-jump-to-prev-diagnostic))
+    :config
+    (setq lsp-bridge-enable-log nil)
+    (setq lsp-bridge-enable-signature-help t)
+    )
+
+  ;; (add-to-list 'load-path "~/.emacs.d/elpa/lsp-bridge")
+  ;; (require 'lsp-bridge)
+  ;; (global-lsp-bridge-mode)
+#+end_src
+
+*** eglot
+
+built-in
+
+#+begin_src emacs-lisp
+  (use-package eglot
+    :hook
+    (python-mode . eglot-ensure)
+    (c-mode . eglot-ensure)
+    (c++-mode . eglot-ensure)
+    (go-mode . eglot-ensure)
+    (rust-mode . eglot-ensure)
     )
 #+end_src
 

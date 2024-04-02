@@ -986,110 +986,22 @@ brew install ripgrep
 使用lsp-bridge以后，corfu暂时先disable了
 
 #+begin_src emacs-lisp
-  ;; (use-package corfu
-  ;;   :disabled t
-  ;;   :after (orderless lsp-bridge)
-  ;;   :bind (:map corfu-map
-  ;;               ("M-n" . corfu-next)
-  ;;               ("M-p" . corfu-previous)
-  ;;               ("TAB" . corfu-insert))
-  ;;   :custom
-  ;;   ;; (corfu-cycle t)
-  ;;   ;; auto completion
-  ;;   (corfu-auto t)
-  ;;   (corfu-auto-delay 0.25)
-  ;;   (corfu-auto-prefix 2)
-  ;;   (corfu-max-width 110)
-  ;;   (corfu-preview-current nil)
-  ;;   (corfu-echo-documentation t)
-  ;;   :config (global-corfu-mode))
-#+end_src
-
-*** tree-sitter
-
-#+begin_src emacs-lisp
-  (use-package treesit
-    :disabled
+  (use-package corfu
+    :after (orderless)
+    :bind (:map corfu-map
+                ("M-n" . corfu-next)
+                ("M-p" . corfu-previous)
+                ("TAB" . corfu-insert))
+    :custom
+    (corfu-cycle t)                       ; Enable cycling for `corfu-next/prevous`
+    (corfu-auto t)                        ; Enable auto completion
+    (corfu-preview-current nil)           ; Disable current candidate preview
+    (corfu-quit-at-boundary nil)          ; Never quit at completion boundary
+    (corfu-quit-no-match nil)             ; Never quit, even if there is no match
+    (corfu-echo-documentation t)
     :init
-    (setq treesit-language-source-alist
-          '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-            (c "https://github.com/tree-sitter/tree-sitter-c")
-            (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
-            (cmake "https://github.com/uyha/tree-sitter-cmake")
-            (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-            (go "https://github.com/tree-sitter/tree-sitter-go")
-            (rust "https://github.com/tree-sitter/tree-sitter-rust")
-            (html "https://github.com/tree-sitter/tree-sitter-html")
-            (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-            (json "https://github.com/tree-sitter/tree-sitter-json")
-            (make "https://github.com/alemuller/tree-sitter-make")
-            (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-            (python "https://github.com/tree-sitter/tree-sitter-python")
-            (toml "https://github.com/tree-sitter/tree-sitter-toml")
-            ))
-    ;; (setq major-mode-remap-alist
-    ;;       '((bash-mode . bash-ts-mode)
-    ;;         (js2-mode . js-ts-mode)
-    ;;         (python-mode . python-ts-mode)
-    ;;         (go-mode . go-ts-mode)
-    ;;         (rust-mode . rust-ts-mode)
-    ;;         (c-mode . c-ts-mode)
-    ;;         (c++-mode . c++-ts-mode)))
+    (global-corfu-mode))
     )
-#+end_src
-
-*** yasnippet
-
-模版补全，lsp-bridge也需要这个包。[[https://github.com/joaotavora/yasnippet][官网]]
-
-#+begin_src emacs-lisp
-  (use-package yasnippet
-    :bind (:map yas-keymap
-                ("C-i" . yas-next-field-or-maybe-expand))
-    :hook ((prog-mode org-mode) . yas-minor-mode)
-    :init (defvar snippet-directory "~/.emacs.d/snippets")
-    :config
-    (add-to-list 'yas-snippet-dirs snippet-directory)
-    (yas-global-mode 1)
-    )
-#+end_src
-
-*** posframe
-
-弹出一个posframe(只是一个子frame)。lsp-bridge需要这个包 。[[https://github.com/tumashu/posframe][官网]]
-
-#+begin_src emacs-lisp
-  (use-package posframe)
-#+end_src
-
-*** lsp-bridge
-
-LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bridge，加速补全。
-
-具体见: [[https://github.com/manateelazycat/lsp-bridge][官网]]
-
-#+begin_src emacs-lisp
-  (use-package lsp-bridge
-    :load-path "~/.emacs.d/site-lisp/lsp-bridge"
-    :hook (after-init . global-lsp-bridge-mode)
-    :bind
-    (:map lsp-bridge-mode-map
-          ("M-." . lsp-bridge-find-def)
-          ("M-," . lsp-bridge-find-def-return)
-          ("M-?" . lsp-bridge-find-references)
-          ("M-i" . lsp-bridge-lookup-documentation)
-          ("M-n" . lsp-bridge-popup-documentation-scroll-up)
-          ("M-p" . lsp-bridge-popup-documentation-scroll-down)
-          ("s-C-n" . lsp-bridge-jump-to-next-diagnostic)
-          ("s-C-p" . lsp-bridge-jump-to-prev-diagnostic))
-    :config
-    (setq lsp-bridge-enable-log nil)
-    (setq lsp-bridge-enable-signature-help t)
-    )
-
-  ;; (add-to-list 'load-path "~/.emacs.d/elpa/lsp-bridge")
-  ;; (require 'lsp-bridge)
-  ;; (global-lsp-bridge-mode)
 #+end_src
 
 ** 文档帮助
@@ -1560,33 +1472,6 @@ Emacs中实时显示修改
            ("C-c n f" . org-roam-node-find)
            ("C-c n i" . org-roam-node-insert))
     :config (org-roam-db-autosync-enable))
-#+end_src
-
-* Blog
-
-** ox-hugo
-
-[[https://github.com/kaushalmodi/ox-hugo][ox-hugo]] is an Org exporter backend that exports Org to [[https://gohugo.io/][Hugo]]-compatible Markdown and also generates the front-matter (in TOML or YAML format).
-
-#+begin_src emacs-lisp
-  (use-package ox-hugo
-    :after ox
-    )
-#+end_src
-
-** easy-hugo
-
-#+begin_src emacs-lisp
-  (use-package easy-hugo
-    :init
-    (setq easy-hugo-basedir "~/Sites/Blog/")
-    (setq easy-hugo-postdir "content/posts")
-    (setq easy-hugo-url "https://bloodyhulu.github.io")
-    (setq easy-hugo-root "~/Sites/Blog")
-    (setq easy-hugo-previewtime "300")
-    (setq easy-hugo-default-ext ".org")
-    :config (easy-hugo-enable-menu)
-    )
 #+end_src
 
 * 结尾

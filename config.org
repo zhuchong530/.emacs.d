@@ -417,7 +417,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
      ;; :family "Menlo"
      ;; :family "JetBrains Mono"
      :family "Monaspace Krypton"
-     :height 130
+     :height 160
      :weight 'normal)
 
   (setq-default line-spacing 0.2)
@@ -1009,6 +1009,7 @@ brew install ripgrep
 
 #+begin_src emacs-lisp
   (use-package treesit
+    :disabled
     :init
     (setq treesit-language-source-alist
           '((bash "https://github.com/tree-sitter/tree-sitter-bash")
@@ -1161,7 +1162,7 @@ LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bri
     :defer t
     :mode ("\\.py\\'" . python-mode)
     :config
-    (setq python-shell-interpreter "python3")
+    (setq python-shell-interpreter "python3.12")
     )
 #+end_src
 
@@ -1170,14 +1171,20 @@ LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bri
 [[https://github.com/jorgenschaefer/pyvenv][官网]]
 
 #+begin_src emacs-lisp
-
-  ;; python3.3 build-in virtualenv environments
   (use-package pyvenv
     :demand
+    :init
+    (setenv "WORKON_HOME" "/home/wangchang/Programme/pythonCode")
     :config
     (pyvenv-mode 1)
+    ;; set corret python interpreter
+    (setq pyvenv-post-activate-hooks
+          (list (lambda()
+                  (setq python-shell-interpreter (concat pyvenv-virtual-env "/opt/homebrew/bin/python3.12")))))
+    (setq pyvenv-post-deactivate-hooks
+          (list (lambda()
+                  (setq python-shell-interpreter "/opt/homebrew/bin/python3.12"))))
     )
-  (setenv "WORKON_HOME" "/home/wangchang/Programme/pythonCode")
 #+end_src
 
 *** go
@@ -1424,7 +1431,7 @@ Emacs中实时显示修改
            truncate-lines t
            org-confirm-babel-evaluate nil) ;don't notify -> "Do you want to execute"
     :config (setq
-             org-directory (file-truename "~/Google Driver/All Notes")
+             org-directory (file-truename "~/Documents/Google Driver/All Notes")
              org-todo-keywords
              '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELED(c)")))
     (org-babel-do-load-languages 'org-babel-load-languages
@@ -1438,9 +1445,9 @@ Emacs中实时显示修改
                                            (go . t))))
     :custom
     (setq org-log-done 'time)
-    (setq org-agenda-files (list "~/Google Driver/All Notes/Agenda/work.org"
-                                 "~/Google Driver/All Notes/Agenda/study.org"
-                                 "~/Google Driver/All Notes/Agenda/life.org"))
+    (setq org-agenda-files (list "~/Documents/Google Driver/All Notes/Agenda/work.org"
+                                 "~/Documents/Google Driver/All Notes/Agenda/study.org"
+                                 "~/Documents/Google Driver/All Notes/Agenda/life.org"))
     :bind(("C-c l" . org-store-link)
           ("C-c a" . org-agenda)
           ("C-c c" . org-capture))

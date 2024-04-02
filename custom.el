@@ -7,7 +7,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(aggressive-indent go-mode easy-hugo ox-hugo rust-mode markdown-mode crux all-the-icons flycheck fanyi devdocs transwin org-roam vertico-posframe olivetti treemacs uniquify zeal-at-point youdao-dictionary yasnippet ws-butler which-key web-mode volatile-highlights vertico use-package undo-tree toc-org rustic realgud-lldb rainbow-mode rainbow-delimiters pyvenv projectile posframe ox-reveal ox-gfm org-mime org-download org-bullets orderless ob-go nyan-mode nasm-mode marginalia magit lsp-mode js2-mode iedit helpful golden-ratio go-eldoc git-gutter+ gcmh flycheck-rust exec-path-from-shell doom-themes doom-modeline diminish consult comment-dwim-2 cmake-mode clean-aindent-mode centaur-tabs cargo all-the-icons-dired all-the-icons-completion ace-window)))
+   '(yasnippet which-key web-mode volatile-highlights vertico-posframe undo-tree transwin toc-org rust-mode rainbow-mode rainbow-delimiters pyvenv projectile ox-reveal ox-hugo ox-gfm org-roam org-mime org-download org-bullets orderless ob-go nyan-mode nasm-mode markdown-mode marginalia magit js2-mode iedit highlight-symbol highlight-indent-guides helpful golden-ratio go-eldoc git-gutter+ gcmh flycheck-rust fanyi exec-path-from-shell easy-hugo doom-themes doom-modeline devdocs crux consult comment-dwim-2 cmake-mode centaur-tabs all-the-icons-dired all-the-icons-completion aggressive-indent ace-window)))
 
 (provide 'init)
 ;;; init.el ends here

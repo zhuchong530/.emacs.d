@@ -1052,6 +1052,12 @@ brew install ripgrep
             (c-mode . c-ts-mode)
             (c++-mode . c++-ts-mode)))
     )
+  (setq
+   c-ts-mode-indent-offset 4
+   c-ts-mode-indent-offset 4
+   rust-ts-mode-indent-offset 4
+   go-ts-mode-indent-offset 4
+   )
 #+end_src
 
 *** yasnippet

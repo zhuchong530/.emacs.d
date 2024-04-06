@@ -1032,6 +1032,7 @@ brew install ripgrep
             (cmake "https://github.com/uyha/tree-sitter-cmake")
             (elisp "https://github.com/Wilfred/tree-sitter-elisp")
             (go "https://github.com/tree-sitter/tree-sitter-go")
+            (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
             (rust "https://github.com/tree-sitter/tree-sitter-rust")
             (html "https://github.com/tree-sitter/tree-sitter-html")
             (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
@@ -1039,6 +1040,7 @@ brew install ripgrep
             (make "https://github.com/alemuller/tree-sitter-make")
             (markdown "https://github.com/ikatyang/tree-sitter-markdown")
             (python "https://github.com/tree-sitter/tree-sitter-python")
+            (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
             (toml "https://github.com/tree-sitter/tree-sitter-toml")
             ))
     (setq major-mode-remap-alist
@@ -1119,6 +1121,7 @@ built-in
     (c++-mode . eglot-ensure)
     (go-mode . eglot-ensure)
     (rust-mode . eglot-ensure)
+    (prog-mode . eglot-ensure)
     )
 #+end_src
 

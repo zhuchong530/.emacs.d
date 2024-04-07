@@ -1375,20 +1375,10 @@ rust语言
 
 ** 项目管理
 
-*** projectile
-
-管理项目相关特性。具体见： [[https://github.com/bbatsov/projectile][官网]]
+*** project
 
 #+begin_src emacs-lisp
-  ;; Manage and navigate projects in Emacs easily
-  (use-package projectile
-    :bind (:map projectile-mode-map
-                ("C-c p" . 'projectile-command-map))
-    :config
-    (setq projectile-enable-caching t
-          projectile-indexing-method 'alien
-          projectile-completion-system 'helm)
-    (projectile-mode +1))
+  (use-package project)
 #+end_src
 
 ** 版本控制相关

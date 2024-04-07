@@ -1008,11 +1008,13 @@ brew install ripgrep
 *** cape
 
 #+begin_src emacs-lisp
-  (defun add-cape-completion ()
-    (add-to-list 'completion-at-point-functions #'cape-file))
-
   (use-package cape
-    :hook (corfu-mode . add-cape-completion))
+    :init
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-keyword)
+    (add-to-list 'completion-at-point-functions #'cape-history)
+    )
 
   (use-package emacs
     :init
@@ -1058,6 +1060,22 @@ brew install ripgrep
    rust-ts-mode-indent-offset 4
    go-ts-mode-indent-offset 4
    )
+#+end_src
+
+*** treesit-auto
+
+treesit-auto 自动安装 grammer 和自动将 xx major-mode remap 到对应的 xx-ts-mode 上。具体参考变量: treesit-auto-recipe-list:
+
+grammer 安装位置: ~/.emacs.d/tree-sitter, 如 ~/.emacs.d/tree-sitter/libtree-sitter-python.dylib
+
+执行 M-x treesit-auto-install-all 来安装所有的 treesit modules。
+如果要重新安装(升级) grammer, 需要先删除 dylib 文件或 tree-sitter 目录, 重启 emacs 后再执行 M-x treesit-auto-install-all.
+
+#+begin_src emacs-lisp
+  (use-package treesit-auto
+    :config
+    (setq treesit-auto-install 'prompt)
+    (global-treesit-auto-mode))
 #+end_src
 
 *** yasnippet

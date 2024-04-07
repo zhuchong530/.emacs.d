@@ -7,7 +7,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(treesit-auto cape corfu eglot yasnippet which-key web-mode volatile-highlights vertico-posframe undo-tree transwin toc-org rust-mode rainbow-mode rainbow-delimiters pyvenv ox-reveal ox-gfm org-roam org-mime org-download org-bullets orderless ob-go nyan-mode nasm-mode markdown-mode marginalia magit js2-mode iedit highlight-symbol highlight-indent-guides helpful golden-ratio go-eldoc git-gutter+ gcmh flycheck-rust fanyi exec-path-from-shell doom-themes doom-modeline devdocs crux consult comment-dwim-2 cmake-mode centaur-tabs all-the-icons-dired all-the-icons-completion aggressive-indent ace-window)))
+   '(citre treesit-auto cape corfu eglot yasnippet which-key web-mode volatile-highlights vertico-posframe undo-tree transwin toc-org rust-mode rainbow-mode rainbow-delimiters pyvenv ox-reveal ox-gfm org-roam org-mime org-download org-bullets orderless ob-go nyan-mode nasm-mode markdown-mode marginalia magit js2-mode iedit highlight-symbol highlight-indent-guides helpful golden-ratio go-eldoc git-gutter+ gcmh flycheck-rust fanyi exec-path-from-shell doom-themes doom-modeline devdocs crux consult comment-dwim-2 cmake-mode centaur-tabs all-the-icons-dired all-the-icons-completion aggressive-indent ace-window)))
 
 (provide 'init)
 ;;; init.el ends here

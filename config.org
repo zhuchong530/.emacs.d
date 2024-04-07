@@ -1149,6 +1149,124 @@ built-in
     )
 #+end_src
 
+*** citre
+
+[[https://www.gnu.org/software/global/][GNU Global]] 内置了 5 种语言解析器，包括 C/Yacc/JAVA/assembly, 其他 25 种语言使用 Pygments + Universal Ctags 解析器插件来支持的。
+
+安装 GNU global 和 pygments, global 依赖并自动安装 universal-ctags, 通过 pygments 能生成更丰富的 TAG 内容，同 时支持 reference 搜索。
+
+- https://github.com/universal-ctags/citre/blob/master/docs/user-manual/citre-global.md
+- global 默认使用 brew 安装的 python@3.12 和 pygments, 而不能直接使用 pip install pygments.
+
+#+begin_quote
+brew install global pygments # 提供 global、gtags 命令, gtags 使用 pygments 支持跟多语言
+
+# 在 ~/.bashrc 中添加如下配置：
+# 统一的 tags 文件目录
+export GTAGSOBJDIRPREFIX=~/.cache/gtags/
+mkdir $GTAGSOBJDIRPREFIX
+export GTAGSCONF=/opt/homebrew/opt/global/share/gtags/gtags.conf
+# 使用 pygments 支持更多的语言，他噢夹南是支持 reference 搜索。
+export GTAGSLABEL=pygments
+#+end_quote
+
+citre 是基于 Ctags（Universal Ctags 版本）的代码浏览器工具，也支持[[https://github.com/universal-ctags/citre/blob/master/docs/user-manual/citre-global.md][集成使用GNU global 的 GTAGS 文件]]。
+
+创建和更新 GNU global GTAGS 文件（保存到 GTAGSOBJDIRPREFIX 环境变量指定的位置，如 ~/.cache/gtags/)：
+
+- M-x citre-global-create-database
+- M-x citre-global-update-database
+
+注意以下两个命令创建 Universal Ctags 的 ctags 文件（项目有 .tags/ 目录或 .tags 或 tags 文件），而非 GNU global GTAGS 文件，不支持 references，不建议使用：
+
+- M-x citre-create-tags-file
+- M-x citre-update-tags-file
+
+如果误使用了上面的命令创建 ctags 文件则后续使用 xref-find-references 会 hang，需要删除。
+
+使用 citre:
+
+- *M-x citre-jump-to-reference*
+  - which reuses the citre-jump UI;
+- *M-x citre-peek-references*
+  - equivalent to citre-peek;
+- *M-x citre-ace-peek-references*
+  - equivalent to citre-ace-peek;
+- *M-x citre-peek-through-references*
+  - equivalent to citre-peek-through.
+- *M-x citre-ace-peek*
+  - 使用 ace 来 peek 查看指定的符号定义或函数签名。
+- *M-x citre-peek*
+  - 查看当前光标处符号的定义或函数签名。
+
+执行 s-? (citre-peek-reference) 支持如下快捷键：
+
+- M-n, M-p: Next/prev line，当前显示的内容的下一行或上一行（文件不变）。
+- M-N, M-P: Next/prev definition. 切换到下一个或上一个文件。
+- M-l j: Jump to the definition. (跳转到当前预览的位置定义文件，同时 peek window 继续显示，可以使用 M-n/M-p/M-N/M-P 来使用 peek window)。
+- M-l p：M-x citre-peek-through， 在 peek window 中选择一个 symbol，然后跳转到定义。
+- C-g: Close the peek window.
+
+M-l 前缀快捷键：
+
+- j citre-peek-jump
+- f citre-peek-make-current-tag-first
+- D citre-peek-delete-branches
+- d citre-peek-delete-branch
+- r citre-peek-through-reference
+- p citre-peek-through
+
+通过 peek through 打开多个多个 function definition 后，citre 会在 peek window 下方记录 peek history， 可以使用 <left>/<right> 来移动 history，当前的位置用 [func] 方括号来表示。
+
+可以使用 C-l 来调整 peek window 的位置。
+
+对于开启了 citre-mode 的 buffer，citre 会向 xref-backend-functions 中添加 citre-xref-backend, 所以后 续使用 imenu/xref-find-references/xref-find-definitions 时会使用 citre 提供的输入。同时 xref 和 consult 结合，可以使用 consult 来预览 xref 的结果。
+
+xref-backend-functions 可能会被添加多个 backend，它使用第一个 backend 返回地信息，所以必须确保 citre-xref-backend 位于列表的第一位。常见的问题是 eglot 会将 xref-backend-functions 重置为唯一的 eglot-xref-backend。
+
+- 解决办法：定义一个函数 my/toggle-eglot 来关闭 eglot，这时 xref-backend-functions 会恢复为 eglot 启 动前设置的值。
+
+在 citre-jump（M-.) 的弹出时 buffer 中可以使用正则语法对候选者进行过滤（orderless 提供的支持）, 例 如: something kind:^member$ kind:^macro$ input:.c$
+
+#+begin_src emacs-lisp
+  (setenv "GTAGSOBJDIRPREFIX" (expand-file-name "~/.cache/gtags/"))
+  (setenv "GTAGSCONF" (car (file-expand-wildcards "/opt/homebrew/opt/global/share/gtags/gtags.conf")))
+  (setenv "GTAGSLABEL" "pygments")
+
+  (use-package citre
+    :after (elgot)
+    :init
+    ;; when open a file, if it can find the relative TAGS file, it will turn-on the citre-mode
+    ;; when citre-mode is on, it will add "citre-xref-backend" into xref-backend-functions hook
+    ;; and this will support integration of xref and imenu
+    (require 'citre-config)
+    :config
+    ;; only use GNU Global tags, which support reference
+    (setq citre-completion-backends '(global))
+    (setq citre-find-definition-backends '(global))
+    (setq citre-find-reference-backends '(global))
+    (setq citre-tags-in-buffer-backends '(global))
+    (setq citre-auto-enable-citre-mode-bakcends '(global))
+    ;; citre-config is only useful for prog-mode file
+    (setq citre-auto-enable-citre-mode-modes '(go-ts-mode go-mode python-ts-mode python-mode rust-ts-mode rust-mode c-mode c-ts-mode c++-mode c++-ts-mode))
+    (setq citre-use-project-root-when-creating-tags t)
+    (setq citre-peek-file-content-height 20)
+    ;; after citre-config automaticaly enable citre-mode
+    ;; the key-binding under citre-mode-map is enabled
+    (define-key citre-mode-map (kbd "M-.") 'citre-jump)
+    (define-key citre-mode-map (kbd "M-,") 'citre-jump-back)
+    (define-key citre-mode-map (kbd "M-?") 'citre-peek-reference)
+    (define-key citre-mode-map (kbd "M-p") 'citre-peek)
+    (define-key citre-peek-keymap (kbd "M-n") 'citre-peek-next-line)
+    (define-key citre-peek-keymap (kbd "M-p") 'citre-peek-prev-line)
+    (define-key citre-peek-keymap (kbd "M-N") 'citre-peek-next-tag)
+    (define-key citre-peek-keymap (kbd "M-P") 'citre-peek-prev-tag)
+    (global-set-key (kbd "C-x c u") 'citre-global-update-database)
+    ;; when eglot is closed, close citre-mode, prevent mutual interference between the two xref backends
+    (add-hook 'eglot-managed-mode-hook (lambda () (citre-mode -1)))
+    )
+#+end_src
+
 ** 文档帮助
 
 *** devdocs

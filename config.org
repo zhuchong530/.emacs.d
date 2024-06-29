@@ -984,11 +984,10 @@ brew install ripgrep
 
 补全功能，之前用 =company-mode= ，但是太重量了。所以换成corfu，具体见： [[https://github.com/minad/corfu][官网]]
 
-使用lsp-bridge以后，corfu暂时先disable了
-
 #+begin_src emacs-lisp
   (use-package corfu
     :after (orderless)
+    :hook (prog-mode . corfu-mode)
     :bind (:map corfu-map
                 ("M-n" . corfu-next)
                 ("M-p" . corfu-previous)

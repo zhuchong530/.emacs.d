@@ -351,7 +351,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (toggle-frame-maximized)
 #+end_src
 
-
 * UI
 
 ** doom-themes
@@ -1147,7 +1146,7 @@ built-in
     (rust-mode . eglot-ensure)
     (prog-mode . eglot-ensure)
     )
-#+end_src
+ #+end_src
 
 *** citre
 
@@ -1234,7 +1233,7 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
   (setenv "GTAGSLABEL" "pygments")
 
   (use-package citre
-    :after (elgot)
+    :after (eglot)
     :init
     ;; when open a file, if it can find the relative TAGS file, it will turn-on the citre-mode
     ;; when citre-mode is on, it will add "citre-xref-backend" into xref-backend-functions hook
@@ -1253,10 +1252,10 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
     (setq citre-peek-file-content-height 20)
     ;; after citre-config automaticaly enable citre-mode
     ;; the key-binding under citre-mode-map is enabled
-    (define-key citre-mode-map (kbd "M-.") 'citre-jump)
-    (define-key citre-mode-map (kbd "M-,") 'citre-jump-back)
-    (define-key citre-mode-map (kbd "M-?") 'citre-peek-reference)
-    (define-key citre-mode-map (kbd "M-p") 'citre-peek)
+    (global-set-key (kbd "M-.") 'citre-jump)
+    (global-set-key (kbd "M-,") 'citre-jump-back)
+    (global-set-key (kbd "M-?") 'citre-peek-reference)
+    (global-set-key (kbd "M-p") 'citre-peek)
     (define-key citre-peek-keymap (kbd "M-n") 'citre-peek-next-line)
     (define-key citre-peek-keymap (kbd "M-p") 'citre-peek-prev-line)
     (define-key citre-peek-keymap (kbd "M-N") 'citre-peek-next-tag)
@@ -1349,7 +1348,7 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
   (use-package pyvenv
     :demand
     :init
-    (setenv "WORKON_HOME" "/home/wangchang/Programme/pythonCode")
+    ;; (setenv "WORKON_HOME" "/home/wangchang/Programme/pythonCode")
     :config
     (pyvenv-mode 1)
     ;; set corret python interpreter

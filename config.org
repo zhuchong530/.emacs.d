@@ -1648,11 +1648,12 @@ Emacs中实时显示修改
   ;; or "C-c C-,"
   (require 'org-tempo)
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("py" . "src python"))
-  (add-to-list 'org-structure-template-alist '("go" . "src go"))
+  (add-to-list 'org-structure-template-alist '("se" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("sp" . "src python"))
+  (add-to-list 'org-structure-template-alist '("sg" . "src go"))
   (add-to-list 'org-structure-template-alist '("sc" . "src c"))
   (add-to-list 'org-structure-template-alist '("scpp" . "src c++"))
+  (add-to-list 'org-structure-template-alist '("sr" . "src rust"))
 #+end_src
 
 ** ob-go
@@ -1661,6 +1662,14 @@ Emacs中实时显示修改
 
 #+begin_src emacs-lisp
   (use-package ob-go)
+#+end_src
+
+** ob-rust
+
+[[https://github.com/micanzhang/ob-rust][ob-rust]] 使org-babel支持执行rust代码
+
+#+begin_src emacs-lisp
+(use-package ob-rust)
 #+end_src
 
 ** ox-reveal

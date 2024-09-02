@@ -1528,6 +1528,7 @@ Emacs中实时显示修改
 #+begin_src emacs-lisp
 
   (use-package git-gutter+
+    :disabled
     :config
     (progn
       (global-git-gutter+-mode)))

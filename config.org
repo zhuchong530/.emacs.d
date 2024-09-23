@@ -37,7 +37,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+begin_src emacs-lisp
   ;;; config.el --- Cathy.Chang's Emacs configuration -*- lexical-binding: t -*-
 
-  ;; Copyright (C) 2008-2022 Cathy Chang
+  ;; Copyright (C) 2008-2024 Cathy Chang
 
   ;; Author: Cathy.Chang <xxxxxxx@gmail.com>
   ;; Keywords: internal
@@ -362,7 +362,8 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     :config
     (setq doom-themes-enable-bold t       ; if nil,  bold is universally disabled
           doom-themes-enable-italic t)    ; if nil, italics is universally disabled
-    (load-theme 'doom-dracula t)
+    ;; (load-theme 'doom-dracula t)
+    (load-theme 'doom-laserwave t)
     ;; (load-theme 'doom-acario-light t)      ; a ligh theme
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
@@ -1313,6 +1314,11 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
       )
 #+end_src
 
+#+begin_src emacs-lisp
+  (use-package modern-cpp-font-lock
+    :hook (c++-mode . modern-c++-font-lock-global-mode))
+#+end_src
+
 *** assembler
 
 汇编语言模式。 [[https://github.com/skeeto/nasm-mode][官网]]
@@ -1458,8 +1464,8 @@ rust语言
 #+begin_src emacs-lisp
   (use-package rust-mode
     :mode ("\\.rs\\'" . rust-mode)
-    :custom
-    (rust-format-on-save t)
+    :config
+    (setq rust-format-on-save t)
     )
 #+end_src
 

@@ -6,10 +6,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("ff24d14f5f7d355f47d53fd016565ed128bf3af30eb7ce8cae307ee4fe7f3fd0" "c5878086e65614424a84ad5c758b07e9edcf4c513e08a1c5b1533f313d1b17f1" default))
  '(package-selected-packages
-   '(modern-cpp-font-lock yasnippet which-key web-mode volatile-highlights vertico-posframe undo-tree treesit-auto transwin tomelr toc-org rust-mode request realgud-lldb rainbow-mode rainbow-delimiters pyvenv popup pkg-info ox-reveal ox-gfm org-roam org-mime org-download org-bullets orderless ob-rust ob-go nyan-mode nasm-mode markdown-mode marginalia magit js2-mode iedit highlight-symbol highlight-indent-guides helpful golden-ratio go-eldoc gcmh flycheck-rust fanyi exec-path-from-shell eglot doom-themes doom-modeline devdocs crux corfu consult comment-dwim-2 cmake-mode citre centaur-tabs cape all-the-icons-dired all-the-icons-completion aggressive-indent ace-window)))
+   '(all-the-icons-completion org-download org-roam cape centaur-tabs comment-dwim-2 devdocs fanyi flycheck-rust helpful magit marginalia ace-window all-the-icons-dired doom-modeline consult yasnippet with-editor which-key web-mode volatile-highlights vertico-posframe undo-tree treesit-auto transwin toc-org rust-mode rainbow-mode rainbow-delimiters pyvenv ox-reveal ox-gfm org-mime org-bullets orderless ob-rust ob-go nyan-mode nerd-icons nasm-mode modern-cpp-font-lock markdown-mode js2-mode iedit golden-ratio go-mode gcmh flycheck f exec-path-from-shell doom-themes crux corfu cmake-mode citre avy async all-the-icons aggressive-indent)))
 
 (provide 'init)
 ;;; init.el ends here

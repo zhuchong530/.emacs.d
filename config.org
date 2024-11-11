@@ -67,6 +67,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (set-keyboard-coding-system 'utf-8)
   (set-selection-coding-system 'utf-8)
   (prefer-coding-system 'utf-8)
+  (set-buffer-file-coding-system 'utf-8-unix 't)
   (setenv "LANG" "en_US.UTF-8")
   (setenv "LC_ALL" "en_US.UTF-8")
   (setenv "LC_CTYPE" "en_US.UTF-8")

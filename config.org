@@ -1244,13 +1244,14 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
     ;; when citre-mode is on, it will add "citre-xref-backend" into xref-backend-functions hook
     ;; and this will support integration of xref and imenu
     (require 'citre-config)
+    :hook (prog-mode . citre-mode)
     :config
     ;; only use GNU Global tags, which support reference
-    (setq citre-completion-backends '(global))
-    (setq citre-find-definition-backends '(global))
-    (setq citre-find-reference-backends '(global))
-    (setq citre-tags-in-buffer-backends '(global))
-    (setq citre-auto-enable-citre-mode-bakcends '(global))
+    (setq citre-completion-backends '(tags eglot global))
+    (setq citre-find-definition-backends '(tags eglot global))
+    (setq citre-find-reference-backends '(tags eglot global))
+    (setq citre-tags-in-buffer-backends '(tags eglot global))
+    (setq citre-auto-enable-citre-mode-bakcends '(tags eglot global))
     ;; citre-config is only useful for prog-mode file
     (setq citre-auto-enable-citre-mode-modes '(go-ts-mode go-mode python-ts-mode python-mode rust-ts-mode rust-mode c-mode c-ts-mode c++-mode c++-ts-mode))
     (setq citre-use-project-root-when-creating-tags t)

@@ -457,14 +457,11 @@ Make window/frame transparent.
 
 ** which-key
 
-这个包是一个 =minor mode= ，可以根据当前按键，提示可能的键绑定。具体见[[https://github.com/justbur/emacs-which-key][官网]]
+Emacs 30 build-in this package
 
 #+begin_src emacs-lisp
-  (use-package which-key                  ;bring up help on key combinations
-    :diminish
-    :hook (after-init . which-key-mode)
-    :config
-    (which-key-setup-side-window-bottom))
+  (which-key-mode 1)
+  (which-key-setup-side-window-bottom)
 #+end_src
 
 ** ace-window

@@ -37,7 +37,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+begin_src emacs-lisp
   ;;; config.el --- Cathy.Chang's Emacs configuration -*- lexical-binding: t -*-
 
-  ;; Copyright (C) 2008-2024 Cathy Chang
+  ;; Copyright (C) 2008-2025 Cathy Chang
 
   ;; Author: Cathy.Chang <xxxxxxx@gmail.com>
   ;; Keywords: internal
@@ -51,11 +51,11 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** 版本检查
 
-检查Emacs版本，要求Emacs >= 28
+检查Emacs版本，要求Emacs >= 30
 
 #+begin_src emacs-lisp
-  (when (version< emacs-version "28")
-    (error "Requires at least GNU Emacs 28, but you're running %s" emacs-version))
+  (when (version< emacs-version "30")
+    (error "Requires at least GNU Emacs 30, but you're running %s" emacs-version))
 #+end_src
 
 ** 编码
@@ -75,11 +75,15 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 ** 配置包管理的源
 
+- gnu 一般是必备的，其它的 elpa 中的包会依赖 gnu 中的包
+- nongnu 建议启用，类似于 melpa 但是 Emacs 官方维护的
+- melpa 滚动升级，收录了的包的数量最大
+
 #+begin_src emacs-lisp
   (require 'package)
-  (setq package-archives '(("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                           ;; ("org" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-                           ("gnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+  (setq package-archives '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+                         ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
   (package-initialize)
   (when (not package-archive-contents)
     (package-refresh-contents))
@@ -96,16 +100,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 这个包实际是宏(macro)，可以隔离包配置。 具体参见这里： [[id:66760557-2681-41d4-8e02-ea68fe02e805][use-package]]
 
 #+begin_src emacs-lisp
-  ;; (unless (package-installed-p 'use-package)
-  ;;   (package-refresh-contents)
-  ;;   (package-install 'use-package)
-  ;;   (package-install 'diminish)
-  ;;   (package-install 'bind-key))
+  (eval-when-compile
+   (require 'use-package))
 
-  ;; (eval-when-compile
-  ;;   (require 'use-package))
-  ;; (require 'diminish)
-  ;; (require 'bind-key)
   (setq use-package-verbose t)
   (setq use-package-always-ensure t)
   (setq use-package-always-demand t)

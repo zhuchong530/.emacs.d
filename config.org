@@ -679,18 +679,6 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
     )
 #+end_src
 
-** nyan-mode
-
-当前位置在buffer中的位置，使用一个彩虹猫展示。一切为了好看。 具体见： [[https://github.com/TeMPOraL/nyan-mode][官网]]
-
-#+begin_src emacs-lisp
-  (use-package nyan-mode
-    :custom
-    (nyan-cat-face-number 3)
-    (nyan-animate-nyancat t)
-    :config (nyan-mode 1))
-#+end_src
-
 ** tramp
 
 远程编辑，先这样吧

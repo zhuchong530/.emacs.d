@@ -11,14 +11,15 @@
                 all-the-icons-dired cape centaur-tabs citre cmake-mode
                 comment-dwim-2 compiler-exploere compiler-explorer
                 consult corfu crux devdocs doom-modeline doom-themes
-                exec-path-from-shell fanyi flycheck-rust gcmh go-eldoc
-                golden-ratio helpful iedit js2-mode magit marginalia
-                markdown-mode modern-cpp-font-lock nasm-mode nyan-mode
-                ob-go ob-rust orderless org-bullets org-download
-                org-mime org-roam ox-gfm ox-reveal pyvenv
-                rainbow-delimiters rainbow-mode rust-mode toc-org
-                transwin treesit-auto undo-tree vertico-posframe
-                volatile-highlights web-mode yasnippet zig-mode)))
+                eldoc-box exec-path-from-shell fanyi flycheck-rust
+                gcmh go-eldoc golden-ratio helpful iedit js2-mode
+                magit marginalia markdown-mode modern-cpp-font-lock
+                nasm-mode nyan-mode ob-go ob-rust orderless
+                org-bullets org-download org-mime org-roam ox-gfm
+                ox-reveal pyvenv rainbow-delimiters rainbow-mode
+                rust-mode toc-org transwin treesit-auto undo-tree
+                vertico-posframe volatile-highlights web-mode
+                yasnippet zig-mode)))
 
 (provide 'init)
 ;;; init.el ends here

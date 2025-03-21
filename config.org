@@ -119,6 +119,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell
     :config (exec-path-from-shell-initialize))
+  (setenv "WORKON_HOME" "/home/wangchang/Programme/pythonCode/")
 #+end_src
 
 ** Emacs内建功能
@@ -1243,14 +1244,18 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
   (use-package devdocs)
 #+end_src
 
-*** eldoc
+*** eldoc-box
 
 是一个 =minor mode= ，在echo area里显示函数参数
 
 #+begin_src emacs-lisp
-  (use-package eldoc
-    :diminish eldoc-mode
-    :config (add-hook 'prog-mode-hook 'eldoc-mode))
+  (use-package eldoc-box
+    :hook (prog-mode . +eldoc-box-hover-at-point-mode-maybe)
+    :hook (elgot-managed-mode . +eldoc-box-hover-at-point-mode-maybe)
+    :init
+    (defun +eldoc-box-hover-at-point-mode-maybe (&optional arg)
+      (when (display-graphic-p)
+        (eldoc-box-hover-at-point-mode arg))))
 #+end_src
 
 ** programming languages
@@ -1344,18 +1349,6 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
     :mode (("\\.go\\'" . go-mode))
     ;; :init (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
     )
-#+end_src
-
-**** go-eldoc
-
-给go语言提供eldoc功能。 [[https://github.com/emacsorphanage/go-eldoc][官网]]
-
-#+begin_src emacs-lisp
-  (use-package go-eldoc
-    :defer t
-    :config
-    (add-hook 'go-mode-hook 'go-eldoc-setup))
-  (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
 #+end_src
 
 *** web

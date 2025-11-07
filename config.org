@@ -101,13 +101,14 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 #+begin_src emacs-lisp
   (eval-when-compile
-   (require 'use-package))
-
-  (setq use-package-verbose t)
+    (require 'use-package))
   (setq use-package-always-ensure t)
-  (setq use-package-always-demand t)
-  (setq use-package-compute-statistics t)
-
+  ;; https://www.gnu.org/software/emacs/manual/html_mono/use-package.html#Troubleshooting
+  ;;  enbable when pass '--debug-init' command line flags, for getting more information
+  (when init-file debug
+        (setq use-package-verbose t
+              setq use-package-always-demand t)
+        setq use-package-compute-statistics t))
 #+end_src
 
 ** exec-path-from-shell

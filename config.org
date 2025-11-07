@@ -127,9 +127,8 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 具体信息可以查询[[https://www.gnu.org/software/emacs/manual/html_mono/emacs.html][官网文档]]
 
-*** 各种bar
 
-工具栏，滚动栏，菜单栏 全部不要！
+- 工具栏，滚动栏，菜单栏 全部不要！
 
 #+begin_src emacs-lisp
   (when (window-system)
@@ -140,7 +139,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     (setq use-dialog-box nil))
 #+end_src
 
-*** 关掉启动信息啥的
+- 关掉启动信息啥的
 
 #+begin_src emacs-lisp
   ;; No need to see GNU agitprop
@@ -150,20 +149,20 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (setq inhibit-startup-echo-area-message t)
 #+end_src
 
-*** 关掉ring-bell
+- 关掉ring-bell
 
 #+begin_src emacs-lisp
   (setq ring-bell-function 'ignore)
 #+end_src
 
-*** symlink处理
+- symlink处理
 
 #+begin_src emacs-lisp
   (setq find-file-visit-truename t)
   (setq vc-follow-symlinks t)
 #+end_src
 
-*** 缩进用空格而不是tab
+- 缩进用空格而不是tab
 
 #+begin_src emacs-lisp
   ;; Never mix tabs and spaces. Never use tabs, period.
@@ -172,45 +171,45 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (setq-default indent-tabs-mode nil)
 #+end_src
 
-*** 超长文件处理
+- 超长文件处理
 
 #+begin_src emacs-lisp
   (global-so-long-mode)                   ;Handle long files
 #+end_src
 
-*** 高亮当前行
+- 高亮当前行
 
-这里设置为全局
+  这里设置为全局
 
 #+begin_src emacs-lisp
   (global-hl-line-mode t)
 #+end_src
 
-*** 自动折行
+- 自动折行
 
 #+begin_src emacs-lisp
   (global-visual-line-mode t)
 #+end_src
 
-*** Delete region when yank on top of it
+- Delete region when yank on top of it
 
 #+begin_src emacs-lisp
   (delete-selection-mode t)
 #+end_src
 
-*** 不生成备份文件
+- 不生成备份文件
 
 #+begin_src emacs-lisp
   (setq make-backup-files nil)
 #+end_src
 
-*** 关闭自动保存
+- 关闭自动保存
 
 #+begin_src emacs-lisp
   (setq auto-save-default nil)
 #+end_src
 
-*** 其他选项配置
+- 其他选项配置
 
 先这样吧，回头慢慢搞
 
@@ -282,7 +281,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     )
 #+end_src
 
-*** 保存Emacs会话
+-  保存Emacs会话
 
 #+begin_src emacs-lisp
   ;; ;; Save backup files in a dedicated directory
@@ -290,9 +289,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     :config (desktop-save-mode))
 #+end_src
 
-*** 保存编辑位置
+- 保存编辑位置
 
-打开文件，回到上次编辑位置
+  打开文件，回到上次编辑位置
 
 #+begin_src emacs-lisp
   ;; history
@@ -300,7 +299,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     :config (save-place-mode))
 #+end_src
 
-*** 保存minibuff历史
+- 保存minibuff历史
 
 Vertico sorts by history position
 
@@ -309,7 +308,7 @@ Vertico sorts by history position
     :config (savehist-mode))
 #+end_src
 
-*** 外部程序修改文件后，自动加载文件
+- 外部程序修改文件后，自动加载文件
 
 #+begin_src emacs-lisp
   ;; Automatically reload files was modified by external program
@@ -319,7 +318,24 @@ Vertico sorts by history position
     )
 #+end_src
 
-*** 括号效果
+- just-in-time fontification
+
+#+begin_src emacs-lisp
+  (with-eval-after-load 'jit-lock
+    ;; NOTE: [Re: Some performance questions.] https://lists.gnu.org/archive/html/emacs-devel/2023-02/msg00216.html
+    ;; Turning on jit-stealth also lowers the GC pressure because it
+    ;; fontifies buffers during idle time, so by the time you get to actually
+    ;; editing a buffer it is already fontified, and thus all the garbage
+    ;; produced by fontifications was already produced and collected the
+    ;; editing itself will produce much less garbage.
+    (setq jit-lock-stealth-time 1.5
+          jit-lock-stealth-load 200
+          jit-lock-stealty-nice 0.5
+          jit-lock-contextually 'syntax-driven
+          jit-lock-defer-time 0))
+#+end_src
+
+- 括号效果
 
 *show-paren-style* controls whether just the two parens, or also the text between them get highlighted. The valid options here are:
 
@@ -342,16 +358,16 @@ Vertico sorts by history position
   (show-paren-mode t)
 #+end_src
 
-*** line number
+- line number
 
 #+begin_src emacs-lisp
   ;; line numbers, after Emacs 26
   (global-display-line-numbers-mode)
 #+end_src
 
-*** whitespace
+- whitespace
 
-显示空白字符
+  显示空白字符
 
 #+begin_src emacs-lisp
   ;; activate whitespace-mode to view all whitespace characters
@@ -360,7 +376,7 @@ Vertico sorts by history position
   (add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
 #+end_src
 
-*** 最大化
+- 最大化
 
 #+begin_src emacs-lisp
   (toggle-frame-maximized)

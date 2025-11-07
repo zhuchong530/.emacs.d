@@ -830,30 +830,56 @@ makes the string match ignoring diacritics and similar inflections on characters
 
 =!= 只能对 =字面量= 匹配取反(orderless-without-literal), 和其他dispatch字符连用时， ！需要前缀形式， 如 !=.go 将不匹配含有字面量.go的候选者
 
+从@minad’s orderless configuration 偷来的 https://github.com/minad/consult/wiki#minads-orderless-configuration
+
 #+begin_src emacs-lisp
   (use-package orderless
-    :custom
-    ;; 自定义名为 +orderless-with-initialism 的 orderless风格
-    ;; (orderless-define-completion-style +orderless-with-initialism
-    ;;   (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
+    :config
+    (defun +orderless--consult-suffix ()
+      "Regexp which matches the end of string with Consult tofu support."
+      (if (boundp 'consult--tofu-regexp)
+          (concat consult--tofu-regexp "*\\'")
+        "\\'"))
 
+    ;; Recognizes the following patterns:
+    ;; * .ext (file extension)
+    ;; * regexp$ (regexp matching at end)
+    (defun +orderless-consult-dispatch (word _index _total)
+      (cond
+       ;; Ensure that $ works with Consult commands, which add disambiguation suffixes
+       ((string-suffix-p "$" word)
+        `(orderless-regexp . ,(concat (substring word 0 -1) (+orderless--consult-suffix))))
+       ;; File extensions
+       ((and (or minibuffer-completion-file-name
+                 (derived-mode-p 'eshell-mode))
+             (string-match-p "\\`\\..'" word))
+        `(orderless-regexp . ,(concat "\\." (substring word 1) (+orderless--consult-suffix))))))
+
+    ;; Define orderless style with initialism by default
+    (orderless-define-completion-style +orderless-with-initialism
+      (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
+
+    ;; Certain dynamic completion tables (completion-table-dynamic) do not work
+    ;; properly with orderless. One can add basic as a fallback. Basic will only
+    ;; be used when orderless fails, which happens only for these special
+    ;; tables. Also note that you may want to configure special styles for special
+    ;; completion categories, e.g., partial-completion for files.
     ;; 使用orderless和emacs原生的basic补全风格，但orderless的优先级更高
-    (completion-styles '(orderless partial-completion basic))
-    (completion-category-defaults nil)    ; Disable defaults, use our settings
-    ;; 进一步设置各category使用的补全风格
-    (completion-category-overrides
-     '(
-       (eglot (styles orderless))
-       ;; buffer name 补全
-       (buffer (styles))
-       ;; file path&name 补全，partial completion提供了wildcard支持
-       (file (styles basic partial-completion))
-       (command (styles))
-       (variable (styles))
-       (symbol (styles))
-       ))
-    ;; 使用space来分割过滤字符，SPACE可以用\转义
-    (setq orderless-component-separator #'orderless-escapable-split-on-space))
+    (setq completion-styles '(orderless basic)
+          completion-category-defaults nil    ; Disable defaults, use our settings
+          ;; Enable partial-completion for files.
+          ;; Either give orderless precedence or partial-completion
+          ;; Note that completion-category-overrides is not really an override
+          ;; but rather prepended to the default completion-styles.
+          ;; completion-category-overrides '((file (styles orderless partial-completion))) ;; orderless is tried first
+          completion-category-overrides '((file (styles partial-completion)) ; partial-completion is tried first
+                                          (command (styles +orderless-with-initialism))
+                                          (variable (styles +orderless-with-initialism))
+                                          (symbol (styles +orderless-with-initialism)))
+          orderless-component-separator #'orderless-escapable-split-on-space ; allow escaping space with backslash!
+          orderless-style-dispatchers (list #'+orderless-consult-dispatch
+                                            #'orderless-kwd-dispatch
+                                            #'orderless-affix-dispatch)))
 #+end_src
 
 - partial-completion 支持shell wildcards 和部分文件路径， 如/u/s/l for /usr/share/local
@@ -1017,8 +1043,8 @@ brew install ripgrep
     :custom
     (corfu-cycle t)                       ; Enable cycling for `corfu-next/prevous`
     (corfu-auto t)                        ; Enable auto completion
-    (corfu-quit-at-boundary nil)   ; Automatically quit at word boundary
-    (corfu-quit-no-match nil)      ; Automatically quit if there is no match
+    (corfu-quit-at-boundary t)   ; Automatically quit at word boundary
+    (corfu-quit-no-match t)      ; Automatically quit if there is no match
     (corfu-preview-current nil)           ; Disable current candidate preview
     ;; (corfu-preselect 'prompt)             ; Preselect the prompt
     (corfu-on-exact-match nil)            ; configure handling of exact matches

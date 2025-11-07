@@ -84,7 +84,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (setq package-archives '(("gnu"    . "https://mirrors.ustc.edu.cn/elpa/gnu/")
                          ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")
                          ("melpa"  . "https://mirrors.ustc.edu.cn/elpa/melpa/")))
-  (package-initialize)
+  ;; (package-initialize)
   (when (not package-archive-contents)
     (package-refresh-contents))
 
@@ -105,10 +105,10 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (setq use-package-always-ensure t)
   ;; https://www.gnu.org/software/emacs/manual/html_mono/use-package.html#Troubleshooting
   ;;  enbable when pass '--debug-init' command line flags, for getting more information
-  (when init-file debug
-        (setq use-package-verbose t
-              setq use-package-always-demand t)
-        setq use-package-compute-statistics t))
+  (when init-file-debug
+    (setq use-package-verbose t
+          use-package-always-demand t
+  	use-package-compute-statistics t))
 #+end_src
 
 ** exec-path-from-shell
@@ -259,7 +259,27 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   ;; 平滑滚动
   (if (boundp 'pixel-scroll-precision-mode)
       (pixel-scroll-precision-mode t))
+#+end_src
 
+#+begin_src emacs-lisp
+  ;; Emacs minibuffer configuration for vertico
+  (use-package emacs
+    :custom
+    ;; Enable context menu. `vertico-multiform-mode' adds a menu in the minibuffer
+    ;; to switch display modes.
+    (context-menu-mode t)
+    ;; Support opening new minibuffers from inside existing minibuffers
+    (enable-recursive-minibuffer t)
+    ;; Do not allow the cursor in the minibuffer prompt
+    (minibuffer-prompt-properties
+     '(read-only t cursor-intangible t face minibuffer-prompt))
+    ;; Emacs 30 and newer: Disable Ispell completion function.
+    ;; Try `cape-dict' as an alternative
+    (text-mode-ispell-word-completion nil)
+    ;; Hide commands in M-x which do not work in the current mode. Vertico-Mode & Corfu
+    ;; commands are hidden in normal buffers. This setting is useful beyond Vertico and Corfu
+    (read-extended-command-predicate #'command-completion-default-include-p)
+    )
 #+end_src
 
 *** 保存Emacs会话
@@ -267,12 +287,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+begin_src emacs-lisp
   ;; ;; Save backup files in a dedicated directory
   (use-package desktop
-    :config (desktop-save-mode)
-    :custom
-    (desktop-restore-eager 1)
-    (desktop-lazy-idle-delay 1)
-    (desktop-lazy-verbose nil)
-    )
+    :config (desktop-save-mode))
 #+end_src
 
 *** 保存编辑位置
@@ -286,6 +301,8 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+end_src
 
 *** 保存minibuff历史
+
+Vertico sorts by history position
 
 #+begin_src emacs-lisp
   (use-package savehist
@@ -303,6 +320,18 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+end_src
 
 *** 括号效果
+
+*show-paren-style* controls whether just the two parens, or also the text between them get highlighted. The valid options here are:
+
+- *parenthesis* (show the matching paren)
+- *expression* (highlight the entire expression enclosed by the parens)
+- *mixed* (highlight the matching paren if it is visible in the window, the expression otherwise).
+
+*show-paren-highlight-openparen* controls whether to highlight an open paren when point is just before it, and hence its position is marked by the cursor anyway. The default is non-nil (yes).
+
+*show-paren-highlight-openparen* controls whether to highlight an open paren when point is just before it, and hence its position is marked by the cursor anyway. The default is non-nil (yes).
+
+*show-paren-when-point-in-periphery*, when non-nil, causes highlighting also when point is in whitespace at the beginning of a line and there is a paren at the first or last non-whitespace position on the line, or when point is at the end of a line and there is a paren at the last non-whitespace position on the line.
 
 #+begin_src emacs-lisp
   (setq-default show-paren-style 'expression
@@ -345,14 +374,19 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 #+begin_src emacs-lisp
   (use-package doom-themes
-    :config
+    :custom
     (setq doom-themes-enable-bold t       ; if nil,  bold is universally disabled
           doom-themes-enable-italic t)    ; if nil, italics is universally disabled
+    :config
     ;; (load-theme 'doom-dracula t)
     (load-theme 'doom-laserwave t)
     ;; (load-theme 'doom-acario-light t)      ; a ligh theme
-    ;; Enable flashing mode-line on errors
+    ;; Enable flashing mode-line on errors or Emacs bell rings
     (doom-themes-visual-bell-config)
+    ;; Enable cusotm neotree theme(nerd-icons must be installed!)
+    ;; (doom-themes-neotree-config)
+    ;; or for treemacs users
+    ;; (doom-themes-treemacs-config)
     ;; Corrects (and improves) org-mode's native fontification.
     (doom-themes-org-config))
 #+end_src
@@ -403,7 +437,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
      ;; :family "Menlo"
      ;; :family "JetBrains Mono"
      :family "Monaspace Krypton"
-     :height 140
+     :height 180
      :weight 'normal)
 
   (setq-default line-spacing 0.2)
@@ -440,7 +474,29 @@ Make window/frame transparent.
     )
 #+end_src
 
+** posframe
+
+弹出一个posframe(只是一个子frame)。lsp-bridge需要这个包 。[[https://github.com/tumashu/posframe][官网]]
+
+#+begin_src emacs-lisp
+  (use-package posframe)
+#+end_src
+
+
 * 编辑器增强
+
+** 打开大文件的tweak
+
+#+begin_src emacs-lisp
+  ;; improve long line coding, don't need bidirectional text
+  ;; https://emacs-china.org/t/topic/25811/9
+  ;; Disable bidirectional text scanning for a modest performance boost
+  (setq-default bidi-display-reordering nil)
+  (setq bidi-inhibit-bpa t                ; given up some bidirectional functionality for slightly faster re-display
+        long-line-threshold 1000
+        large-hscroll-threshold 1000
+        syntax-wholeline-max 1000)
+#+end_src
 
 ** 基础
 
@@ -760,53 +816,26 @@ makes the string match ignoring diacritics and similar inflections on characters
 
 #+begin_src emacs-lisp
   (use-package orderless
-    :config
-    ;; https://github.com/minad/consult/wiki#minads-orderless-configuration
-    (defun +orderless--consult-suffix()
-      "Regexp which matches the end of string with Consult tofu support."
-      (if (and (boundp 'consult--tofu-char) (boundp 'consult--tofu-range))
-          (format "[%c-%c]*$"
-                  consult--tofu-char
-                  (+ consult--tofu-char consult--tofu-range -1))
-        "$"))
-
-    ;; Recognizes the following patterns:
-    ;; * .ext (file extension)
-    ;; * regexp$ (regexp matching at end)
-    (defun +orderless-consult-dispatch (word _index _total)
-      (cond
-       ;; Ensure that $ works with Consult commands, which add disambiguation suffixs
-       ((string-suffix-p "$" word)
-        `(orderless-regexp . ,(concat (substring word 0 -1) (+orderless--consult-suffix))))
-       ;; File extensions
-       ((and (or minibuffer-completing-file-name
-                 (derived-mode-p 'eshell-mode))
-             (string-match-p "\\`\\..'" word))
-        `(orderless-regexp . ,(concat "\\." (substring word 1) (+orderless--consult-suffix))))))
-
-    ;; 在 orderless-affix-dispatch 的基础上添加上面支持文件名扩展和正则表达式的 dispatchers
-    (setq orderless-style-dispatchers (list #'+orderless-consult-dispatch
-                                            #'orderless-affix-dispatch))
-
+    :custom
     ;; 自定义名为 +orderless-with-initialism 的 orderless风格
-    (orderless-define-completion-style +orderless-with-initialism
-      (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
+    ;; (orderless-define-completion-style +orderless-with-initialism
+    ;;   (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
 
     ;; 使用orderless和emacs原生的basic补全风格，但orderless的优先级更高
-    (setq completion-styles '(orderless partial-completion basic))
-    (setq completion-category-defaults nil)
+    (completion-styles '(orderless partial-completion basic))
+    (completion-category-defaults nil)    ; Disable defaults, use our settings
     ;; 进一步设置各category使用的补全风格
-    (setq completion-category-overrides
-          '(
-            (eglot (styles orderless))
-            ;; buffer name 补全
-            (buffer (styles +orderless-with-initialism))
-            ;; file path&name 补全，partial completion提供了wildcard支持
-            (file (styles basic partial-completion))
-            (command (styles +orderless-with-initialism))
-            (variable (styles +orderless-with-initialism))
-            (symbol (styles +orderless-with-initialism))
-            ))
+    (completion-category-overrides
+     '(
+       (eglot (styles orderless))
+       ;; buffer name 补全
+       (buffer (styles))
+       ;; file path&name 补全，partial completion提供了wildcard支持
+       (file (styles basic partial-completion))
+       (command (styles))
+       (variable (styles))
+       (symbol (styles))
+       ))
     ;; 使用space来分割过滤字符，SPACE可以用\转义
     (setq orderless-component-separator #'orderless-escapable-split-on-space))
 #+end_src
@@ -822,7 +851,7 @@ makes the string match ignoring diacritics and similar inflections on characters
   (use-package vertico
     :config
     (vertico-mode 1)
-    (setq vertico-count 25)
+    (setq vertico-count 35)
     (setq vertico-resize t)
     )
 #+end_src
@@ -952,6 +981,9 @@ brew install ripgrep
 * 编程
 
 ** 补全系统
+
+
+
 *** corfu
 
 补全功能，之前用 =company-mode= ，但是太重量了。所以换成corfu，具体见： [[https://github.com/minad/corfu][官网]]
@@ -959,18 +991,21 @@ brew install ripgrep
 #+begin_src emacs-lisp
   (use-package corfu
     :after (orderless)
-    :hook (prog-mode . corfu-mode)
     :bind (:map corfu-map
                 ("M-n" . corfu-next)
                 ("M-p" . corfu-previous)
                 ("TAB" . corfu-insert))
+    ;; Enable Corfu globally.(Recommended).
+    ;; since many modes provide Capfs and Dabbrev can be used globally(M-/).
+    :init (global-corfu-mode)
     :custom
     (corfu-cycle t)                       ; Enable cycling for `corfu-next/prevous`
     (corfu-auto t)                        ; Enable auto completion
+    (corfu-quit-at-boundary nil)   ; Automatically quit at word boundary
+    (corfu-quit-no-match nil)      ; Automatically quit if there is no match
     (corfu-preview-current nil)           ; Disable current candidate preview
-    (corfu-quit-at-boundary 'separator)   ; Automatically quit at word boundary
-    (corfu-quit-no-match 'separator)      ; Automatically quit if there is no match
-    (corfu-echo-documentation t)
+    ;; (corfu-preselect 'prompt)             ; Preselect the prompt
+    (corfu-on-exact-match nil)            ; configure handling of exact matches
     :init
     (global-corfu-mode))
 #+end_src
@@ -1062,14 +1097,6 @@ grammer 安装位置: ~/.emacs.d/tree-sitter, 如 ~/.emacs.d/tree-sitter/libtree
     )
 #+end_src
 
-*** posframe
-
-弹出一个posframe(只是一个子frame)。lsp-bridge需要这个包 。[[https://github.com/tumashu/posframe][官网]]
-
-#+begin_src emacs-lisp
-  (use-package posframe)
-#+end_src
-
 *** lsp-bridge
 
 LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bridge，加速补全。
@@ -1105,6 +1132,10 @@ LSP客户端。使用python的线程技术在Emacs和lsp服务器之间建立bri
 
 built-in
 
+NOTE: https://joaotavora.github.io/eglot/
+macos file descriptors limitation,https://www.reddit.com/r/emacs/comments/x4p7mg/fix_annoying_max_open_files_for_emacs/
+https://github.com/microsoft/vscode-extension-samples
+
 #+begin_src emacs-lisp
   (use-package eglot
     :hook
@@ -1115,6 +1146,21 @@ built-in
     (rust-mode . eglot-ensure)
     (prog-mode . eglot-ensure)
     (zig-mode . eglot-ensure)
+    :config
+    (setq eglot-autoshutdown t
+          eglot-send-changes-idle-time 0.5
+          eglot-sync-connect nil
+          eglot-ignored-server-capabilities '(:documentHighlightProvider
+                                              :foldingRangeProvider)
+          eglot-stay-out-of '()
+          ;; drop log to impove performance
+          eglot-events-buffer-config '(:size 0 :format full)
+          eglot-report-progress nil
+          eglot-extend-to-xref t
+          ;; https://github.com/joaotavora/eglot/issues/1491
+          ;; https://github.com/microsoft/vscode-extension-samples/blob/main/code-actions-sample/README.md
+          eglot-code-action-indications '()
+          eglot-advertise-cancellation nil)
     )
 #+end_src
 

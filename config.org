@@ -1004,10 +1004,10 @@ brew install ripgrep
   ;; Enhances the minibuffer completions with additional informations
   (use-package marginalia
     :after vertico
-    :custom
-    (marginalia-annotators
-     '(marginalia-annotators-heavy marginalia-annotators-light nil))
-    (marginalia-align 'left)
+    ;; :custom
+    ;; (marginalia-annotators
+    ;;  '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    ;; (marginalia-align 'left)
     :init (marginalia-mode))
 #+end_src
 
@@ -1518,6 +1518,7 @@ rust语言
 #+begin_src emacs-lisp
   (use-package rust-mode
     :mode ("\\.rs\\'" . rust-mode)
+    :init (setq rust-mode-treesitter-derive t)
     :bind
     (("C-c C-c C-r" . rust-run)
      ("C-c C-c C-t" . rust-test)

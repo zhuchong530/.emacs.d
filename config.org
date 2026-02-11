@@ -901,6 +901,8 @@ makes the string match ignoring diacritics and similar inflections on characters
 
 ** vertico-posfram
 
+mac上4K分辨率会导致这个插件巨卡，稍微调低一点点就很流畅。现在分辨率是 3360x1890
+
 #+begin_src emacs-lisp
   (use-package vertico-posframe
     :after (vertico)
@@ -1516,6 +1518,11 @@ rust语言
 #+begin_src emacs-lisp
   (use-package rust-mode
     :mode ("\\.rs\\'" . rust-mode)
+    :bind
+    (("C-c C-c C-r" . rust-run)
+     ("C-c C-c C-t" . rust-test)
+     ("C-c C-c C-k" . rust-check)
+     ("C-c C-c C-u" . rust-compile))
     :config
     (setq rust-format-on-save t)
     )
@@ -1541,14 +1548,27 @@ the language server is [[https://zigtools.org][zls]]
 
 自动检查语法, [[https://www.flycheck.org/][官网]]
 
+需要GNU Emacs 27.1+。 Flycheck自己本身并不检查buffer，而是依赖外部程序来检查，具体见：[[https://www.flycheck.org/en/latest/languages.html#][list of supported language]]
+
 #+begin_src emacs-lisp
   (use-package flycheck
-    :config (global-flycheck-mode)
+    :init (global-flycheck-mode)
     :bind
     (("C-c e n" . flycheck-next-error)
      ("C-c e p" . flycheck-previour-error)
      ("C-c e l" . flycheck-list-errors))
     )
+#+end_src
+
+*** flycheck-eglot
+
+[[https://github.com/flycheck/flycheck-eglot][flycheck-eglot]] 使flycheck可以和eglot协同工作
+
+#+begin_src emacs-lisp
+  (use-package flycheck-eglot
+    :after (flycheck eglot)
+    :config (global-flycheck-eglot-mode 1)
+    :custom (flycheck-eglot-exclusive nil))
 #+end_src
 
 *** flycheck-rust
@@ -1557,7 +1577,7 @@ the language server is [[https://zigtools.org][zls]]
 
 #+begin_src emacs-lisp
   (use-package flycheck-rust
-    :config (add-hook 'rust-mode-hook #'flycheck-rust-setup)
+    :hook (rust-mode-hook . #'flycheck-rust-setup)
     )
 #+end_src
 

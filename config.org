@@ -1828,6 +1828,54 @@ Emacs中实时显示修改
     :config (org-roam-db-autosync-enable))
 #+end_src
 
+* latex
+
+首先安装latex，这里使用的是 openSUSE-Tumbleweed
+
+#+begin_src shell
+sudo zypper refresh
+sudo zypper install texlive                # 基础，~几百 MB
+sudo zypper install texlive-latexextra     # 常用宏包集合（含 ctex、xecjk、fontspec）
+sudo zypper install texlive-biblatex       # 文献
+sudo zypper install texlive-ctex           # 中文核心，zypper 拆包后单独装更准
+sudo zypper install latexmk ghostscript
+#+end_src
+
+安装字体
+
+#+begin_src shell
+sudo zypper install google-noto-sans-cjk-fonts google-noto-serif-cjk-fonts
+# 或 Adobe 源： adobe-source-han-sans adobe-source-han-serif
+#+end_src
+
+安装emacs插件，auctex, auctex-latexmk, pdf-tools
+
+=C-c C-c= 编完， =C-c C-v= 直接在Emacs里使用 pdf-tools 查看PDF
+
+#+begin_src emacs-lisp
+(use-package auctex
+  :config
+  (setq TeX-PDF-mode t)
+  (setq TeX-engine 'xetex)           ; 中文用 xelatex
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
+  (setq-default TeX-master nil))
+
+;; 用 latexmk 做编译驱动，比裸 xelatex 省心（自动跑 bibtex/多次编译）
+(use-package auctex-latexmk
+  :ensure t
+  :config
+  (auctex-latexmk-setup)
+  (setq auctex-latexmk-inherit-TeX-PDF-mode t))
+
+;; 预览器：WSLg 下用 pdf-tools（Emacs 内预览）最顺
+;; 需要先 sudo zypper install poppler-glib 再 M-x package-install pdf-tools
+(setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+(setq TeX-source-correlate-mode t)
+(setq TeX-source-correlate-method 'synctex)
+
+#+end_src
+
 * 结尾
 
 #+begin_src emacs-lisp

@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: errno
-# key: err
-# --
-#include <errno.h>

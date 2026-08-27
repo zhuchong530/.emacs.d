@@ -1,5 +1,0 @@
-#contributor : Cathy.Chang <zhuchong530@gmail.com>
-#name : <tr>...</tr>
-#group : table
-# --
-<tr$1>$2</tr>

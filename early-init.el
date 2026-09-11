@@ -1,4 +1,4 @@
-;;; package -- Summary
+;;; package -- Summary  -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; early-init.el --- Early Init File
 ;; Emacs 27 introduces early-init.el, which is run before init.el,

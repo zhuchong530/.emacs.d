@@ -1,4 +1,4 @@
-;;; package -- Summary:
+;;; package -- Summary:  -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 (custom-set-variables
@@ -10,15 +10,14 @@
    '(0x0 ace-window aggressive-indent all-the-icons-completion
          all-the-icons-dired auctex auctex-latexmk cape centaur-tabs
          citre cmake-mode comment-dwim-2 consult corfu crux devdocs
-         doom-modeline doom-themes eldoc-box exec-path-from-shell
-         fanyi flycheck-eglot flycheck-rust go-mode golden-ratio
-         helpful iedit js2-mode magit marginalia markdown-mode
-         modern-cpp-font-lock nasm-mode ob-go ob-rust orderless
-         org-bullets org-download org-mime org-roam ox-gfm ox-reveal
-         pdf-tools pyvenv rainbow-delimiters rainbow-mode rime
-         rust-mode toc-org transwin treesit-auto undo-tree
-         vertico-posframe volatile-highlights web-mode yasnippet
-         zig-mode)))
+         doom-modeline eldoc-box exec-path-from-shell fanyi
+         flycheck-eglot flycheck-rust go-mode golden-ratio helpful
+         iedit js2-mode marginalia markdown-mode modern-cpp-font-lock
+         nasm-mode ob-go ob-rust orderless org-bullets org-download
+         org-mime org-roam ox-gfm ox-reveal pdf-tools pyvenv
+         rainbow-delimiters rainbow-mode rime rust-mode toc-org
+         transwin treesit-auto undo-tree vertico-posframe
+         volatile-highlights web-mode yasnippet zig-mode)))
 
 (provide 'init)
 ;;; init.el ends here

@@ -732,7 +732,6 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
 
 ** markdown-mode
 
-
 编辑markdown文件，具体见: [[https://jblevins.org/projects/markdown-mode/][官网]]
 
 先这样吧，用 =org-mode= 比较多。

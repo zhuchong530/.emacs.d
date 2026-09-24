@@ -9,13 +9,12 @@
  '(package-selected-packages
    '(0x0 ace-window aggressive-indent auctex-latexmk cape centaur-tabs
          citre cmake-mode comment-dwim-2 consult corfu crux devdocs
-         doom-modeline doom-themes eldoc-box exec-path-from-shell
-         fanyi flycheck-rust git-gutter+ go-mode golden-ratio helpful
-         iedit js2-mode magit marginalia markdown-mode
-         modern-cpp-font-lock nasm-mode nerd-icons-completion
-         nerd-icons-dired ob-go ob-rust orderless org-bullets
-         org-download org-mime org-roam ox-gfm ox-reveal pdf-tools
-         pyvenv rainbow-delimiters rainbow-mode rime rust-mode toc-org
+         doom-modeline eldoc-box exec-path-from-shell fanyi
+         flycheck-eglot flycheck-rust go-mode golden-ratio helpful
+         iedit js2-mode marginalia markdown-mode modern-cpp-font-lock
+         nasm-mode ob-go ob-rust orderless org-bullets org-download
+         org-mime org-roam ox-gfm ox-reveal pdf-tools pyvenv
+         rainbow-delimiters rainbow-mode rime rust-mode toc-org
          transwin treesit-auto undo-tree vertico-posframe
          volatile-highlights web-mode yasnippet zig-mode)))
 

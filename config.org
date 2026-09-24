@@ -61,16 +61,19 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 ** 编码
 
 #+begin_src emacs-lisp
+  ;; 统一编码设置，适用于 Emacs 26+
+  (set-default-coding-systems 'utf-8)
   (prefer-coding-system 'utf-8)
-  (set-charset-priority 'unicode)
-  (setq locale-coding-system 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-selection-coding-system 'utf-8)
-  (set-buffer-file-coding-system 'utf-8-unix 't)
-  (setenv "LANG" "en_US.UTF-8")
-  (setenv "LC_ALL" "en_US.UTF-8")
-  (setenv "LC_CTYPE" "en_US.UTF-8")
+  ;; 文件保存使用Unix换行符（跨平台友好）
+  (setq-default buffer-file-coding-system 'utf-8-unix)
+
+  (when (eq system-type 'gnu/linux)
+    (setenv "LANG" "en_US.UTF-8")
+    (setenv "LC_ALL" "en_US.UTF-8")
+    (setenv "LC_CTYPE" "en_US.UTF-8"))
+  ;; macOS通常不需要手动设置locale，如需强制取消注释
+  ;; (when (eq system-type 'darwin)
+    ;; (setenv "LANG" "en_US.UTF-8"))
 #+end_src
 
 ** 配置包管理的源
@@ -82,12 +85,12 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+begin_src emacs-lisp
   (require 'package)
   (setq package-archives '(("gnu"    . "https://mirrors.ustc.edu.cn/elpa/gnu/")
-                         ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")
-                         ("melpa"  . "https://mirrors.ustc.edu.cn/elpa/melpa/")))
-  ;; (package-initialize)
-  (when (not package-archive-contents)
+                           ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")
+                           ("melpa"  . "https://mirrors.ustc.edu.cn/elpa/melpa/")))
+  (package-initialize)
+  ;; 仅在首次启动时刷新
+  (unless package-archive-contents
     (package-refresh-contents))
-
 #+end_src
 
 ** use-package
@@ -109,6 +112,8 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     (setq use-package-verbose t
           use-package-always-demand t
   	use-package-compute-statistics t))
+
+  (use-package compat)
 #+end_src
 
 ** exec-path-from-shell
@@ -120,7 +125,9 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell
     :config (exec-path-from-shell-initialize))
-  (setenv "WORKON_HOME" "/home/wangchang/Programme/pythonCode/")
+  (setenv "WORKON_HOME"
+          (expand-file-name "pythonCode/"
+                            (expand-file-name "Programme/" (getenv "HOME"))))
 #+end_src
 
 ** Emacs内建功能
@@ -144,8 +151,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 #+begin_src emacs-lisp
   ;; No need to see GNU agitprop
   (setq inhibit-startup-screen t)
-  ;; No need to remind me what a scratch buffer is
-  (setq inhibit-startup-message nil)
   (setq inhibit-startup-echo-area-message t)
 #+end_src
 
@@ -158,7 +163,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 - symlink处理
 
 #+begin_src emacs-lisp
-  (setq find-file-visit-truename t)
   (setq vc-follow-symlinks t)
 #+end_src
 
@@ -171,12 +175,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
   (setq-default indent-tabs-mode nil)
 #+end_src
 
-- 超长文件处理
-
-#+begin_src emacs-lisp
-  (global-so-long-mode)                   ;Handle long files
-#+end_src
-
 - 高亮当前行
 
   这里设置为全局
@@ -187,8 +185,10 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 
 - 自动折行
 
+  全局启用会严重影响 isearch、avy、move-text 等操作的体验。仅在文本模式下启用
+
 #+begin_src emacs-lisp
-  (global-visual-line-mode t)
+  (add-hook 'text-mode-hook #'visual-line-mode)
 #+end_src
 
 - Delete region when yank on top of it
@@ -219,13 +219,10 @@ Instead of imagining that our main task is to instruct a computer what to do, le
    sentence-end-double-space nil
    ;; Save existing clipboard text into the kill ring before replacing it.
    save-interprogram-paste-before-kill t
-   ;; Fix undo in commands affecting the mark
-   mark-even-if-inactive nil
    ;; if NIL, kill whole line and move the next line up
    kill-whole-line t
    ;; accept 'y' or 'n' instead of yes/no
    use-short-answers t
-   default-directory "~/Programme/"
    ;; prefer newer elisp files
    load-prefer-newer t
    ;; disable lock files, losing benefits of simultaneous editing
@@ -235,29 +232,22 @@ Instead of imagining that our main task is to instruct a computer what to do, le
    confirm-kill-emacs 'y-or-n-p
    ;; specifies the maximum length of a minibuffer history list
    history-length                     1000
-   ;; Disable non selected window highlight
-   cursor-in-non-selected-windows     nil
-   highlight-nonselected-windows      nil
    ;; PATH
    exec-path                          (append exec-path '("/usr/local/bin/"))
    ;; Backups disabled
-   backup-inhibited                   t
    fringes-outside-margins            t
    select-enable-clipboard          t
    frame-resize-pixelwise t
    ;; delete to trash
    delete-by-moving-to-trash t
-   ;; highlight syntax
-   global-font-lock-mode t
    )
-  (defalias 'yes-or-no-p 'y-or-n-p)
   ;; default to 4 visible spaces to display a tab
   (setq-default tab-width 4)
   (set-fringe-mode 10)
+  (setq default-directory (expand-file-name "Programme/" (getenv "HOME")))
 
   ;; 平滑滚动
-  (if (boundp 'pixel-scroll-precision-mode)
-      (pixel-scroll-precision-mode t))
+  (pixel-scroll-precision-mode t)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -269,6 +259,8 @@ Instead of imagining that our main task is to instruct a computer what to do, le
     (context-menu-mode t)
     ;; Support opening new minibuffers from inside existing minibuffers
     (enable-recursive-minibuffer t)
+    ;; 显示层级，否则recursive-minibuffer容易困惑
+    (minibuffer-depth-indicate-mode t)
     ;; Do not allow the cursor in the minibuffer prompt
     (minibuffer-prompt-properties
      '(read-only t cursor-intangible t face minibuffer-prompt))
@@ -313,9 +305,7 @@ Vertico sorts by history position
 #+begin_src emacs-lisp
   ;; Automatically reload files was modified by external program
   (use-package autorevert
-    :diminish
-    :hook (after-init . global-auto-revert-mode)
-    )
+    :hook (after-init . global-auto-revert-mode))
 #+end_src
 
 - just-in-time fontification
@@ -330,7 +320,7 @@ Vertico sorts by history position
     ;; editing itself will produce much less garbage.
     (setq jit-lock-stealth-time 1.5
           jit-lock-stealth-load 200
-          jit-lock-stealty-nice 0.5
+          jit-lock-stealt-nice 0.5
           jit-lock-contextually 'syntax-driven
           jit-lock-defer-time 0))
 #+end_src
@@ -373,13 +363,15 @@ Vertico sorts by history position
   ;; activate whitespace-mode to view all whitespace characters
   (global-set-key (kbd "C-c w") 'whitespace-mode)
   ;; show unncessary whitespace that can mess up your diff
-  (add-hook 'prog-mode-hook (lambda () (interactive) (setq show-trailing-whitespace 1)))
+  (add-hook 'prog-mode-hook (lambda () (setq-local show-trailing-whitespace t)))
 #+end_src
 
 - 最大化
 
+  ~(toggle-frame-maximized)~ 直接在顶层调用，可能在帧未完全初始化时执行。使用 ~default-frame-alist~
+
 #+begin_src emacs-lisp
-  (toggle-frame-maximized)
+  (push '(fullscreen . maximized) default-frame-alist)
 #+end_src
 
 * UI
@@ -391,8 +383,8 @@ Vertico sorts by history position
 #+begin_src emacs-lisp
   (use-package doom-themes
     :custom
-    (setq doom-themes-enable-bold t       ; if nil,  bold is universally disabled
-          doom-themes-enable-italic t)    ; if nil, italics is universally disabled
+    (doom-themes-enable-bold t)       ; if nil,  bold is universally disabled
+    (doom-themes-enable-italic t)    ; if nil, italics is universally disabled
     :config
     ;; (load-theme 'doom-dracula t)
     (load-theme 'doom-laserwave t)
@@ -414,29 +406,24 @@ Vertico sorts by history position
 #+begin_src emacs-lisp
   (use-package nerd-icons)
   (use-package doom-modeline
+    :after nerd-icons
     :hook (after-init . doom-modeline-mode)
     :custom
-    (setq doom-modeline-height 25)
-    (setq doom-modeline-bar-width 4)
-    (setq doom-modeline-project-detection 'projectile)
-    (setq doom-modeline-buffer-file-name-style 'auto)
-    (setq doom-modeline-icon (display-graphic-p))
-    (setq doom-modeline-major-mode-icon t)
-    (setq doom-modeline-hud t)
-    (setq doom-modeline-time-icon t)
-    (setq doom-modeline-buffer-modification-icon t)
-    (setq doom-modeline-env-version t)
-    (setq doom-modeline-buffer-encoding t)
+    (doom-modeline-height 25)
+    (doom-modeline-bar-width 4)
+    ;; (doom-modeline-project-detection 'projectile)
+    (doom-modeline-buffer-file-name-style 'truncate-with-project)
+    (doom-modeline-icon (display-graphic-p))
+    (doom-modeline-major-mode-icon t)
+    (doom-modeline-hud t)
+    (doom-modeline-time-icon t)
+    (doom-modeline-buffer-modification-icon t)
+    (doom-modeline-env-version t)
+    (doom-modeline-buffer-encoding t)
     :config
     (display-battery-mode 1)
     (column-number-mode t)
     (size-indication-mode t)
-    (display-time-mode t)
-    (setq display-time-24hr-format t)
-    (setq display-time-default-load-average nil)
-    (setq display-time-load-average-threshold 10)
-    (setq display-time-format "%m/%d[%w]%H:%M ")
-    (setq display-time-day-and-date t)
     (setq indicate-buffer-boundaries (quote left)))
 #+end_src
 
@@ -445,37 +432,24 @@ Vertico sorts by history position
 在系统shell里通过 ~fc-list~ 命令，找到对应family的名字
 
 #+begin_src emacs-lisp
-    ;; (set-frame-font "Fira Code-12")
-    (set-face-attribute
-     'default nil
-     ;; :family "YaHei Consolas Hybrid"
-     ;; :family "Fira Code"
-     ;; :family "Menlo"
-     ;; :family "JetBrains Mono"
-     :family "Monaspace Krypton"
-     :height 180
-     :weight 'normal)
-
-  (setq-default line-spacing 0.2)
+  (cl-case system-type
+    (darwin
+     (set-face-attribute 'default nil :family "Menlo" :height 160 :weight 'normal))
+    (gnu/linux
+     (set-face-attribute 'default nil :family "Monaspace Krypton" :height 170 :weight 'normal))
+    (t
+     (set-face-attribute 'default nil :family "Monaspace Krypton" :height 180 :weight 'normal)))
+  (setq-default line-spacing 6)
 #+end_src
 
 ** 图标
 
-*** all-the-icons
+*** nerd-icons-dired
 
 #+begin_src emacs-lisp
-  (use-package all-the-icons
+  (use-package nerd-icons-dired
     :if (display-graphic-p)
-    )
-#+end_src
-
-*** all-the-icons-dired
-
-#+begin_src emacs-lisp
-  (use-package all-the-icons-dired
-    :after all-the-icons
-    :hook (dired-mode . all-the-icons-dired-mode)
-    )
+    :hook (dired-mode . nerd-icons-dired))
 #+end_src
 
 ** transwin
@@ -486,8 +460,7 @@ Make window/frame transparent.
   (use-package transwin
     :after frame
     :config (transwin-ask 90)
-    :custom (transwin-toggle)
-    )
+    :custom (transwin-toggle))
 #+end_src
 
 ** posframe
@@ -498,7 +471,6 @@ Make window/frame transparent.
   (use-package posframe)
 #+end_src
 
-
 * 编辑器增强
 
 ** 打开大文件的tweak
@@ -508,10 +480,13 @@ Make window/frame transparent.
   ;; https://emacs-china.org/t/topic/25811/9
   ;; Disable bidirectional text scanning for a modest performance boost
   (setq-default bidi-display-reordering nil)
+  ;; 进一步优化长行处理(Emacs28+)
   (setq bidi-inhibit-bpa t                ; given up some bidirectional functionality for slightly faster re-display
         long-line-threshold 1000
         large-hscroll-threshold 1000
         syntax-wholeline-max 1000)
+  ;; 超长文件处理会利用上面的阈值
+  (global-so-long-mode)
 #+end_src
 
 ** 基础
@@ -534,8 +509,20 @@ Make window/frame transparent.
 Emacs 30 build-in this package
 
 #+begin_src emacs-lisp
-  (which-key-mode 1)
-  (which-key-setup-side-window-bottom)
+  (use-package which-key
+    :custom
+    (which-key-idle-delay 0.5)
+    (which-key-idle-secondary-delay 0.1)
+    (which-key-popup-type 'side-window)
+    (which-key-side-window-location 'bottom)
+    (which-key-side-window-max-height 0.25)
+    (which-key-sort-order #'which-key-key-order-alpha)
+    (which-key-sort-uppercase-first nil)
+    (which-key-add-column-padding 1)
+    (which-key-separator " → ")
+    (which-key-show-prefix 'left)    ; 弹窗里显示当前前缀
+    (which-key-show-early-on-C-h t)  ; 前缀后按 C-h 立即弹
+    :config (which-key-mode 1))
 #+end_src
 
 ** ace-window
@@ -552,40 +539,9 @@ Emacs本身自带 ~other-window~ 函数，绑定到 ~C-x o~ 上，所以这里�
     ;; 设置为frame后会忽略treemacs frame，否则即使两个窗口时也会提示选择
     (setq aw-scope 'frame)
     ;; 调大窗口选择字符
-    (custom-set-faces
-     '(aw-leading-char-face
-       ((t (:inherit ace-jump-face-foreground :foreground "red" :height 7.0))))))
-#+end_src
-
-** volatile-highlights
-
-这是Emacs的一个 =minor mode= 用于可视化反馈。 比如当你粘贴一段文本的时候，这段文本会被高亮直到你有进一步的操作，具体见:[[https://github.com/k-talo/volatile-highlights.el][官网]]
-
-#+begin_src emacs-lisp
-  (use-package volatile-highlights
-    :init
-    (add-hook 'after-init-hook 'volatile-highlights-mode)
-    :config
-    (set-face-attribute 'vhl/default-face nil
-                        :underline "yellow"))
-#+end_src
-
-** undo-tree
-
-[[https://www.dr-qubit.org/undo-tree.html][官网]]
-
-将undo历史可视化成一个tree，方便navigation
-
-#+begin_src emacs-lisp
-  (use-package undo-tree
-    :init
-    (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))
-          undo-tree-visualizer-diff nil
-          undo-tree-visualizer-timestamps t
-          undo-tree-enable-undo-in-region t)
-    :config
-    (global-undo-tree-mode 1)
-    )
+    (set-face-attribute 'aw-leading-char-face nil
+                        :foreground "red"
+                        :height 7.0))
 #+end_src
 
 ** uniquify
@@ -619,7 +575,9 @@ built-in功能，Emacs 24引入。自动闭合括号等，具体见： [[https:/
 #+begin_src emacs-lisp
   (use-package comment-dwim-2
     :bind ("M-;" . comment-dwim-2)
-    )
+    :custom
+    (comment-dwim-2-move-to-comment-column t) ;;; 注释时对齐到注释列
+    (comment-dwim-2-comment-style 'indent))      ;; 使用缩进风格注释
 #+end_src
 
 ** iedit
@@ -631,8 +589,7 @@ built-in功能，Emacs 24引入。自动闭合括号等，具体见： [[https:/
 #+begin_src emacs-lisp
   (use-package iedit
     :init (setq iedit-toggle-key-default nil)
-    :bind ("C-:" . iedit-mode)
-    )
+    :bind ("C-:" . iedit-mode))
 #+end_src
 
 ** golden-ratio
@@ -673,20 +630,21 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
 
 #+begin_src emacs-lisp
   (use-package centaur-tabs
-    :after all-the-icons
+    :after nerd-icons
+    :bind
+    (("C-9" . centaur-tabs-backward)
+    ("C-0" . centaur-tabs-forward))
     :config
     (setq centaur-tabs-set-bar 'over      ; display an underline over the selected tab
           centaur-tabs-height 32          ; tab height
           centaur-tabs-set-icons t        ; display themed icon from all-the-icons
+          centaur-tabs-icon-type 'nerd-icons
           centaur-tabs-set-close-button nil ; disable the close button
           centaur-tabs-set-modified-marker t ; display a marker indicating that a buffer has been modified
           centaur-tabs-modified-marker " ● " ; change the displayed string for the modified-marker
           centaur-tabs-style "bar"        ; tab style, 可能的值:"alternate", "bar", "box", "chamfer", "rounded","slant", "wave", "zigzag"
           )
-    (centaur-tabs-mode t)
-    :bind
-    ("C-9" . centaur-tabs-backward)
-    ("C-0" . centaur-tabs-forward))
+    (centaur-tabs-mode 1))
 #+end_src
 
 ** rainbow-mode
@@ -696,8 +654,9 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
 #+begin_src emacs-lisp
   ;; rainbow mode for display the color
   (use-package rainbow-mode
-    :diminish
-    :hook (prog-mode . rainbow-mode))
+    :if (display-graphic-p)
+    :delight
+    :hook ((css-mode html-mode web-mode sgml-mode latex-mode org-mode) . rainbow-mode))
 #+end_src
 
 ** rainbow-delimiters
@@ -706,7 +665,7 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
 
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
-    :init (progn (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+    :hook (prog-mode . rainbow-delimiters-mode)
     :config
     (set-face-foreground 'rainbow-delimiters-depth-1-face "chartreuse3")
     (set-face-foreground 'rainbow-delimiters-depth-2-face "DodgerBlue1")
@@ -715,26 +674,24 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
     (set-face-foreground 'rainbow-delimiters-depth-5-face "medium orchid")
     (set-face-foreground 'rainbow-delimiters-depth-6-face "turquoise")
     (set-face-foreground 'rainbow-delimiters-depth-7-face "lime green")
-    (set-face-foreground 'rainbow-delimiters-depth-9-face "gold")
+    (set-face-foreground 'rainbow-delimiters-depth-8-face "gold")
     (set-face-foreground 'rainbow-delimiters-depth-9-face "cyan")
-    (set-face-bold 'rainbow-delimiters-depth-1-face "t")
-    (set-face-bold 'rainbow-delimiters-depth-2-face "t")
-    (set-face-bold 'rainbow-delimiters-depth-3-face "t")
-    (set-face-bold 'rainbow-delimiters-depth-4-face "t")
-    (set-face-bold 'rainbow-delimiters-depth-5-face "t")
-    (set-face-bold 'rainbow-delimiters-depth-6-face "t")
-    (set-face-bold 'rainbow-delimiters-depth-7-face "t")
-    (set-face-bold 'rainbow-delimiters-depth-8-face "t")
-    (set-face-bold 'rainbow-delimiters-depth-9-face "t")
-    )
+    (set-face-bold 'rainbow-delimiters-depth-1-face t)
+    (set-face-bold 'rainbow-delimiters-depth-2-face t)
+    (set-face-bold 'rainbow-delimiters-depth-3-face t)
+    (set-face-bold 'rainbow-delimiters-depth-4-face t)
+    (set-face-bold 'rainbow-delimiters-depth-5-face t)
+    (set-face-bold 'rainbow-delimiters-depth-6-face t)
+    (set-face-bold 'rainbow-delimiters-depth-7-face t)
+    (set-face-bold 'rainbow-delimiters-depth-8-face t)
+    (set-face-bold 'rainbow-delimiters-depth-9-face t))
 #+end_src
 
 ** 缩进
 
 #+begin_src emacs-lisp
   (use-package aggressive-indent
-  :config
-  (global-aggressive-indent-mode t))
+  :hook (prog-mode . aggressive-indent-mode))
 #+end_src
 
 * 杂项
@@ -750,7 +707,9 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
            ([remap describe-variable] . helpful-variable)
            ([remap describe-key] . helpful-key)
            ([remap describe-symbol] . helpful-symbol))
-    )
+    :custom
+    (helpful-max-buffers 2)
+    (helpful-switch-buffer-function #'pop-to-buffer))
 #+end_src
 
 ** tramp
@@ -894,9 +853,10 @@ makes the string match ignoring diacritics and similar inflections on characters
   (use-package vertico
     :config
     (vertico-mode 1)
-    (setq vertico-count 35)
-    (setq vertico-resize t)
-    )
+    :custom
+    (vertico-count 35)
+    (vertico-resize t)
+    (vertico-cycle t))
 #+end_src
 
 ** vertico-posfram
@@ -905,11 +865,12 @@ mac上4K分辨率会导致这个插件巨卡，稍微调低一点点就很流畅
 
 #+begin_src emacs-lisp
   (use-package vertico-posframe
-    :after (vertico)
+    :after vertico
     :config
     (vertico-posframe-mode 1)
     (setq vertico-posframe-width 160
-          vertico-posframe-height vertico-count))
+          vertico-posframe-height vertico-count
+          vertico-posfram-auto-height t))
 #+end_src
 
 ** consult
@@ -1008,7 +969,7 @@ brew install ripgrep
     ;; (marginalia-annotators
     ;;  '(marginalia-annotators-heavy marginalia-annotators-light nil))
     ;; (marginalia-align 'left)
-    :init (marginalia-mode))
+    :config (marginalia-mode 1))
 #+end_src
 
 ** all-the-icons-completion
@@ -1016,17 +977,16 @@ brew install ripgrep
 给补全系统里的candidates加上icon，见: [[https://github.com/iyefrat/all-the-icons-completion][官网]]
 
 #+begin_src emacs-lisp
-  (use-package all-the-icons-completion
-    :after (marginalia all-the-icons)
-    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  (use-package nerd-icons-completion
+    :after (marginalia nerd-icons)
+    :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
     :init
-    (all-the-icons-completion-mode))
+    (nerd-icons-completion-mode 1))
 #+end_src
 
 * 编程
 
 ** 补全系统
-
 
 
 *** corfu
@@ -1035,14 +995,13 @@ brew install ripgrep
 
 #+begin_src emacs-lisp
   (use-package corfu
-    :after (orderless)
+    :after orderless
     :bind (:map corfu-map
                 ("M-n" . corfu-next)
                 ("M-p" . corfu-previous)
                 ("TAB" . corfu-insert))
     ;; Enable Corfu globally.(Recommended).
     ;; since many modes provide Capfs and Dabbrev can be used globally(M-/).
-    :init (global-corfu-mode)
     :custom
     (corfu-cycle t)                       ; Enable cycling for `corfu-next/prevous`
     (corfu-auto t)                        ; Enable auto completion
@@ -1052,7 +1011,7 @@ brew install ripgrep
     ;; (corfu-preselect 'prompt)             ; Preselect the prompt
     (corfu-on-exact-match nil)            ; configure handling of exact matches
     :init
-    (global-corfu-mode))
+    (global-corfu-mode 1))
 #+end_src
 
 *** cape
@@ -1064,11 +1023,6 @@ brew install ripgrep
     (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions #'cape-keyword)
     (add-to-list 'completion-at-point-functions #'cape-history)
-    )
-
-  (use-package emacs
-    :init
-    (setq completion-cycle-threshold 3)
     )
 #+end_src
 
@@ -1094,17 +1048,18 @@ brew install ripgrep
           (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
           (json "https://github.com/tree-sitter/tree-sitter-json")
           (make "https://github.com/alemuller/tree-sitter-make")
-          (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+          (markdown "https://github.com/tree-sitter/tree-sitter-markdown")
           (python "https://github.com/tree-sitter/tree-sitter-python")
           (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
           (toml "https://github.com/tree-sitter/tree-sitter-toml")
           (zig "https://github.com/GrayJack/tree-sitter-zig")
           ))
-  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(go-mode . go-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(rust-mode . rust-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.cpp\\'" . cpp-ts-mode))
+  (dolist (mapping '((python-mode . python-ts-mode)
+                     (c-mode . c-ts-mode)
+                     (c++-mode . cpp-ts-mode)
+                     (go-mode . go-ts-mode)
+                     (rust-mode . rust-ts-mode)))
+    (add-to-list 'major-mode-remap-alist mapping))
 #+end_src
 
 *** treesit-auto
@@ -1122,7 +1077,7 @@ grammer 安装位置: ~/.emacs.d/tree-sitter, 如 ~/.emacs.d/tree-sitter/libtree
     (treesit-auto-add-to-auto-mode-alist 'all)
     (global-treesit-auto-mode)
     :custom
-    (setq treesit-auto-install 'prompt)
+    (treesit-auto-install 'prompt)
     )
 #+end_src
 
@@ -1135,11 +1090,9 @@ grammer 安装位置: ~/.emacs.d/tree-sitter, 如 ~/.emacs.d/tree-sitter/libtree
     :bind (:map yas-keymap
                 ("C-i" . yas-next-field-or-maybe-expand))
     :hook ((prog-mode org-mode) . yas-minor-mode)
-    :init (defvar snippet-directory "~/.emacs.d/snippets")
+    :custom (yas-snippet-dirs (list "~/.emacs.d/snippets"))
     :config
-    (add-to-list 'yas-snippet-dirs snippet-directory)
-    (yas-global-mode 1)
-    )
+    (yas-global-mode 1))
 #+end_src
 
 *** lsp-bridge
@@ -1189,24 +1142,21 @@ https://github.com/microsoft/vscode-extension-samples
     (c++-mode . eglot-ensure)
     (go-mode . eglot-ensure)
     (rust-mode . eglot-ensure)
-    (prog-mode . eglot-ensure)
-    (zig-mode . eglot-ensure)
-    :config
-    (setq eglot-autoshutdown t
-          eglot-send-changes-idle-time 0.5
-          eglot-sync-connect nil
-          eglot-ignored-server-capabilities '(:documentHighlightProvider
-                                              :foldingRangeProvider)
-          eglot-stay-out-of '()
-          ;; drop log to impove performance
-          eglot-events-buffer-config '(:size 0 :format full)
-          eglot-report-progress nil
-          eglot-extend-to-xref t
-          ;; https://github.com/joaotavora/eglot/issues/1491
-          ;; https://github.com/microsoft/vscode-extension-samples/blob/main/code-actions-sample/README.md
-          eglot-code-action-indications '()
-          eglot-advertise-cancellation nil)
-    )
+    :custom
+    (eglot-autoshutdown t)
+    (eglot-send-changes-idle-time 0.5)
+    (eglot-sync-connect nil)
+    (eglot-ignored-server-capabilities '(:documentHighlightProvider
+                                         :foldingRangeProvider))
+    (eglot-stay-out-of '())
+    ;; drop log to impove performance
+    (eglot-events-buffer-config '(:size 0 :format full))
+    (eglot-report-progress nil)
+    (eglot-extend-to-xref t)
+    ;; https://github.com/joaotavora/eglot/issues/1491
+    ;; https://github.com/microsoft/vscode-extension-samples/blob/main/code-actions-sample/README.md
+    (eglot-code-action-indications '())
+    (eglot-advertise-cancellation nil))
 #+end_src
 
 *** citre
@@ -1289,11 +1239,12 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
 在 citre-jump（M-.) 的弹出时 buffer 中可以使用正则语法对候选者进行过滤（orderless 提供的支持）, 例 如: something kind:^member$ kind:^macro$ input:.c$
 
 #+begin_src emacs-lisp
-  (setenv "GTAGSOBJDIRPREFIX" (expand-file-name "~/.cache/gtags/"))
-  (setenv "GTAGSCONF" (car (file-expand-wildcards "/opt/homebrew/opt/global/share/gtags/gtags.conf")))
-  (setenv "GTAGSLABEL" "pygments")
+  ;; (setenv "GTAGSOBJDIRPREFIX" (expand-file-name "~/.cache/gtags/"))
+  ;; (setenv "GTAGSCONF" (car (file-expand-wildcards "/opt/homebrew/opt/global/share/gtags/gtags.conf")))
+  ;; (setenv "GTAGSLABEL" "pygments")
 
   (use-package citre
+    :disabled
     :after (eglot)
     :init
     ;; when open a file, if it can find the relative TAGS file, it will turn-on the citre-mode
@@ -1324,17 +1275,11 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
     (define-key citre-peek-keymap (kbd "M-P") 'citre-peek-prev-tag)
     (global-set-key (kbd "C-x c u") 'citre-global-update-database)
     ;; when eglot is closed, close citre-mode, prevent mutual interference between the two xref backends
-    (add-hook 'eglot-managed-mode-hook (lambda () (citre-mode -1)))
-    )
+    (add-hook 'eglot-managed-mode-hook (lambda () (citre-mode -1))))
 #+end_src
 
 ** 文档帮助
 
-*** devdocs
-
-#+begin_src emacs-lisp
-  (use-package devdocs)
-#+end_src
 
 *** eldoc-box
 
@@ -1342,12 +1287,11 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
 
 #+begin_src emacs-lisp
   (use-package eldoc-box
-    :hook (prog-mode . +eldoc-box-hover-at-point-mode-maybe)
-    :hook (elgot-managed-mode . +eldoc-box-hover-at-point-mode-maybe)
+    :hook ((prog-mode eglot-managed-mode) . +eldoc-box-hover-at-point-mode-maybe)
     :init
     (defun +eldoc-box-hover-at-point-mode-maybe (&optional arg)
       (when (display-graphic-p)
-        (eldoc-box-hover-at-point-mode arg))))
+        (eldoc-box-hover-at-point-mode (or arg 1)))))
 #+end_src
 
 ** programming languages
@@ -1361,7 +1305,7 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
              ("\\.h\\'" . c-mode)
              ("\\.m\\'" . c-mode)
              ("\\.mm\\'" . c-mode))
-      :config
+      :custom
       ;; Available C style:
       ;; “gnu”: The default style for GNU projects
       ;; “k&r”: What Kernighan and Ritchie, the authors of C used in their book
@@ -1373,16 +1317,11 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
       ;; “python”: What Python developers use for extension modules
       ;; “java”: The default style for java-mode (see below)
       ;; “user”: When you want to define your own style
-      (setq c-default-style '((awk-mode . "awk")
+      (c-default-style '((awk-mode . "awk")
                                     (other . "linux"))) ;; set style to "k&r"
-      (setq c-basic-offset 4)
-      (setq tab-width 4) ; or any other preferred value
+      (c-basic-offset 4)
+      (tab-width 4) ; or any other preferred value
       )
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package modern-cpp-font-lock
-    :hook (c++-mode . modern-c++-font-lock-global-mode))
 #+end_src
 
 *** assembler
@@ -1394,7 +1333,9 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
     :mode (("\\.nasm\\'" . nasm-mode)
            ("\\.s\\'" . nasm-mode)
            ("\\.asm\\'" . nasm-mode))
-    )
+    :config
+    (setq nasm-basic-offset 4)
+    (setq nasm-electric-pound t))
 #+end_src
 
 *** python
@@ -1402,13 +1343,11 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
 设置python-mode
 
 #+begin_src emacs-lisp
-
   (use-package python
     :defer t
     :mode ("\\.py\\'" . python-mode)
-    :config
-    (setq python-shell-interpreter "python3.12")
-    )
+    :custom
+    (python-shell-interpreter "python3"))
 #+end_src
 
 **** python虚拟环境
@@ -1421,15 +1360,8 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
     :init
     ;; (setenv "WORKON_HOME" "/home/wangchang/Programme/pythonCode")
     :config
-    (pyvenv-mode 1)
-    ;; set corret python interpreter
-    (setq pyvenv-post-activate-hooks
-          (list (lambda()
-                  (setq python-shell-interpreter (concat pyvenv-virtual-env "/opt/homebrew/bin/python3.12")))))
-    (setq pyvenv-post-deactivate-hooks
-          (list (lambda()
-                  (setq python-shell-interpreter "/opt/homebrew/bin/python3.12"))))
-    )
+    (pyvenv-mode 1))
+
 #+end_src
 
 *** go
@@ -1439,6 +1371,7 @@ xref-backend-functions 可能会被添加多个 backend，它使用第一个 bac
 #+begin_src emacs-lisp
   (use-package go-mode
     :mode (("\\.go\\'" . go-mode))
+    :hook (go-mode . eglot-ensure)
     ;; :init (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
     )
 #+end_src
@@ -1517,7 +1450,7 @@ rust语言
 
 #+begin_src emacs-lisp
   (use-package rust-mode
-    :mode ("\\.rs\\'" . rust-mode)
+    :mode ("\\.rs\\'" . rust-ts-mode)
     :init (setq rust-mode-treesitter-derive t)
     :bind
     (("C-c C-c C-r" . rust-run)
@@ -1525,25 +1458,11 @@ rust语言
      ("C-c C-c C-k" . rust-check)
      ("C-c C-c C-u" . rust-compile))
     :config
-    (setq rust-format-on-save t)
-    )
-#+end_src
-
-*** zig
-
-Syntax highlighting and automatic indentation for the Zig programming language in Emacs
-
-the language server is [[https://zigtools.org][zls]]
-
-#+begin_src emacs-lisp
-  (use-package zig-mode
-    :after eglot
-    :mode ("\\.zig\\'" . zig-mode)
-    ;; :mode "\\.zig$"
-    )
+    (setq rust-format-on-save t))
 #+end_src
 
 ** 错误自动检查
+
 
 *** flycheck
 
@@ -1553,23 +1472,13 @@ the language server is [[https://zigtools.org][zls]]
 
 #+begin_src emacs-lisp
   (use-package flycheck
-    :init (global-flycheck-mode)
     :bind
     (("C-c e n" . flycheck-next-error)
-     ("C-c e p" . flycheck-previour-error)
+     ("C-c e p" . flycheck-previous-error)
      ("C-c e l" . flycheck-list-errors))
-    )
-#+end_src
-
-*** flycheck-eglot
-
-[[https://github.com/flycheck/flycheck-eglot][flycheck-eglot]] 使flycheck可以和eglot协同工作
-
-#+begin_src emacs-lisp
-  (use-package flycheck-eglot
-    :after (flycheck eglot)
-    :config (global-flycheck-eglot-mode 1)
-    :custom (flycheck-eglot-exclusive nil))
+    :config (global-flycheck-mode 1)
+    (global-flycheck-eglot-mode 1)
+    (setq flycheck-eglot-exclusive nil))  ;允许多checker
 #+end_src
 
 *** flycheck-rust
@@ -1578,16 +1487,7 @@ the language server is [[https://zigtools.org][zls]]
 
 #+begin_src emacs-lisp
   (use-package flycheck-rust
-    :hook (rust-mode-hook . #'flycheck-rust-setup)
-    )
-#+end_src
-
-** 项目管理
-
-*** project
-
-#+begin_src emacs-lisp
-  (use-package project)
+    :hook ((rust-mode rust-ts-mode) . flycheck-rust-setup))
 #+end_src
 
 ** 版本控制相关
@@ -1608,23 +1508,7 @@ Emacs的git客户端
            ("C-x g u" . magit-pull)
            ("C-x g e" . magit-ediff-resolve)
            ("C-x g r" . magit-rebase-interactive))
-    :config (magit-auto-revert-mode)
-    )
-#+end_src
-
-*** git-gutter
-
-[[https://github.com/emacsorphanage/git-gutter][官网]]
-
-Emacs中实时显示修改
-
-#+begin_src emacs-lisp
-
-  (use-package git-gutter+
-    :disabled
-    :config
-    (progn
-      (global-git-gutter+-mode)))
+    :config (magit-auto-revert-mode 1))
 #+end_src
 
 ** 其他配置
@@ -1633,8 +1517,8 @@ Emacs中实时显示修改
 
 #+begin_src emacs-lisp
   (use-package cmake-mode
-    :mode ("CMakeLists.txt" "\\.cmake\\'")
-    )
+    :mode (("CMakeLists.txt" . cmake-mode)
+           ("\\.cmake\\'" . cmake-mode)))
 #+end_src
 
 ** 调试
@@ -1669,7 +1553,6 @@ Emacs中实时显示修改
 ** org
 
 #+begin_src emacs-lisp
-
   (use-package org
     :mode ("\\.org\\'" . org-mode)
     :hook (org-mode . visual-line-mode)
@@ -1681,16 +1564,26 @@ Emacs中实时显示修改
            org-startup-indented t
            org-startup-folded 'content
            org-fontify-done-headline t     ;change the face of a headline if it's marked DONE
-           org-src-fontity-natively t        ;Pretty code blocks
+           org-src-fontify-natively t        ;Pretty code blocks
            org-pretty-entities t           ;show entities as UTF-8 characters
            org-hide-leading-stars t        ;hide the stars
            org-src-tab-acts-natively t     ;Make TAB acts as if it were issued from the buffer of the languages's major mode
            truncate-lines t
            org-confirm-babel-evaluate nil) ;don't notify -> "Do you want to execute"
-    :config (setq
-             org-directory (file-truename "~/Documents/Google Driver/All Notes")
-             org-todo-keywords
-             '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELED(c)")))
+    :config
+    (require 'org-tempo)
+    (setq org-structure-template-alist
+          (append org-structure-template-alist
+                  '(("sh" . "src shell")
+                    ("se" . "src emacs-lisp")
+                    ("sp" . "src python")
+                    ("sg" . "src go")
+                    ("sc" . "src c")
+                    ("scpp" . "src c++")
+                    ("sr" . "src rust"))))
+    (setq org-directory (file-truename "~/Documents/Google Driver/All Notes")
+          org-todo-keywords
+          '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELED(c)")))
     (org-babel-do-load-languages 'org-babel-load-languages
                                  (append org-babel-load-languages
                                          '((emacs-lisp . t)
@@ -1701,14 +1594,14 @@ Emacs中实时显示修改
                                            (js . t)
                                            (go . t))))
     :custom
-    (setq org-log-done 'time)
-    (setq org-agenda-files (list "~/Documents/Google Driver/All Notes/Agenda/work.org"
-                                 "~/Documents/Google Driver/All Notes/Agenda/study.org"
-                                 "~/Documents/Google Driver/All Notes/Agenda/life.org"))
+    (org-ellipsis "▼")
+    (org-log-done 'time)
+    (org-agenda-files (list "~/Documents/Google Driver/All Notes/Agenda/work.org"
+                            "~/Documents/Google Driver/All Notes/Agenda/study.org"
+                            "~/Documents/Google Driver/All Notes/Agenda/life.org"))
     :bind(("C-c l" . org-store-link)
           ("C-c a" . org-agenda)
-          ("C-c c" . org-capture))
-    )
+          ("C-c c" . org-capture)))
 #+end_src
 
 ** org-bullets
@@ -1731,23 +1624,7 @@ Emacs中实时显示修改
       ;; (setq org-bullets-bullet-list '("♠" "♣" "♥" "♦" "♤" "♧" "♡" "♢"))
       ;; special symbols
       ;; (setq org-bullets-bullet-list '("☀" "♼" "☼" "☾" "☽" "☣" "§" "¶" "‡" "※" "✕" "△" "◇" "▶" "◀" "◈"))
-      (setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷")) ;
-      (setq org-ellipsis "▼"))
-#+end_src
-
-** org-tempo
-
-#+begin_src emacs-lisp
-  ;; for '<s/e/c... TAB'  completion
-  ;; or "C-c C-,"
-  (require 'org-tempo)
-  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-  (add-to-list 'org-structure-template-alist '("se" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("sp" . "src python"))
-  (add-to-list 'org-structure-template-alist '("sg" . "src go"))
-  (add-to-list 'org-structure-template-alist '("sc" . "src c"))
-  (add-to-list 'org-structure-template-alist '("scpp" . "src c++"))
-  (add-to-list 'org-structure-template-alist '("sr" . "src rust"))
+      (setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷")))
 #+end_src
 
 ** ob-go
@@ -1755,7 +1632,9 @@ Emacs中实时显示修改
 [[https://github.com/pope/ob-go][官网]] 这个包使org-babel支持执行go代码
 
 #+begin_src emacs-lisp
-  (use-package ob-go)
+  (use-package ob-go
+    :after org
+    )
 #+end_src
 
 ** ob-rust
@@ -1763,19 +1642,22 @@ Emacs中实时显示修改
 [[https://github.com/micanzhang/ob-rust][ob-rust]] 使org-babel支持执行rust代码
 
 #+begin_src emacs-lisp
-(use-package ob-rust)
+  (use-package ob-rust
+    :after rust)
 #+end_src
 
 ** ox-reveal
 
 #+begin_src emacs-lisp
-  (use-package ox-reveal)
+  (use-package ox-reveal
+    :after org)
 #+end_src
 
 ** ox-gfm
 
 #+begin_src emacs-lisp
-  (use-package ox-gfm)
+  (use-package ox-gfm
+    :after org)
 #+end_src
 
 ** toc-org
@@ -1795,7 +1677,8 @@ Emacs中实时显示修改
 
 #+begin_src emacs-lisp
   ;; WYSIWYG, html mime composition using org-mode
-  (use-package org-mime)
+  (use-package org-mime
+    :after org)
 #+end_src
 
 ** org-download
@@ -1816,16 +1699,16 @@ Emacs中实时显示修改
 
 #+begin_src emacs-lisp
   (use-package org-roam
+    :after org
     :custom
     (org-roam-directory "~/Documents/Google Driver/brain-notes")
     (org-roam-db-location "~/Documents/Google Driver/brain-notes/org-roam.db")
     (org-roam-db-gc-threshold most-positive-fixnum)
     (org-roam-complete-everywhere t)
-    (org-roam-db-autosync-mode)
     :bind (("C-c n l" . org-roam-buffer-toggle)
            ("C-c n f" . org-roam-node-find)
            ("C-c n i" . org-roam-node-insert))
-    :config (org-roam-db-autosync-enable))
+    :config (org-roam-db-autosync-mode 1))
 #+end_src
 
 * latex

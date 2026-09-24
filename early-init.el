@@ -1,4 +1,4 @@
-;;; package -- Summary
+;;; package -- Summary  -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; early-init.el --- Early Init File
 ;; Emacs 27 introduces early-init.el, which is run before init.el,
@@ -16,6 +16,10 @@
       gc-cons-threshold-original gc-cons-threshold)
 (setq gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6)
+(add-hook 'after-init-hook
+          (lambda ()
+            (setq gc-cons-threshold gc-cons-threshold-original
+                  gc-cons-percentage gc-cons-percentage-original)))
 
 ;; Do not allow loading from the package cache (same reason).
 (setq package-quickstart nil)
@@ -32,7 +36,7 @@
 ;; Prevent the glimpse of un-styled Emacs by disabling these UI elements early.
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
-(push '(vertical-scroll-bars) default-frame-alist)
+(push '(vertical-scroll-bars . nil) default-frame-alist)
 (push '(fullscreen . maximized) default-frame-alist)
 (push '(underorated . t) default-frame-alist)
 
@@ -47,11 +51,12 @@
 ;; native-comp settings
 (when (and (featurep 'native-comp-available-p)
            (native-comp-available-p))
-  (startup-redirect-eln-cache (expand-file-name "eln-cache/" user-emacs-directory))
+  (when (fboundp 'startup-redirect-eln-cache)
+    (startup-redirect-eln-cache (expand-file-name "eln-cache/" user-emacs-directory)))
   (setq-default native-comp-speed 2
-               native-comp-async-query-on-exit t
-               native-comp-jit-compilation nil
-               native-comp-async-report-warnings-errors 'silent))
+                native-comp-async-query-on-exit t
+                native-comp-jit-compilation nil
+                native-comp-async-report-warnings-errors 'silent))
 
 ;; Prevent unwanted runtime builds in gcemacs (native-comp); packages are
 ;; compiled ahead-of-time when they are installed and site files are compiled
@@ -59,7 +64,7 @@
 ;; (setq comp-deferred-compilation nil)
 
 ;; 在单独文件保存自定义配置，避免污染~/.emacs文件
-(setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (add-hook 'after-init-hook (lambda () (when (file-exists-p custom-file) (load custom-file))))
 
 ;; Load private config files is exist.

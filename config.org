@@ -103,8 +103,6 @@ Instead of imagining that our main task is to instruct a computer what to do, le
 这个包实际是宏(macro)，可以隔离包配置。 具体参见这里： [[id:66760557-2681-41d4-8e02-ea68fe02e805][use-package]]
 
 #+begin_src emacs-lisp
-  (eval-when-compile
-    (require 'use-package))
   (setq use-package-always-ensure t)
   ;; https://www.gnu.org/software/emacs/manual/html_mono/use-package.html#Troubleshooting
   ;;  enbable when pass '--debug-init' command line flags, for getting more information
@@ -113,7 +111,7 @@ Instead of imagining that our main task is to instruct a computer what to do, le
           use-package-always-demand t
   	use-package-compute-statistics t))
 
-  (use-package compat)
+  (require 'compat)
 #+end_src
 
 ** exec-path-from-shell
@@ -320,7 +318,7 @@ Vertico sorts by history position
     ;; editing itself will produce much less garbage.
     (setq jit-lock-stealth-time 1.5
           jit-lock-stealth-load 200
-          jit-lock-stealt-nice 0.5
+          jit-lock-stealth-nice 0.5
           jit-lock-contextually 'syntax-driven
           jit-lock-defer-time 0))
 #+end_src
@@ -371,7 +369,7 @@ Vertico sorts by history position
   ~(toggle-frame-maximized)~ 直接在顶层调用，可能在帧未完全初始化时执行。使用 ~default-frame-alist~
 
 #+begin_src emacs-lisp
-  (push '(fullscreen . maximized) default-frame-alist)
+  (add-hook 'window-setup-hook #'toggle-frame-maximized)
 #+end_src
 
 * UI
@@ -432,13 +430,18 @@ Vertico sorts by history position
 在系统shell里通过 ~fc-list~ 命令，找到对应family的名字
 
 #+begin_src emacs-lisp
-  (cl-case system-type
-    (darwin
-     (set-face-attribute 'default nil :family "Menlo" :height 160 :weight 'normal))
-    (gnu/linux
-     (set-face-attribute 'default nil :family "Monaspace Krypton" :height 170 :weight 'normal))
-    (t
-     (set-face-attribute 'default nil :family "Monaspace Krypton" :height 180 :weight 'normal)))
+  (defun my/setup-fonts ()
+    (cond
+     ((eq system-type 'darwin)
+      (set-face-attribute 'default nil :family "Menlo" :height 160))
+     ((eq system-type 'gnu/linux)
+      (if (find-font (font-spec :name "Monaspace Krypton"))
+          (set-face-attribute 'default nil :family "Monaspace Krypton" :height 170)
+        (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 160)))))
+
+  (if (daemonp)
+      (add-hook 'server-after-make-frame-hook (lambda (frame) (with-selected-frame frame (my/setup-fonts))))
+    (my/setup-fonts))
   (setq-default line-spacing 6)
 #+end_src
 
@@ -449,7 +452,7 @@ Vertico sorts by history position
 #+begin_src emacs-lisp
   (use-package nerd-icons-dired
     :if (display-graphic-p)
-    :hook (dired-mode . nerd-icons-dired))
+    :hook (dired-mode . nerd-icons-dired-mode))
 #+end_src
 
 ** transwin
@@ -479,14 +482,15 @@ Make window/frame transparent.
   ;; improve long line coding, don't need bidirectional text
   ;; https://emacs-china.org/t/topic/25811/9
   ;; Disable bidirectional text scanning for a modest performance boost
-  (setq-default bidi-display-reordering nil)
+  ;; (setq-default bidi-display-reordering nil)
+  (setq-default bidi-paragraph-direction 'left-to-right)
   ;; 进一步优化长行处理(Emacs28+)
   (setq bidi-inhibit-bpa t                ; given up some bidirectional functionality for slightly faster re-display
         long-line-threshold 1000
         large-hscroll-threshold 1000
         syntax-wholeline-max 1000)
   ;; 超长文件处理会利用上面的阈值
-  (global-so-long-mode)
+  (global-so-long-mode 1)
 #+end_src
 
 ** 基础
@@ -630,6 +634,7 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
 
 #+begin_src emacs-lisp
   (use-package centaur-tabs
+    :demand t
     :after nerd-icons
     :bind
     (("C-9" . centaur-tabs-backward)
@@ -638,7 +643,6 @@ If you use a large screen and have very wide frames golden-ratio makes very wide
     (setq centaur-tabs-set-bar 'over      ; display an underline over the selected tab
           centaur-tabs-height 32          ; tab height
           centaur-tabs-set-icons t        ; display themed icon from all-the-icons
-          centaur-tabs-icon-type 'nerd-icons
           centaur-tabs-set-close-button nil ; disable the close button
           centaur-tabs-set-modified-marker t ; display a marker indicating that a buffer has been modified
           centaur-tabs-modified-marker " ● " ; change the displayed string for the modified-marker
@@ -858,7 +862,7 @@ makes the string match ignoring diacritics and similar inflections on characters
     (vertico-cycle t))
 #+end_src
 
-** vertico-posfram
+** vertico-posframe
 
 mac上4K分辨率会导致这个插件巨卡，稍微调低一点点就很流畅。现在分辨率是 3360x1890
 
@@ -869,7 +873,7 @@ mac上4K分辨率会导致这个插件巨卡，稍微调低一点点就很流畅
     (vertico-posframe-mode 1)
     (setq vertico-posframe-width 160
           vertico-posframe-height vertico-count
-          vertico-posfram-auto-height t))
+          vertico-posframe-auto-height t))
 #+end_src
 
 ** consult
@@ -971,7 +975,7 @@ brew install ripgrep
     :config (marginalia-mode 1))
 #+end_src
 
-** all-the-icons-completion
+** nerd-icons-completion
 
 给补全系统里的candidates加上icon，见: [[https://github.com/iyefrat/all-the-icons-completion][官网]]
 
